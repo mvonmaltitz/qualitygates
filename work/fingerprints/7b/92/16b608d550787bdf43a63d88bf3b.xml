@@ -12,6 +12,14 @@
       <string>Jenkins Testing Plugin</string>
       <ranges>1</ranges>
     </entry>
+    <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+    <entry>
+      <string>Project One</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
   </usages>
   <facets/>
 </fingerprint>

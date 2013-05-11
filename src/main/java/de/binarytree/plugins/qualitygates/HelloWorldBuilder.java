@@ -70,7 +70,6 @@ public class HelloWorldBuilder extends Builder {
         return true;
         
     }
-
     // Overridden for better type safety.
     // If your plugin doesn't really define any property on Descriptor,
     // you don't have to do this.
@@ -98,6 +97,10 @@ public class HelloWorldBuilder extends Builder {
          */
         private boolean useFrench;
 
+
+    public DescriptorExtensionList<Check,CheckDescriptor> getAvailableChecks(){
+        	return Check.all(); 
+    }
         /**
          * Performs on-the-fly validation of the form field 'name'.
          *

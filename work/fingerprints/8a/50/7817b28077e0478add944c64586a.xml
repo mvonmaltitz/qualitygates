@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 21:52:46.215 CEST</timestamp>
+  <md5sum>8a507817b28077e0478add944c64586a</md5sum>
+  <fileName>commons-logging:commons-logging-1.0.4.jar</fileName>
+  <usages>
+    <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+    <entry>
+      <string>Project One</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

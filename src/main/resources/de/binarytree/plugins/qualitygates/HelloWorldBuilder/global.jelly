@@ -13,8 +13,19 @@
   -->
   <f:section title="Hello World Builder">
     <f:entry title="French" field="useFrench"
-      description="Check if we should say hello in French">
+      description="Check if we should say hello in French. QG Quality Gates FTW.">
       <f:checkbox />
     </f:entry>
+	<f:block>
+    <h2>Available checks</h2>
+    <ul>
+    <li> ${descriptor.displayName} </li>
+    <j:forEach var="check" items="${descriptor.availableChecks}" >
+    <li>
+    Check: ${check.displayName}
+    </li>
+    </j:forEach>
+    </ul>
+	</f:block>
   </f:section>
 </j:jelly>

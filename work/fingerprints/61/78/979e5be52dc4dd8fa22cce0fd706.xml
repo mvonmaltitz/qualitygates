@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 21:52:46.413 CEST</timestamp>
+  <md5sum>6178979e5be52dc4dd8fa22cce0fd706</md5sum>
+  <fileName>org.apache.maven.doxia:doxia-module-fml-1.1.2.jar</fileName>
+  <usages>
+    <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+    <entry>
+      <string>Project One</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

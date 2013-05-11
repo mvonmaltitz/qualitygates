@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 21:52:45.779 CEST</timestamp>
+  <md5sum>503a45919f711527649a6664b4f8e92c</md5sum>
+  <fileName>org.apache.maven.reporting:maven-reporting-api-2.1.0.jar</fileName>
+  <usages>
+    <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+    <entry>
+      <string>Project One</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

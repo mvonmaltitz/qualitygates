@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 21:52:46.435 CEST</timestamp>
+  <md5sum>2617b220009f952bb9542af167d040cf</md5sum>
+  <fileName>commons-codec:commons-codec-1.2.jar</fileName>
+  <usages>
+    <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+    <entry>
+      <string>Project One</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

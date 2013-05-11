@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 21:52:45.954 CEST</timestamp>
+  <md5sum>3ae0163edc9713f8b5116e695744602f</md5sum>
+  <fileName>org.jacoco:org.jacoco.report-0.6.2.201302030002.jar</fileName>
+  <usages>
+    <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+    <entry>
+      <string>Project One</string>
+      <ranges>2-3,5-6</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

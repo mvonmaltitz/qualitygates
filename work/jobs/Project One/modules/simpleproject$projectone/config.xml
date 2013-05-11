@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<maven2-module-set>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <reporters/>
+  <displayName>projectone</displayName>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <relativePath>home/mvm/git/Masterarbeit/code/projectone</relativePath>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit-dep</artifactId>
+      <version>4.8.2</version>
+      <plugin>false</plugin>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-pmd-plugin</artifactId>
+      <version>3.0.1</version>
+      <plugin>true</plugin>
+    </dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>0.6.2.201302030002</version>
+      <plugin>true</plugin>
+    </dependency>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>0.6.2.201302030002</version>
+      <plugin>false</plugin>
+    </dependency>
+  </dependencies>
+  <children/>
+</maven2-module-set>
