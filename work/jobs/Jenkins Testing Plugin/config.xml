@@ -32,11 +32,7 @@
   <publishers/>
   <buildWrappers/>
   <prebuilders/>
-  <postbuilders>
-    <de.binarytree.plugins.qualitygates.HelloWorldBuilder>
-      <name>Quality Gates</name>
-    </de.binarytree.plugins.qualitygates.HelloWorldBuilder>
-  </postbuilders>
+  <postbuilders/>
   <runPostStepsIfResult>
     <name>FAILURE</name>
     <ordinal>2</ordinal>

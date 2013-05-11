@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class MavenSuccessCheckTest {
 
-	private MavenSuccessCheck check;
+	private Check check;
 	private AbstractBuild build;
 	@Before
 	public void setUp(){

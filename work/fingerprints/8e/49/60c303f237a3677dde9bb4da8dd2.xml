@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 17:40:20.448 CEST</timestamp>
+  <original>
+    <name>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</name>
+    <number>9</number>
+  </original>
+  <md5sum>8e4960c303f237a3677dde9bb4da8dd2</md5sum>
+  <fileName>testing.jar</fileName>
+  <usages>
+    <entry>
+      <string>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</string>
+      <ranges>9</ranges>
+    </entry>
+    <entry>
+      <string>Jenkins Testing Plugin</string>
+      <ranges>9</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>
