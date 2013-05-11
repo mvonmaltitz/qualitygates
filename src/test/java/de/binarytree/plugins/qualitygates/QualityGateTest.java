@@ -9,6 +9,8 @@ import hudson.model.Result;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.binarytree.plugins.qualitygates.checks.Check;
+
 public class QualityGateTest {
 
 	private Result SUCCESS = Result.SUCCESS; 

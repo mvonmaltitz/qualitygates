@@ -1,4 +1,5 @@
 package de.binarytree.plugins.qualitygates;
+import hudson.DescriptorExtensionList;
 import hudson.Launcher;
 import hudson.Extension;
 import hudson.util.FormValidation;
@@ -11,6 +12,9 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.QueryParameter;
+
+import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -59,7 +63,12 @@ public class HelloWorldBuilder extends Builder {
             listener.getLogger().println("Bonjour, "+name+"!");
         else
             listener.getLogger().println("Hello, "+name+"!");
+        	DescriptorExtensionList<Check, CheckDescriptor> checks = Check.all(); 
+        	for(CheckDescriptor descriptor: checks){
+        		listener.getLogger().println("Found check:" +  descriptor.getDisplayName()); 
+        	}
         return true;
+        
     }
 
     // Overridden for better type safety.

@@ -6,6 +6,8 @@ import hudson.model.AbstractBuild;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.binarytree.plugins.qualitygates.checks.Check;
+
 public class QualityGate {
 
 	
