@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 10:41:57.375 CEST</timestamp>
+  <md5sum>6571d69d142dd2a003c4ffae6138f0ee</md5sum>
+  <fileName>args4j:args4j-2.0.16.jar</fileName>
+  <usages>
+    <entry>
+      <string>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+    <entry>
+      <string>Jenkins Testing Plugin</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

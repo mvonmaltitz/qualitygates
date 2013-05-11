@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 10:41:54.793 CEST</timestamp>
+  <md5sum>9b38cee33c86582158b4a7cf2c94deb9</md5sum>
+  <fileName>org.codehaus.groovy:groovy-all-1.8.5.jar</fileName>
+  <usages>
+    <entry>
+      <string>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+    <entry>
+      <string>Jenkins Testing Plugin</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

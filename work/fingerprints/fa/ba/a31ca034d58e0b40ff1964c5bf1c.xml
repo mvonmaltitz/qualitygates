@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 10:41:53.344 CEST</timestamp>
+  <md5sum>fabaa31ca034d58e0b40ff1964c5bf1c</md5sum>
+  <fileName>org.apache.maven.wagon:wagon-ssh-external-2.2.jar</fileName>
+  <usages>
+    <entry>
+      <string>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+    <entry>
+      <string>Jenkins Testing Plugin</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 10:41:53.814 CEST</timestamp>
+  <md5sum>f93cf6daadd599ca20b0b72802b0f52e</md5sum>
+  <fileName>org.jenkins-ci.main.maven:maven3-interceptor-1.2.jar</fileName>
+  <usages>
+    <entry>
+      <string>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+    <entry>
+      <string>Jenkins Testing Plugin</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

@@ -1,0 +1,54 @@
+Gestartet durch Benutzer [8mha:AAAAlh+LCAAAAAAAAABb85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAzOEgYu/dLi1CL9vNKcHACFIKlWvwAAAA==[0manonymous
+Building in workspace /home/mvm/git/Masterarbeit/code/qualitygates/work/workspace/Jenkins Testing Plugin
+Parsing POMs
+ERROR: POMs konnten nicht geparst werden
+[8mha:AAAAWB+LCAAAAAAAAABb85aBtbiIQSmjNKU4P08vOT+vOD8nVc8DzHWtSE4tKMnMz/PLL0ldFVf2c+b/lb5MDAwVRQxSaBqcITRIIQMEMIIUFgAAckCEiWAAAAA=[0mhudson.maven.MavenEmbedderException: java.util.NoSuchElementException
+      role: org.apache.maven.execution.MavenExecutionRequestPopulator
+  roleHint: 
+	at hudson.maven.MavenEmbedder.<init>(MavenEmbedder.java:130)
+	at hudson.maven.MavenEmbedder.<init>(MavenEmbedder.java:109)
+	at hudson.maven.MavenEmbedder.<init>(MavenEmbedder.java:136)
+	at hudson.maven.MavenUtil.createEmbedder(MavenUtil.java:213)
+	at hudson.maven.MavenModuleSetBuild$PomParser.invoke(MavenModuleSetBuild.java:1221)
+	at hudson.maven.MavenModuleSetBuild$PomParser.invoke(MavenModuleSetBuild.java:1045)
+	at hudson.FilePath.act(FilePath.java:852)
+	at hudson.FilePath.act(FilePath.java:834)
+	at hudson.maven.MavenModuleSetBuild$MavenModuleSetBuildExecution.parsePoms(MavenModuleSetBuild.java:910)
+	at hudson.maven.MavenModuleSetBuild$MavenModuleSetBuildExecution.doRun(MavenModuleSetBuild.java:654)
+	at hudson.model.AbstractBuild$AbstractBuildExecution.run(AbstractBuild.java:500)
+	at hudson.model.Run.execute(Run.java:1502)
+	at hudson.maven.MavenModuleSetBuild.run(MavenModuleSetBuild.java:477)
+	at hudson.model.ResourceController.execute(ResourceController.java:88)
+	at hudson.model.Executor.run(Executor.java:237)
+Caused by: org.codehaus.plexus.component.repository.exception.ComponentLookupException: java.util.NoSuchElementException
+      role: org.apache.maven.execution.MavenExecutionRequestPopulator
+  roleHint: 
+	at org.codehaus.plexus.DefaultPlexusContainer.lookup(DefaultPlexusContainer.java:257)
+	at org.codehaus.plexus.DefaultPlexusContainer.lookup(DefaultPlexusContainer.java:245)
+	at org.codehaus.plexus.DefaultPlexusContainer.lookup(DefaultPlexusContainer.java:239)
+	at hudson.maven.MavenEmbedder.lookup(MavenEmbedder.java:567)
+	at hudson.maven.MavenEmbedder.buildMavenExecutionRequest(MavenEmbedder.java:157)
+	at hudson.maven.MavenEmbedder.<init>(MavenEmbedder.java:120)
+	... 14 more
+Caused by: java.util.NoSuchElementException
+	at org.sonatype.guice.bean.locators.LocatedBeans$Itr.next(LocatedBeans.java:142)
+	at org.sonatype.guice.bean.locators.LocatedBeans$Itr.next(LocatedBeans.java:77)
+	at org.sonatype.guice.plexus.locators.DefaultPlexusBeans$Itr.next(DefaultPlexusBeans.java:60)
+	at org.sonatype.guice.plexus.locators.DefaultPlexusBeans$Itr.next(DefaultPlexusBeans.java:48)
+	at org.codehaus.plexus.DefaultPlexusContainer.lookup(DefaultPlexusContainer.java:253)
+	... 19 more
+FATAL: class de.binarytree.plugins.qualitygates.HelloWorldBuilder is missing its descriptor
+[8mha:AAAAWB+LCAAAAAAAAABb85aBtbiIQSmjNKU4P08vOT+vOD8nVc8DzHWtSE4tKMnMz/PLL0ldFVf2c+b/lb5MDAwVRQxSaBqcITRIIQMEMIIUFgAAckCEiWAAAAA=[0mjava.lang.AssertionError: class de.binarytree.plugins.qualitygates.HelloWorldBuilder is missing its descriptor
+	at jenkins.model.Jenkins.getDescriptorOrDie(Jenkins.java:1150)
+	at hudson.tasks.Builder.getDescriptor(Builder.java:67)
+	at de.binarytree.plugins.qualitygates.HelloWorldBuilder.getDescriptor(HelloWorldBuilder.java:71)
+	at de.binarytree.plugins.qualitygates.HelloWorldBuilder.perform(HelloWorldBuilder.java:58)
+	at hudson.tasks.BuildStepMonitor$1.perform(BuildStepMonitor.java:19)
+	at hudson.model.AbstractBuild$AbstractBuildExecution.perform(AbstractBuild.java:718)
+	at hudson.maven.MavenModuleSetBuild$MavenModuleSetBuildExecution.build(MavenModuleSetBuild.java:866)
+	at hudson.maven.MavenModuleSetBuild$MavenModuleSetBuildExecution.doRun(MavenModuleSetBuild.java:805)
+	at hudson.model.AbstractBuild$AbstractBuildExecution.run(AbstractBuild.java:500)
+	at hudson.model.Run.execute(Run.java:1502)
+	at hudson.maven.MavenModuleSetBuild.run(MavenModuleSetBuild.java:477)
+	at hudson.model.ResourceController.execute(ResourceController.java:88)
+	at hudson.model.Executor.run(Executor.java:237)

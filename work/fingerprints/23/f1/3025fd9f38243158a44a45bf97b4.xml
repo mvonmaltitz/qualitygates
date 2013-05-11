@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 10:44:37.305 CEST</timestamp>
+  <original>
+    <name>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</name>
+    <number>2</number>
+  </original>
+  <md5sum>23f13025fd9f38243158a44a45bf97b4</md5sum>
+  <fileName>testing.hpi</fileName>
+  <usages>
+    <entry>
+      <string>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</string>
+      <ranges>2</ranges>
+    </entry>
+    <entry>
+      <string>Jenkins Testing Plugin</string>
+      <ranges>2</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

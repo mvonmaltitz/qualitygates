@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-11 10:41:57.464 CEST</timestamp>
+  <md5sum>6ac1813e9e680f10aa01e5bfa06a7f22</md5sum>
+  <fileName>org.jenkins-ci:commons-jexl-1.1-jenkins-20111212.jar</fileName>
+  <usages>
+    <entry>
+      <string>Jenkins Testing Plugin/org.jenkins-ci.plugins:testing</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+    <entry>
+      <string>Jenkins Testing Plugin</string>
+      <ranges>1-3,5,7</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>
