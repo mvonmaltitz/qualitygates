@@ -19,13 +19,6 @@
     </repository>
   </repositories>
 
-<dependencies>
-	<dependency>
-		<groupId>org.mockito</groupId>
-		<artifactId>mockito-all</artifactId>
-		<version>1.8.4</version>
-	</dependency>
-</dependencies>
   <pluginRepositories>
     <pluginRepository>
       <id>repo.jenkins-ci.org</id>

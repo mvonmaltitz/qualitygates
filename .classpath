@@ -118,7 +118,6 @@
   <classpathentry kind="var" path="M2_REPO/org/jenkins-ci/main/maven/maven3-interceptor/1.2/maven3-interceptor-1.2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jenkins-ci/memory-monitor/1.7/memory-monitor-1.7.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jvnet/mock-javamail/mock-javamail/1.7/mock-javamail-1.7.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/mockito/mockito-all/1.8.4/mockito-all-1.8.4.jar"/>
   <classpathentry kind="var" path="M2_REPO/net/sourceforge/nekohtml/nekohtml/1.9.13/nekohtml-1.9.13.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jvnet/hudson/netx/0.5-hudson-2/netx-0.5-hudson-2.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/netbeans/modules/org-netbeans-insane/RELEASE72/org-netbeans-insane-RELEASE72.jar"/>
