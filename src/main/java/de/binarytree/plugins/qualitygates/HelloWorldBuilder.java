@@ -1,19 +1,26 @@
 package de.binarytree.plugins.qualitygates;
 
+import hudson.BulkChange;
 import hudson.DescriptorExtensionList;
 import hudson.Extension;
 import hudson.Launcher;
+import hudson.XmlFile;
 import hudson.model.BuildListener;
 import hudson.model.Saveable;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Descriptor.FormException;
+import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.DescribableList;
+import hudson.util.DescriptorList;
 import hudson.util.FormValidation;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import javax.servlet.ServletException;
 
@@ -22,6 +29,7 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
@@ -43,9 +51,10 @@ import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class HelloWorldBuilder extends Builder {
+public class HelloWorldBuilder extends Builder implements Saveable{
 
-	private final String name;
+	private String name;
+	private DescribableList<QualityGate, QualityGateDescriptor> gates  = new DescribableList<QualityGate, QualityGateDescriptor>(this); 
 
 	// Fields in config.jelly must match the parameter names in the
 	// "DataBoundConstructor"
@@ -61,6 +70,11 @@ public class HelloWorldBuilder extends Builder {
 		return name;
 	}
 
+	public void setName(String name) throws IOException {
+		this.name = name;
+		save();
+	}
+	
 	@Override
 	public boolean perform(AbstractBuild build, Launcher launcher,
 			BuildListener listener) {
@@ -74,6 +88,11 @@ public class HelloWorldBuilder extends Builder {
 			listener.getLogger().println("Bonjour, " + name + "!");
 		else
 			listener.getLogger().println("Hello, " + name + "!");
+		DescriptorExtensionList<QualityGate, QualityGateDescriptor> gates = QualityGate.all();
+		for (QualityGateDescriptor descriptor : gates) {
+			listener.getLogger().println(
+					"Found gate type:" + descriptor.getDisplayName());
+		}
 		DescriptorExtensionList<Check, CheckDescriptor> checks = Check.all();
 		for (CheckDescriptor descriptor : checks) {
 			listener.getLogger().println(
@@ -91,6 +110,34 @@ public class HelloWorldBuilder extends Builder {
 		return (DescriptorImpl) super.getDescriptor();
 	}
 
+	@Override
+	public void save() throws IOException {
+		if (BulkChange.contains(this))
+			return;
+		getConfigXml().write(this);
+	}
+	protected XmlFile getConfigXml() {
+		return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance()
+				.getRootDir(), "qualitygates.xml"));
+	}
+	
+	 public void doConfigSubmit(StaplerRequest req, StaplerResponse rsp) throws ServletException, IOException, InterruptedException {
+	        JSONObject form = req.getSubmittedForm();
+
+	        // persist the setting
+	        BulkChange bc = new BulkChange(this);
+	        try {
+	        	setName(form.getString("name")); 
+	            gates.rebuildHetero(req,form,QualityGate.all(),"configuration");
+	        } catch (FormException e) {
+	            throw new ServletException(e);
+	        } finally {
+	            bc.commit();
+	        }
+
+
+	        rsp.sendRedirect(".");
+	    }	
 	/**
 	 * Descriptor for {@link HelloWorldBuilder}. Used as a singleton. The class
 	 * is marked as public so that it can be accessed from views.
@@ -104,7 +151,7 @@ public class HelloWorldBuilder extends Builder {
 	// This indicates to Jenkins that this is an implementation of an extension
 	// point.
 	public static final class DescriptorImpl extends
-			BuildStepDescriptor<Builder> implements Saveable {
+			BuildStepDescriptor<Builder> {
 		/**
 		 * To persist global configuration information, simply store it in a
 		 * field and call save().
@@ -180,4 +227,5 @@ public class HelloWorldBuilder extends Builder {
 			return useFrench;
 		}
 	}
+
 }

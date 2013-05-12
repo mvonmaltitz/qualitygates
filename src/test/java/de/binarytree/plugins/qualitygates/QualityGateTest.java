@@ -19,12 +19,12 @@ public class QualityGateTest {
 	private Result UNSTABLE = Result.UNSTABLE; 
 	private Result NOT_BUILT = Result.NOT_BUILT; 
 	
-	private QualityGate gate;
+	private QualityGateImpl gate;
 	private AbstractBuild build;
 
 	@Before
 	public void setUp() throws Exception {
-		gate = new QualityGate(); 
+		gate = new QualityGateImpl(); 
 		build = mock(AbstractBuild.class); 
 	}
 

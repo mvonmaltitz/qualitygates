@@ -35,5 +35,6 @@
                            addCaption="${%Add Check Configuration}"/>
           </f:block>
         </f:section>
+        
   </f:section>
 </j:jelly>

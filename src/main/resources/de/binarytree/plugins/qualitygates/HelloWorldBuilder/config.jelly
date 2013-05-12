@@ -9,6 +9,7 @@
     Creates a text field that shows the value of the "name" property.
     When submitted, it will be passed to the corresponding constructor parameter.
   -->
+      <f:form method="post" action="configSubmit" name="config">
   <f:entry title="Name" field="name">
     <f:textbox />
   </f:entry>
@@ -16,19 +17,21 @@
     <p> ${descriptor.url} </p>
     <p> ${descriptor.displayName} </p>
 	</f:block>
-    <f:section title="${%Available Checks}">
-    <j:forEach var="config" items="${descriptor.availableChecks}">
+    <j:forEach var="gate" items="${descriptor.gates}">
     <f:block>
             <li>
-              <a href="${config.url}/">${config.displayName}</a>
+              <a href="${gate.url}/">${gate.displayName}</a>
             </li>
           </f:block>
           </j:forEach>
           <f:block>
             <f:hetero-list name="configuration" hasHeader="true"
-                           descriptors="${descriptor.descriptors}"
-                           items="${descriptor.availableChecks}"
-                           addCaption="${%Add Check Configuration}"/>
+                           descriptors="${descriptor.gates}"
+                           items="${descriptor.gates}"
+                           addCaption="${%Add Gate}"/>
           </f:block>
-        </f:section>
+                <f:block>
+          <f:submit value="${%Save}" />
+        </f:block>
+              </f:form>
 </j:jelly>
