@@ -33,7 +33,15 @@
   <prebuilders/>
   <postbuilders>
     <de.binarytree.plugins.qualitygates.HelloWorldBuilder>
-      <name>Quality Gates</name>
+      <name>Quality Gates!</name>
+      <gates>
+        <de.binarytree.plugins.qualitygates.QualityGateImpl>
+          <checks/>
+        </de.binarytree.plugins.qualitygates.QualityGateImpl>
+        <de.binarytree.plugins.qualitygates.QualityGateImpl>
+          <checks/>
+        </de.binarytree.plugins.qualitygates.QualityGateImpl>
+      </gates>
     </de.binarytree.plugins.qualitygates.HelloWorldBuilder>
   </postbuilders>
   <runPostStepsIfResult>

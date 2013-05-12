@@ -7,11 +7,15 @@ import hudson.model.AbstractBuild;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kohsuke.stapler.DataBoundConstructor;
+
 import de.binarytree.plugins.qualitygates.checks.Check;
 
 public class QualityGateImpl extends QualityGate {
 	private List<Check> checks = new ArrayList<Check>();
 
+	@DataBoundConstructor
+	public QualityGateImpl(){}
 	public void addCheck(Check check) {
 		this.checks.add(check);
 	}

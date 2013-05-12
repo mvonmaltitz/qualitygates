@@ -3,11 +3,11 @@ Group-Id: de.binarytree.plugins
 Short-Name: qualitygates
 Long-Name: qualitygates
 Url: http://jenkins-ci.org/plugin/qualitygates/
-Plugin-Version: 1.0-SNAPSHOT (private-05/12/2013 16:27-mvm)
+Plugin-Version: 1.0-SNAPSHOT (private-05/12/2013 18:03-mvm)
 Hudson-Version: 1.480.3
 Jenkins-Version: 1.480.3
-Plugin-Dependencies: subversion:1.26,javadoc:1.0,ant:1.1,maven-plugin:
- 1.480.3,ui-samples-plugin:1.480.3
+Plugin-Dependencies: maven-plugin:1.480.3,subversion:1.26,javadoc:1.0,
+ ant:1.1,ui-samples-plugin:1.480.3
 Plugin-Developers: 
 Libraries: /home/mvm/git/Masterarbeit/code/qualitygates/target/classes
  ,/home/mvm/.m2/repository/org/mockito/mockito-all/1.8.4/mockito-all-1

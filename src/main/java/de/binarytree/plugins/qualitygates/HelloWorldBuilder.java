@@ -1,7 +1,6 @@
 package de.binarytree.plugins.qualitygates;
 
 import hudson.BulkChange;
-import hudson.DescriptorExtensionList;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.XmlFile;
@@ -9,18 +8,15 @@ import hudson.model.BuildListener;
 import hudson.model.Saveable;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.Descriptor.FormException;
 import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.DescribableList;
-import hudson.util.DescriptorList;
 import hudson.util.FormValidation;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
 
 import javax.servlet.ServletException;
 
@@ -29,7 +25,6 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
@@ -59,8 +54,9 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 	// Fields in config.jelly must match the parameter names in the
 	// "DataBoundConstructor"
 	@DataBoundConstructor
-	public HelloWorldBuilder(String name) {
+	public HelloWorldBuilder(String name, Collection<QualityGate> gates  ) throws IOException {
 		this.name = name;
+		this.gates.addAll(gates); 
 	}
 
 	/**
@@ -70,38 +66,43 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 		return name;
 	}
 
-	public void setName(String name) throws IOException {
-		this.name = name;
-		save();
-	}
+//	public void setName(String name) throws IOException {
+//		this.name = name;
+//	}
 	
-	@Override
-	public boolean perform(AbstractBuild build, Launcher launcher,
-			BuildListener listener) {
-		// This is where you 'build' the project.
-		// Since this is a dummy, we just say 'hello world' and call that a
-		// build.
+//	@Override
+//	public boolean perform(AbstractBuild build, Launcher launcher,
+//			BuildListener listener) {
+//		// This is where you 'build' the project.
+//		// Since this is a dummy, we just say 'hello world' and call that a
+//		// build.
+//
+//		// This also shows how you can consult the global configuration of the
+//		// builder
+//		if (getDescriptor().getUseFrench())
+//			listener.getLogger().println("Bonjour, " + name + "!");
+//		else
+//			listener.getLogger().println("Hello, " + name + "!");
+//		DescriptorExtensionList<QualityGate, QualityGateDescriptor> gates = QualityGate.all();
+//		for (QualityGateDescriptor descriptor : gates) {
+//			listener.getLogger().println(
+//					"Found gate type:" + descriptor.getDisplayName());
+//		}
+//		DescriptorExtensionList<Check, CheckDescriptor> checks = Check.all();
+//		for (CheckDescriptor descriptor : checks) {
+//			listener.getLogger().println(
+//					"Found check:" + descriptor.getDisplayName());
+//		}
+//		return true;
+//
+//	}
 
-		// This also shows how you can consult the global configuration of the
-		// builder
-		if (getDescriptor().getUseFrench())
-			listener.getLogger().println("Bonjour, " + name + "!");
-		else
-			listener.getLogger().println("Hello, " + name + "!");
-		DescriptorExtensionList<QualityGate, QualityGateDescriptor> gates = QualityGate.all();
-		for (QualityGateDescriptor descriptor : gates) {
-			listener.getLogger().println(
-					"Found gate type:" + descriptor.getDisplayName());
-		}
-		DescriptorExtensionList<Check, CheckDescriptor> checks = Check.all();
-		for (CheckDescriptor descriptor : checks) {
-			listener.getLogger().println(
-					"Found check:" + descriptor.getDisplayName());
-		}
-		return true;
-
+	public DescribableList<QualityGate, QualityGateDescriptor> getGates() {
+		return gates;
 	}
-
+	public Collection<QualityGateDescriptor> getDescriptors() {
+		return QualityGate.all();
+	}
 	// Overridden for better type safety.
 	// If your plugin doesn't really define any property on Descriptor,
 	// you don't have to do this.
@@ -110,7 +111,6 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 		return (DescriptorImpl) super.getDescriptor();
 	}
 
-	@Override
 	public void save() throws IOException {
 		if (BulkChange.contains(this))
 			return;
@@ -121,23 +121,25 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 				.getRootDir(), "qualitygates.xml"));
 	}
 	
-	 public void doConfigSubmit(StaplerRequest req, StaplerResponse rsp) throws ServletException, IOException, InterruptedException {
-	        JSONObject form = req.getSubmittedForm();
+//	 public void doConfigSubmit(StaplerRequest req, StaplerResponse rsp) throws ServletException, IOException, InterruptedException {
+//	        JSONObject form = req.getSubmittedForm();
+//
+//	        // persist the setting
+//	        BulkChange bc = new BulkChange(this);
+//	        try {
+//	        	setName(form.getString("name")); 
+//	            gates.rebuildHetero(req,form,QualityGate.all(),"configuration");
+//	        } catch (FormException e) {
+//	            throw new ServletException(e);
+//	        } finally {
+//	            bc.commit();
+//	        }
+//
+//
+//	        rsp.sendRedirect(".");
+//	    }	
+//	 
 
-	        // persist the setting
-	        BulkChange bc = new BulkChange(this);
-	        try {
-	        	setName(form.getString("name")); 
-	            gates.rebuildHetero(req,form,QualityGate.all(),"configuration");
-	        } catch (FormException e) {
-	            throw new ServletException(e);
-	        } finally {
-	            bc.commit();
-	        }
-
-
-	        rsp.sendRedirect(".");
-	    }	
 	/**
 	 * Descriptor for {@link HelloWorldBuilder}. Used as a singleton. The class
 	 * is marked as public so that it can be accessed from views.

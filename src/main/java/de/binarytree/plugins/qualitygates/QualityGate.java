@@ -15,7 +15,6 @@ import de.binarytree.plugins.qualitygates.checks.Check;
 
 public abstract class QualityGate implements Describable<QualityGate>, ExtensionPoint {
 
-	@Override
 	public QualityGateDescriptor getDescriptor(){
 		return (QualityGateDescriptor) Hudson.getInstance().getDescriptor(getClass()); 
 	}
