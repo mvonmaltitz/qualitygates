@@ -9,6 +9,10 @@
     Creates a text field that shows the value of the "name" property.
     When submitted, it will be passed to the corresponding constructor parameter.
   -->
+	<f:block>
+    <h2>Visiblity check</h2>
+    <p> ${descriptor.displayName} </p>
+	</f:block>
   <f:entry title="Threshold" field="threshold">
     <f:textbox />
   </f:entry>

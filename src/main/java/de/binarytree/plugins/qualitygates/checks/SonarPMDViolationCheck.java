@@ -8,10 +8,17 @@ import hudson.model.AbstractBuild;
 
 public class SonarPMDViolationCheck extends SonarCheck {
 
-	public final String threshold; 
+	private String threshold; 
 	@DataBoundConstructor
 	public SonarPMDViolationCheck(String threshold){
 	 this.threshold = threshold; 	
+	}
+	public void setThreshold(final String threshold){
+		System.out.println("Setting PMD threshold"); 
+		this.threshold = threshold; 
+	}
+	public String getThreshold(){
+		return this.threshold; 
 	}
 	@Override
 	public Result doCheck(AbstractBuild build) {
@@ -28,7 +35,9 @@ public class SonarPMDViolationCheck extends SonarCheck {
 
 		@Override
 		public String getDisplayName() {
+			System.out.println("getDisplayName in PMD"); 
 			return "Quality Gate: Sonar PMD Violation Check";
+			
 		}
     	
     	

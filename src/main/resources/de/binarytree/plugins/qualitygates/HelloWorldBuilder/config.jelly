@@ -12,4 +12,23 @@
   <f:entry title="Name" field="name">
     <f:textbox />
   </f:entry>
+	<f:block>
+    <p> ${descriptor.url} </p>
+    <p> ${descriptor.displayName} </p>
+	</f:block>
+    <f:section title="${%Available Checks}">
+    <j:forEach var="config" items="${descriptor.availableChecks}">
+    <f:block>
+            <li>
+              <a href="${config.url}/">${config.displayName}</a>
+            </li>
+          </f:block>
+          </j:forEach>
+          <f:block>
+            <f:hetero-list name="configuration" hasHeader="true"
+                           descriptors="${descriptor.descriptors}"
+                           items="${descriptor.availableChecks}"
+                           addCaption="${%Add Check Configuration}"/>
+          </f:block>
+        </f:section>
 </j:jelly>

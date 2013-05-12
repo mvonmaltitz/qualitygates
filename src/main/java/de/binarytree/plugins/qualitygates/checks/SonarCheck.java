@@ -18,12 +18,6 @@ public abstract class SonarCheck extends Check {
 		private String host; 
 		private int port; 
 		
-		public boolean isApplicable(Class<? extends AbstractProject> aClass) {
-			// Indicates that this builder can be used with all kinds of project
-			// types
-			return true;
-		}
-		
 		
 		@Override
 		public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {

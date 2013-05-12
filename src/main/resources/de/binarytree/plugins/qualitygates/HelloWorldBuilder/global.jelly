@@ -20,12 +20,20 @@
     <h2>Available checks</h2>
     <ul>
     <li> ${descriptor.displayName} </li>
-    <j:forEach var="check" items="${descriptor.availableChecks}" >
+    <j:forEach var="check" items="${descriptor.descriptors}" >
     <li>
     Check: ${check.displayName}
     </li>
     </j:forEach>
     </ul>
 	</f:block>
+    <f:section title="${%Available Checks}">
+          <f:block>
+            <f:hetero-list name="configuration" hasHeader="true"
+                           descriptors="${descriptor.descriptors}"
+                           items="${descriptor.availableChecks}"
+                           addCaption="${%Add Check Configuration}"/>
+          </f:block>
+        </f:section>
   </f:section>
 </j:jelly>
