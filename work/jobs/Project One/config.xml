@@ -34,12 +34,26 @@
   <postbuilders>
     <de.binarytree.plugins.qualitygates.HelloWorldBuilder>
       <name>Quality Gates!</name>
-      <gates>
+      <gates class="linked-list">
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
-          <checks/>
+          <name>Eins</name>
+          <checks class="linked-list">
+            <de.binarytree.plugins.qualitygates.checks.FailingCheck/>
+          </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
-          <checks/>
+          <name>Zwei</name>
+          <checks class="linked-list">
+            <de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck/>
+          </checks>
+        </de.binarytree.plugins.qualitygates.QualityGateImpl>
+        <de.binarytree.plugins.qualitygates.QualityGateImpl>
+          <name>Drei</name>
+          <checks class="linked-list"/>
+        </de.binarytree.plugins.qualitygates.QualityGateImpl>
+        <de.binarytree.plugins.qualitygates.QualityGateImpl>
+          <name>Vier</name>
+          <checks class="linked-list"/>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
       </gates>
     </de.binarytree.plugins.qualitygates.HelloWorldBuilder>

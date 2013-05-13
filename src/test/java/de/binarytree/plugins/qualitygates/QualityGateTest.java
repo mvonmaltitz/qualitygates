@@ -1,10 +1,12 @@
 package de.binarytree.plugins.qualitygates;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.*;
-import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.model.AbstractBuild;
+
+import java.util.LinkedList;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*; 
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,69 +15,40 @@ import de.binarytree.plugins.qualitygates.checks.Check;
 
 public class QualityGateTest {
 
-	private Result SUCCESS = Result.SUCCESS; 
-	private Result FAILURE = Result.FAILURE; 
-	private Result ABORTED = Result.ABORTED; 
-	private Result UNSTABLE = Result.UNSTABLE; 
-	private Result NOT_BUILT = Result.NOT_BUILT; 
-	
-	private QualityGateImpl gate;
-	private AbstractBuild build;
+	private QualityGate gate;
+	private LinkedList<Check> checkList;
 
 	@Before
 	public void setUp() throws Exception {
-		gate = new QualityGateImpl(); 
-		build = mock(AbstractBuild.class); 
-	}
+		Check check1 = mock(Check.class); 
+		Check check2 = mock(Check.class); 
+		checkList = new LinkedList<Check>(); 
+		checkList.add(check1); 
+		checkList.add(check2); 
+		gate = new QualityGate("Name", checkList){
 
-	@Test
-	public void testAddCheck() {
-		gate.addCheck(this.getCheckMockWithResult(SUCCESS)); 
-	    assertEquals(1, gate.getNumberOfChecks()); 
-	}
-	
-	@Test
-	public void testAddTwoChecks(){
-		gate.addCheck(this.getCheckMockWithResult(SUCCESS)); 
-		gate.addCheck(this.getCheckMockWithResult(SUCCESS)); 
-	    assertEquals(2, gate.getNumberOfChecks()); 
-	}
-
-	@Test
-	public void testGateIsSuccessfullWhenChecksSuccessfull(){
-		gate.addCheck(this.getCheckMockWithResult(SUCCESS)); 
-		gate.addCheck(this.getCheckMockWithResult(SUCCESS)); 
-		this.performGateCheckAndExpect(Result.SUCCESS); 
-	}
-	
-	@Test
-	public void testGateAbortedWhenOneCheckAborted(){
-		gate.addCheck(this.getCheckMockWithResult(ABORTED)); 
-		gate.addCheck(this.getCheckMockWithResult(SUCCESS)); 
-		this.performGateCheckAndExpect(Result.ABORTED); 
-	}
-	@Test
-	public void testGateAbortedWhenOneCheckAbortedAndAnotherFailed(){
-		gate.addCheck(this.getCheckMockWithResult(ABORTED)); 
-		gate.addCheck(this.getCheckMockWithResult(FAILURE)); 
-		this.performGateCheckAndExpect(ABORTED); 
-	}
-	
-	@Test
-	public void testGateFailsWhenOneChecksFails(){
-		gate.addCheck(this.getCheckMockWithResult(Result.SUCCESS)); 
-		gate.addCheck(this.getCheckMockWithResult(FAILURE)); 
-		this.performGateCheckAndExpect(Result.FAILURE); 
-	}
-	
-	public void performGateCheckAndExpect(Result expectedResult){
-		Result result =  gate.doCheck(build);
-		assertEquals(expectedResult, result); 
-	}
+			@Override
+			public Result doCheck(AbstractBuild build) {
+				return null;
+			}
+			
+		}; 
 		
-	public Check getCheckMockWithResult(Result result){
-		Check check = mock(Check.class); 
-		when(check.doCheck(any(AbstractBuild.class))).thenReturn(result); 
-		return check; 
 	}
+
+	@Test
+	public void testNameParam() {
+		assertEquals("Name", gate.getName()); 
+	}
+	
+	@Test
+	public void testGivenCollectionIsNotDirectlySet() {
+		assertFalse(gate.getChecks() == checkList); 
+	}
+	
+	@Test
+	public void testChecksContainOnlyChecksOfCollectionDuringConstruction(){
+		assertEquals(gate.getChecks(), checkList); 
+	}
+
 }

@@ -5,8 +5,10 @@ import hudson.Extension;
 import hudson.Launcher;
 import hudson.XmlFile;
 import hudson.model.BuildListener;
+import hudson.model.Result;
 import hudson.model.Saveable;
 import hudson.model.AbstractBuild;
+import hudson.model.AbstractItem;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
@@ -17,6 +19,8 @@ import hudson.util.FormValidation;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
@@ -46,17 +50,19 @@ import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class HelloWorldBuilder extends Builder implements Saveable{
+public class HelloWorldBuilder extends Builder{
 
 	private String name;
-	private DescribableList<QualityGate, QualityGateDescriptor> gates  = new DescribableList<QualityGate, QualityGateDescriptor>(this); 
+	private List<QualityGate> gates = new LinkedList<QualityGate>(); 
 
 	// Fields in config.jelly must match the parameter names in the
 	// "DataBoundConstructor"
 	@DataBoundConstructor
-	public HelloWorldBuilder(String name, Collection<QualityGate> gates  ) throws IOException {
+	public HelloWorldBuilder(String name, Collection<QualityGate> gates) throws IOException {
 		this.name = name;
-		this.gates.addAll(gates); 
+		if (gates != null) {
+			this.gates.addAll(gates);
+		}
 	}
 
 	/**
@@ -66,38 +72,27 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 		return name;
 	}
 
-//	public void setName(String name) throws IOException {
-//		this.name = name;
-//	}
+	public int getNumberOfGates() {
+		return this.gates.size(); 
+	}
 	
-//	@Override
-//	public boolean perform(AbstractBuild build, Launcher launcher,
-//			BuildListener listener) {
-//		// This is where you 'build' the project.
-//		// Since this is a dummy, we just say 'hello world' and call that a
-//		// build.
-//
-//		// This also shows how you can consult the global configuration of the
-//		// builder
+	@Override
+	public boolean perform(AbstractBuild build, Launcher launcher,
+			BuildListener listener) {
 //		if (getDescriptor().getUseFrench())
 //			listener.getLogger().println("Bonjour, " + name + "!");
 //		else
 //			listener.getLogger().println("Hello, " + name + "!");
-//		DescriptorExtensionList<QualityGate, QualityGateDescriptor> gates = QualityGate.all();
-//		for (QualityGateDescriptor descriptor : gates) {
-//			listener.getLogger().println(
-//					"Found gate type:" + descriptor.getDisplayName());
-//		}
-//		DescriptorExtensionList<Check, CheckDescriptor> checks = Check.all();
-//		for (CheckDescriptor descriptor : checks) {
-//			listener.getLogger().println(
-//					"Found check:" + descriptor.getDisplayName());
-//		}
-//		return true;
-//
-//	}
+		for(QualityGate gate : this.gates){
+			listener.getLogger().println("Invoking Quality Gate " +  gate.getName()); 
+			Result result = gate.doCheck(build); 
+			listener.getLogger().println("Result: " + result.toString()); 
+		}
+		return true;
 
-	public DescribableList<QualityGate, QualityGateDescriptor> getGates() {
+	}
+
+	public List<QualityGate> getGates() {
 		return gates;
 	}
 	public Collection<QualityGateDescriptor> getDescriptors() {
@@ -111,34 +106,6 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 		return (DescriptorImpl) super.getDescriptor();
 	}
 
-	public void save() throws IOException {
-		if (BulkChange.contains(this))
-			return;
-		getConfigXml().write(this);
-	}
-	protected XmlFile getConfigXml() {
-		return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance()
-				.getRootDir(), "qualitygates.xml"));
-	}
-	
-//	 public void doConfigSubmit(StaplerRequest req, StaplerResponse rsp) throws ServletException, IOException, InterruptedException {
-//	        JSONObject form = req.getSubmittedForm();
-//
-//	        // persist the setting
-//	        BulkChange bc = new BulkChange(this);
-//	        try {
-//	        	setName(form.getString("name")); 
-//	            gates.rebuildHetero(req,form,QualityGate.all(),"configuration");
-//	        } catch (FormException e) {
-//	            throw new ServletException(e);
-//	        } finally {
-//	            bc.commit();
-//	        }
-//
-//
-//	        rsp.sendRedirect(".");
-//	    }	
-//	 
 
 	/**
 	 * Descriptor for {@link HelloWorldBuilder}. Used as a singleton. The class
@@ -163,16 +130,6 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 		 */
 		private boolean useFrench;
 
-		private final DescribableList<Check, CheckDescriptor> checks = new DescribableList<Check, CheckDescriptor>(
-				this);
-
-		public DescribableList<Check, CheckDescriptor> getAvailableChecks() {
-			return checks;
-		}
-
-		public Collection<CheckDescriptor> getDescriptors() {
-			return Check.all();
-		}
 
 		/**
 		 * Performs on-the-fly validation of the form field 'name'.
@@ -229,5 +186,7 @@ public class HelloWorldBuilder extends Builder implements Saveable{
 			return useFrench;
 		}
 	}
+
+
 
 }
