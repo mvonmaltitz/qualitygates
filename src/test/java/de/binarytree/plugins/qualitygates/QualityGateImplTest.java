@@ -1,5 +1,6 @@
 package de.binarytree.plugins.qualitygates;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -40,6 +41,13 @@ public class QualityGateImplTest {
 		checkList = new LinkedList<Check>();
 	}
 
+	@Test 
+	public void testGetDisplayName(){
+		QualityGateDescriptor  descriptor = new QualityGateImpl.DescriptorImpl(); 
+		assertTrue(descriptor.getDisplayName().contains("Quality Gate")); 
+		assertTrue(descriptor.getDisplayName().contains("AND")); 
+	}
+	
 	@Test
 	public void testAddCheck() {
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
@@ -109,4 +117,5 @@ public class QualityGateImplTest {
 		when(check.doCheck(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(result);
 		return check;
 	}
+	
 }

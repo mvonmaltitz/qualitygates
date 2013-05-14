@@ -1,5 +1,6 @@
 package de.binarytree.plugins.qualitygates.checks;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
@@ -9,6 +10,8 @@ import hudson.model.AbstractBuild;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck.MavenSuccessCheckDescriptor;
 
 
 public class MavenSuccessCheckTest {
@@ -21,6 +24,11 @@ public class MavenSuccessCheckTest {
 	    check = new MavenSuccessCheck(); 	
 	}
 	
+	@Test
+	public void testDisplayName(){
+		MavenSuccessCheckDescriptor descriptor = new MavenSuccessCheck.MavenSuccessCheckDescriptor(); 
+		assertTrue(descriptor.getDisplayName().contains("Maven")); 
+	}
 	@Test
 	public void testBuildSuccess(){
 	    this.testBuildResult(Result.SUCCESS); 	
