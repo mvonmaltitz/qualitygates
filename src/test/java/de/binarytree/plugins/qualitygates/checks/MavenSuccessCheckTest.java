@@ -28,7 +28,7 @@ public class MavenSuccessCheckTest {
 	@Test
 	public void testBuildIsNull(){
 		build = null; 
-	    Result result = check.doCheck(build); 
+	    Result result = check.doCheck(build, null, null); 
 	    assertEquals(Result.FAILURE, result);  
 	}
 	@Test
@@ -42,7 +42,7 @@ public class MavenSuccessCheckTest {
 	
 	public void testBuildResult(Result desiredResult) {
 		when(build.getResult()).thenReturn(desiredResult); 
-	    Result result = check.doCheck(build); 
+	    Result result = check.doCheck(build, null, null); 
 	    assertEquals(desiredResult, result);  
 	}
 

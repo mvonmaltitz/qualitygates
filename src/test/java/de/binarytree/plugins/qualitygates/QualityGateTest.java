@@ -1,5 +1,7 @@
 package de.binarytree.plugins.qualitygates;
 
+import hudson.Launcher;
+import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 
@@ -28,9 +30,11 @@ public class QualityGateTest {
 		gate = new QualityGate("Name", checkList){
 
 			@Override
-			public Result doCheck(AbstractBuild build) {
+			public Result doCheck(AbstractBuild build, Launcher launcher,
+					BuildListener listener) {
 				return null;
 			}
+
 			
 		}; 
 		
@@ -43,7 +47,7 @@ public class QualityGateTest {
 	
 	@Test
 	public void testGivenCollectionIsNotDirectlySet() {
-		assertFalse(gate.getChecks() == checkList); 
+		assertNotSame(gate.getChecks(), checkList);  
 	}
 	
 	@Test

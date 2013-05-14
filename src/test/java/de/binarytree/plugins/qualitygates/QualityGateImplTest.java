@@ -4,9 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import hudson.Launcher;
+import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 
+import java.io.PrintStream;
 import java.util.LinkedList;
 
 import org.junit.Before;
@@ -25,10 +28,15 @@ public class QualityGateImplTest {
 	private QualityGateImpl gate;
 	private AbstractBuild build;
 	private LinkedList<Check> checkList;
+	private BuildListener listener;
 
 	@Before
 	public void setUp() throws Exception {
+		PrintStream stream = mock(PrintStream.class); 
+		
 		build = mock(AbstractBuild.class);
+		listener = mock(BuildListener.class);
+		when(listener.getLogger()).thenReturn(stream); 
 		checkList = new LinkedList<Check>();
 	}
 
@@ -92,13 +100,13 @@ public class QualityGateImplTest {
 		
 	}
 	public void performGateCheckAndExpect(Result expectedResult) {
-		Result result = gate.doCheck(build);
+		Result result = gate.doCheck(build, null, listener);
 		assertEquals(expectedResult, result);
 	}
 
 	public Check getCheckMockWithResult(Result result) {
 		Check check = mock(Check.class);
-		when(check.doCheck(any(AbstractBuild.class))).thenReturn(result);
+		when(check.doCheck(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(result);
 		return check;
 	}
 }

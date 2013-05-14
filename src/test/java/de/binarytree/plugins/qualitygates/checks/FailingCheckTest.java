@@ -17,13 +17,13 @@ public class FailingCheckTest {
 	public void testFailingWithValidBuild() {
 		AbstractBuild build = mock(AbstractBuild.class); 
 		FailingCheck check = new FailingCheck(); 
-		assertEquals(Result.FAILURE, check.doCheck(build)); 
+		assertEquals(Result.FAILURE, check.doCheck(build, null, null)); 
 	}
 	@Test
 	public void testFailingWithNullBuild() {
 		AbstractBuild build = null; 
 		FailingCheck check = new FailingCheck(); 
-		assertEquals(Result.FAILURE, check.doCheck(build)); 
+		assertEquals(Result.FAILURE, check.doCheck(build, null, null)); 
 	}
 
 }
