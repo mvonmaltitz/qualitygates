@@ -2,6 +2,8 @@ package de.binarytree.plugins.qualitygates;
 
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
+import hudson.Launcher;
+import hudson.model.BuildListener;
 import hudson.model.Describable;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
@@ -36,7 +38,7 @@ public abstract class QualityGate implements Describable<QualityGate>, Extension
 		return this.checks.size();
 	}
 
-	public abstract Result doCheck(AbstractBuild build); 
+	public abstract Result doCheck(AbstractBuild build, Launcher launcher, BuildListener listener); 
 	
 	public QualityGateDescriptor getDescriptor(){
 		return (QualityGateDescriptor) Hudson.getInstance().getDescriptor(getClass()); 

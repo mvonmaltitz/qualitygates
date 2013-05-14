@@ -13,7 +13,7 @@
   <displayName>projectone</displayName>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <relativePath>home/mvm/git/Masterarbeit/code/projectone</relativePath>
+  <relativePath></relativePath>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

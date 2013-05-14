@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="0.462" errors="0" skipped="0" tests="7" name="model.UserTest">
+  <properties>
+    <property name="DISPLAY" value=":2"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="rvm_version" value="1.19.6 (stable)"/>
+    <property name="java.home" value="/usr/lib/jvm/java-7-openjdk-amd64/jre"/>
+    <property name="LOGNAME" value="mvm"/>
+    <property name="rvm_bin_path" value="/home/mvm/.rvm/bin"/>
+    <property name="NODE_NAME" value="master"/>
+    <property name="PWD" value="/home/mvm/git/Masterarbeit/code/qualitygates"/>
+    <property name="JENKINS_URL" value="http://localhost:8080/"/>
+    <property name="sun.font.fontmanager" value="sun.awt.X11FontManager"/>
+    <property name="GDMSESSION" value="awesome"/>
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/endorsed"/>
+    <property name="XDG_SESSION_COOKIE" value="f1014a3ed40040d1df764ee35107d373-1368254421.775579-1418771489"/>
+    <property name="GEM_PATH" value="/home/mvm/.rvm/gems/ruby-2.0.0-p0:/home/mvm/.rvm/gems/ruby-2.0.0-p0@global"/>
+    <property name="XDG_SEAT_PATH" value="/org/freedesktop/DisplayManager/Seat0"/>
+    <property name="HISTSIZE" value=""/>
+    <property name="sun.os.patch.level" value="unknown"/>
+    <property name="EDITOR" value="vim"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="GPG_AGENT_INFO" value="/tmp/gpg-OpkWdB/S.gpg-agent:6943:1"/>
+    <property name="java.version" value="1.7.0_21"/>
+    <property name="JOB_NAME" value="Project One"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="XDG_DATA_DIRS" value="/usr/share/awesome:/usr/local/share/:/usr/share/"/>
+    <property name="user.name" value="mvm"/>
+    <property name="rvm_path" value="/home/mvm/.rvm"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="XDG_RUNTIME_DIR" value="/run/user/mvm"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="RUBY_VERSION" value="ruby-2.0.0-p0"/>
+    <property name="GNOME_KEYRING_CONTROL" value="/run/user/mvm/keyring-QL8Qq2"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="user.timezone" value="Europe/Berlin"/>
+    <property name="path.separator" value=":"/>
+    <property name="WINDOWID" value="18874378"/>
+    <property name="BUILD_TAG" value="jenkins-Project One-29"/>
+    <property name="TERM" value="rxvt-unicode"/>
+    <property name="rvm_warn_clr" value="&amp;#27;[38;5;3m"/>
+    <property name="GTK_MODULES" value="overlay-scrollbar"/>
+    <property name="MANDATORY_PATH" value="/usr/share/gconf/awesome.mandatory.path"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="PATH" value="/home/mvm/.rvm/gems/ruby-2.0.0-p0/bin:/home/mvm/.rvm/gems/ruby-2.0.0-p0@global/bin:/home/mvm/.rvm/rubies/ruby-2.0.0-p0/bin:/home/mvm/.rvm/bin:/home/mvm/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"/>
+    <property name="DESKTOP_SESSION" value="awesome"/>
+    <property name="rvm_prefix" value="/home/mvm"/>
+    <property name="__array_start" value="0"/>
+    <property name="sun.java.command" value="org.jvnet.hudson.maven3.agent.Maven3Main /usr/share/maven3/ /home/mvm/git/Masterarbeit/code/qualitygates/target/work/webapp/WEB-INF/lib/remoting-2.22.jar /home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-interceptor-1.2.jar 43308"/>
+    <property name="HUDSON_URL" value="http://localhost:8080/"/>
+    <property name="XDG_CONFIG_DIRS" value="/etc/xdg/xdg-awesome:/etc/xdg"/>
+    <property name="JENKINS_SERVER_COOKIE" value="29b31d22884b70d2"/>
+    <property name="EXECUTOR_NUMBER" value="1"/>
+    <property name="XDG_SESSION_PATH" value="/org/freedesktop/DisplayManager/Session2"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="user.language" value="de"/>
+    <property name="line.separator" value="
+"/>
+    <property name="escape_flag" value="1"/>
+    <property name="COLORTERM" value="rxvt-xpm"/>
+    <property name="BUILD_URL" value="http://localhost:8080/job/Project%20One/29/"/>
+    <property name="SSH_AGENT_PID" value="6942"/>
+    <property name="SHLVL" value="1"/>
+    <property name="M2_HOME" value="/usr/share/maven3/"/>
+    <property name="USER" value="mvm"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="rvm_debug_clr" value="&amp;#27;[38;5;5m"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="LESS" value=" -R "/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="DESKTOP_STARTUP_ID" value="awesome/urxvtcd/6882-7-Staboix_TIME491147714"/>
+    <property name="HUDSON_SERVER_COOKIE" value="29b31d22884b70d2"/>
+    <property name="PS1" value="\[\033[0;36m\][\[\033[0;33m\]\u\[\033[0;36m\]@\[\033[0;33m\]\h \t \[\033[0;33m\]\w\[\033[0;36m\]]\$\[\033[0m\] "/>
+    <property name="MAVEN_HOME" value="/usr/share/maven3/"/>
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
+    <property name="DEFAULTS_PATH" value="/usr/share/gconf/awesome.default.path"/>
+    <property name="CLASSPATH" value=""/>
+    <property name="rvm_notify_clr" value="&amp;#27;[38;5;2m"/>
+    <property name="XAUTHORITY" value="/home/mvm/.Xauthority"/>
+    <property name="LESSCLOSE" value="/usr/bin/lesspipe %s %s"/>
+    <property name="_JAVA_AWT_WM_NONREPARENTING" value="1"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="BUILD_NUMBER" value="29"/>
+    <property name="maven3.interceptor" value="/home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-interceptor-1.2.jar"/>
+    <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib/jni:/lib:/usr/lib"/>
+    <property name="java.class.version" value="51.0"/>
+    <property name="DBUS_SESSION_BUS_ADDRESS" value="unix:abstract=/tmp/dbus-nWDOs90RXF,guid=541ffd77a68e611ccce46252518de7da"/>
+    <property name="JOB_URL" value="http://localhost:8080/job/Project%20One/"/>
+    <property name="AUTOJUMP_HOME" value="/home/mvm"/>
+    <property name="COLORFGBG" value="7;default"/>
+    <property name="rvm_error_clr" value="&amp;#27;[38;5;1m"/>
+    <property name="JENKINS_HOME" value="/home/mvm/git/Masterarbeit/code/qualitygates/./work"/>
+    <property name="BUILD_ID" value="2013-05-14_16-28-33"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
+    <property name="HUDSON_HOME" value="/home/mvm/git/Masterarbeit/code/qualitygates/./work"/>
+    <property name="PATH+MAVEN" value="/usr/share/maven3//bin"/>
+    <property name="OLDPWD" value="/home/mvm/git/Masterarbeit/code/qualitygates"/>
+    <property name="java.vm.specification.version" value="1.7"/>
+    <property name="JAVA_HOME" value="/usr/lib/jvm/java-7-openjdk-amd64/"/>
+    <property name="SHELL" value="/bin/bash"/>
+    <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
+    <property name="NODE_LABELS" value="master"/>
+    <property name="sun.cpu.isalist" value=""/>
+    <property name="securerandom.source" value="file:/dev/./urandom"/>
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext:/usr/java/packages/lib/ext"/>
+    <property name="os.version" value="3.5.0-17-generic"/>
+    <property name="user.home" value="/home/mvm"/>
+    <property name="_" value="/usr/bin/mvn"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="rvm_reset_clr" value="&amp;#27;[m&amp;#27;(B"/>
+    <property name="IRBRC" value="/home/mvm/.rvm/rubies/ruby-2.0.0-p0/.irbrc"/>
+    <property name="PROMPT_COMMAND" value="{ [[ &quot;/home/mvm&quot; == &quot;/home/mvm&quot; ]] &amp;&amp; (autojump -a &quot;$(pwd ${_PWD_ARGS})&quot;&amp;)&gt;/dev/null 2&gt;&gt;&quot;/home/mvm/.local/share/autojump/.autojump_errors&quot;;} 2&gt;/dev/null ; mypromptcommand"/>
+    <property name="HISTFILESIZE" value=""/>
+    <property name="user.dir" value="/home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="_first" value="0"/>
+    <property name="VISUAL" value="vim"/>
+    <property name="GEM_HOME" value="/home/mvm/.rvm/gems/ruby-2.0.0-p0"/>
+    <property name="_second" value="1"/>
+    <property name="UBUNTU_MENUPROXY" value="libappmenu.so"/>
+    <property name="HISTCONTROL" value="ignoreboth"/>
+    <property name="MY_RUBY_HOME" value="/home/mvm/.rvm/rubies/ruby-2.0.0-p0"/>
+    <property name="java.vm.version" value="23.7-b01"/>
+    <property name="java.class.path" value="/home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-agent-1.2.jar:/usr/share/maven3/boot/plexus-classworlds-2.4.jar"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="WORKSPACE" value="/home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="AUTOJUMP_DATA_DIR" value="/home/mvm/.local/share/autojump"/>
+    <property name="LANG" value="de_DE.UTF-8"/>
+    <property name="GNOME_KEYRING_PID" value="6871"/>
+    <property name="LESSOPEN" value="| /usr/bin/lesspipe %s"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="file.separator" value="/"/>
+    <property name="java.runtime.version" value="1.7.0_21-b02"/>
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/resources.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jsse.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jce.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/charsets.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/netx.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/plugin.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rhino.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/jfr.jar:/usr/lib/jvm/java-7-openjdk-amd64/jre/classes"/>
+    <property name="PATH+JDK" value="/usr/lib/jvm/java-7-openjdk-amd64//bin"/>
+    <property name="user.country" value="DE"/>
+    <property name="maven.home" value="/usr/share/maven3"/>
+    <property name="HOME" value="/home/mvm"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="SSH_AUTH_SOCK" value="/tmp/ssh-brvjxLg8eDm3/agent.6882"/>
+    <property name="LS_COLORS" value="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:"/>
+    <property name="java.specification.version" value="1.7"/>
+    <property name="sun.arch.data.model" value="64"/>
+  </properties>
+  <testcase time="0.032" classname="model.UserTest" name="testGetLastNameWhenEmpty"/>
+  <testcase time="0" classname="model.UserTest" name="testGetLastNameWhenNotEmpty"/>
+  <testcase time="0.001" classname="model.UserTest" name="testGetFullnameSuccessfullWhenForeandLastNamespecified"/>
+  <testcase time="0" classname="model.UserTest" name="testGetFullNameEmptyWhenForeNameEmpty"/>
+  <testcase time="0" classname="model.UserTest" name="testGetFullNameEmptyWhenLastNameEmpty"/>
+  <testcase time="0" classname="model.UserTest" name="testAddingNeighbourSavesGivenUserasNeighbour"/>
+  <testcase time="0" classname="model.UserTest" name="testRemovingExistentNeighbour"/>
+</testsuite>

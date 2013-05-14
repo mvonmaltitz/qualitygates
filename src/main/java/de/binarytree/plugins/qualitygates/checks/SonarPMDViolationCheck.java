@@ -1,10 +1,12 @@
 package de.binarytree.plugins.qualitygates.checks;
 
-import org.kohsuke.stapler.DataBoundConstructor;
-
 import hudson.Extension;
+import hudson.Launcher;
+import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
+
+import org.kohsuke.stapler.DataBoundConstructor;
 
 public class SonarPMDViolationCheck extends SonarCheck {
 
@@ -20,8 +22,15 @@ public class SonarPMDViolationCheck extends SonarCheck {
 	public String getThreshold(){
 		return this.threshold; 
 	}
+	
 	@Override
-	public Result doCheck(AbstractBuild build) {
+	public String toString(){
+		return super.toString() +"[PMD <= " + this.getThreshold() + "]"; 
+	}
+	
+	@Override
+	public Result doCheck(AbstractBuild build, BuildListener listener,
+			Launcher launcher) {
 		return Result.FAILURE;
 	}
 

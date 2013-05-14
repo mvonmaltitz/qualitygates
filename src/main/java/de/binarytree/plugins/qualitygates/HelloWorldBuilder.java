@@ -55,8 +55,6 @@ public class HelloWorldBuilder extends Builder{
 	private String name;
 	private List<QualityGate> gates = new LinkedList<QualityGate>(); 
 
-	// Fields in config.jelly must match the parameter names in the
-	// "DataBoundConstructor"
 	@DataBoundConstructor
 	public HelloWorldBuilder(String name, Collection<QualityGate> gates) throws IOException {
 		this.name = name;
@@ -85,7 +83,7 @@ public class HelloWorldBuilder extends Builder{
 //			listener.getLogger().println("Hello, " + name + "!");
 		for(QualityGate gate : this.gates){
 			listener.getLogger().println("Invoking Quality Gate " +  gate.getName()); 
-			Result result = gate.doCheck(build); 
+			Result result = gate.doCheck(build, launcher, listener); 
 			listener.getLogger().println("Result: " + result.toString()); 
 		}
 		return true;

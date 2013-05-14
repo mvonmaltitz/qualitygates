@@ -1,10 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <maven2-moduleset>
   <actions/>
-  <description></description>
+  <description> </description>
   <keepDependencies>false</keepDependencies>
   <properties/>
-  <scm class="hudson.scm.NullSCM"/>
+  <scm class="hudson.plugins.filesystem_scm.FSSCM">
+    <path>/home/mvm/git/Masterarbeit/code/projectone/</path>
+    <clearWorkspace>false</clearWorkspace>
+    <copyHidden>false</copyHidden>
+    <filterEnabled>false</filterEnabled>
+    <includeFilter>false</includeFilter>
+    <filters/>
+  </scm>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -15,7 +22,6 @@
     <groupId>simpleproject</groupId>
     <artifactId>projectone</artifactId>
   </rootModule>
-  <rootPOM>/home/mvm/git/Masterarbeit/code/projectone/pom.xml</rootPOM>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
   <perModuleEmail>true</perModuleEmail>
@@ -38,18 +44,30 @@
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
           <name>Eins</name>
           <checks class="linked-list">
-            <de.binarytree.plugins.qualitygates.checks.FailingCheck/>
+            <de.binarytree.plugins.qualitygates.checks.POMCheck>
+              <expression>/project/parent/groupId</expression>
+              <targetFile>pom.xml</targetFile>
+            </de.binarytree.plugins.qualitygates.checks.POMCheck>
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
           <name>Zwei</name>
           <checks class="linked-list">
             <de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck/>
+            <de.binarytree.plugins.qualitygates.checks.XMLCheck>
+              <expression>/pmd</expression>
+              <targetFile>target/pmd.xml</targetFile>
+            </de.binarytree.plugins.qualitygates.checks.XMLCheck>
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
           <name>Drei</name>
-          <checks class="linked-list"/>
+          <checks class="linked-list">
+            <de.binarytree.plugins.qualitygates.checks.XMLCheck>
+              <expression>/project</expression>
+              <targetFile>/target/hugeddubel.xml</targetFile>
+            </de.binarytree.plugins.qualitygates.checks.XMLCheck>
+          </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
           <name>Vier</name>

@@ -1,18 +1,22 @@
 package de.binarytree.plugins.qualitygates.checks;
 
-import org.kohsuke.stapler.StaplerRequest;
-
-import net.sf.json.JSONObject;
-import hudson.model.AbstractProject;
+import hudson.Launcher;
+import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
-import hudson.model.Descriptor;
+import net.sf.json.JSONObject;
+
+import org.kohsuke.stapler.StaplerRequest;
 
 public abstract class SonarCheck extends Check {
 
 	@Override
-	public abstract Result doCheck(AbstractBuild build);
-
+	public abstract Result doCheck(AbstractBuild build, BuildListener listener,
+			Launcher launcher); 
+	@Override
+	public String toString(){
+		return super.toString() +"[Sonar]"; 
+	}
 	public static abstract class SonarCheckDescriptor extends CheckDescriptor {
 		
 		private String host; 
