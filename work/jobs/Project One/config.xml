@@ -48,6 +48,7 @@
               <expression>/project/parent/groupId</expression>
               <targetFile>pom.xml</targetFile>
             </de.binarytree.plugins.qualitygates.checks.POMCheck>
+            <de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck/>
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
@@ -65,13 +66,15 @@
           <checks class="linked-list">
             <de.binarytree.plugins.qualitygates.checks.XMLCheck>
               <expression>/project</expression>
-              <targetFile>/target/hugeddubel.xml</targetFile>
+              <targetFile>target/hugeddubel.xml</targetFile>
             </de.binarytree.plugins.qualitygates.checks.XMLCheck>
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
           <name>Vier</name>
-          <checks class="linked-list"/>
+          <checks class="linked-list">
+            <de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck/>
+          </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
       </gates>
     </de.binarytree.plugins.qualitygates.HelloWorldBuilder>

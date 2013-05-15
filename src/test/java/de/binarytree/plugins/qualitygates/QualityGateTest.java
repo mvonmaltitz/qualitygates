@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.result.GateResult;
 
 public class QualityGateTest {
 
@@ -29,10 +30,12 @@ public class QualityGateTest {
 		checkList.add(check2); 
 		gate = new QualityGate("Name", checkList){
 
+
 			@Override
-			public Result doCheck(AbstractBuild build, Launcher launcher,
-					BuildListener listener) {
-				return null;
+			public void doCheck(AbstractBuild build, Launcher launcher,
+					BuildListener listener, GateResult gateResult) {
+				// TODO Auto-generated method stub
+				
 			}
 
 			

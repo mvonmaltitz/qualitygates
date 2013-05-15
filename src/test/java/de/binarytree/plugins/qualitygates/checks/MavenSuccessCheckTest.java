@@ -12,46 +12,56 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck.MavenSuccessCheckDescriptor;
-
+import de.binarytree.plugins.qualitygates.result.CheckResult;
 
 public class MavenSuccessCheckTest {
 
 	private MavenSuccessCheck check;
 	private AbstractBuild build;
+	private MavenSuccessCheckDescriptor descriptor;
+
 	@Before
-	public void setUp(){
-		build = mock(AbstractBuild.class, RETURNS_DEEP_STUBS); 
-	    check = new MavenSuccessCheck(); 	
+	public void setUp() {
+		descriptor = new MavenSuccessCheck.MavenSuccessCheckDescriptor();
+		build = mock(AbstractBuild.class, RETURNS_DEEP_STUBS);
+		check = new MavenSuccessCheck(){
+			public MavenSuccessCheckDescriptor getDescriptor(){
+				return descriptor; 
+			}
+		};
 	}
-	
+
 	@Test
-	public void testDisplayName(){
-		MavenSuccessCheckDescriptor descriptor = new MavenSuccessCheck.MavenSuccessCheckDescriptor(); 
-		assertTrue(descriptor.getDisplayName().contains("Maven")); 
+	public void testDisplayName() {
+		assertTrue(descriptor.getDisplayName().contains("Maven"));
 	}
+
 	@Test
-	public void testBuildSuccess(){
-	    this.testBuildResult(Result.SUCCESS); 	
+	public void testBuildSuccess() {
+		this.testBuildResult(Result.SUCCESS);
 	}
+
 	@Test
-	public void testBuildIsNull(){
-		build = null; 
-	    Result result = check.doCheck(build, null, null); 
-	    assertEquals(Result.FAILURE, result);  
+	public void testBuildIsNull() {
+		build = null;
+		CheckResult result = check.check(build, null, null);
+		assertEquals(Result.FAILURE, result.getResult());
 	}
+
 	@Test
-	public void testBuildUnstable(){
-	    this.testBuildResult(Result.UNSTABLE); 	
+	public void testBuildUnstable() {
+		this.testBuildResult(Result.UNSTABLE);
 	}
+
 	@Test
-	public void testBuildFailed(){
-	    this.testBuildResult(Result.FAILURE); 	
+	public void testBuildFailed() {
+		this.testBuildResult(Result.FAILURE);
 	}
-	
+
 	public void testBuildResult(Result desiredResult) {
-		when(build.getResult()).thenReturn(desiredResult); 
-	    Result result = check.doCheck(build, null, null); 
-	    assertEquals(desiredResult, result);  
+		when(build.getResult()).thenReturn(desiredResult);
+		CheckResult result = check.check(build, null, null);
+		assertEquals(desiredResult, result.getResult());
 	}
 
 }

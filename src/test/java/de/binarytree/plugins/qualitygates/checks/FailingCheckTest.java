@@ -12,14 +12,20 @@ import static org.mockito.Mockito.*;
 public class FailingCheckTest {
 
 	private FailingCheck check;
+	private DescriptorImpl descriptor;
 	@Before
 	public void setUp() throws Exception {
-		check = new FailingCheck(); 
+		descriptor = new FailingCheck.DescriptorImpl(); 
+		check = new FailingCheck(){
+			public DescriptorImpl getDescriptor(){
+				return descriptor; 
+			}
+		}; 
+		
 	}
 
 	@Test
 	public void testDisplayName(){
-		DescriptorImpl descriptor = new FailingCheck.DescriptorImpl(); 
 		assertTrue(descriptor.getDisplayName().contains("fail")); 
 	}
 	@Test
@@ -29,12 +35,12 @@ public class FailingCheckTest {
 	@Test
 	public void testFailingWithValidBuild() {
 		AbstractBuild build = mock(AbstractBuild.class); 
-		assertEquals(Result.FAILURE, check.doCheck(build, null, null)); 
+		assertEquals(Result.FAILURE, check.check(build, null, null).getResult()); 
 	}
 	@Test
 	public void testFailingWithNullBuild() {
 		AbstractBuild build = null; 
-		assertEquals(Result.FAILURE, check.doCheck(build, null, null)); 
+		assertEquals(Result.FAILURE, check.check(build, null, null).getResult()); 
 	}
 
 }

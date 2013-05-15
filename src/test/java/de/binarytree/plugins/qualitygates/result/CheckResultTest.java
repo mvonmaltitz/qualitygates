@@ -19,12 +19,6 @@ import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
 public class CheckResultTest {
 
 	private Check check = new Check(){
-
-		@Override
-		public Result doCheck(AbstractBuild build, BuildListener listener,
-				Launcher launcher) {
-			return null;
-		}
 		
 		public CheckDescriptor getDescriptor(){
 			return new DescriptorImpl(); 
@@ -37,17 +31,17 @@ public class CheckResultTest {
 			}
 			
 		}
+		@Override
+		public void doCheck(AbstractBuild build, BuildListener listener,
+				Launcher launcher, CheckResult checkResult) {
+		}
 		
 	};
 	private CheckResult checkResult;
 
 	@Before
 	public void setUp() {
-		QualityGate gate = mock(QualityGate.class);
-		
-		GatesResult gatesResult = new GatesResult();
-		GateResult gateResult = gatesResult.addResultFor(gate);
-		checkResult = gateResult.addResultFor(check);
+		checkResult = new CheckResult(check); 
 	}
 
 	@Test

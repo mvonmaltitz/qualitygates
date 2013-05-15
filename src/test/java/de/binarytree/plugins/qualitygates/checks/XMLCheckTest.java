@@ -41,15 +41,28 @@ public class XMLCheckTest {
 	private XMLCheck xmlCheck;
 	private AbstractBuild build;
 
+	class MockXMLCheck extends XMLCheck {
+
+		public MockXMLCheck(String targetFile, String expression) {
+			super(targetFile, expression);
+		}
+
+		@Override
+		protected InputStream obtainInputStream(AbstractBuild build) {
+			return pomStream;
+		}
+
+		public CheckDescriptor getDescriptor() {
+			return descriptor;
+		}
+	}
+
 	@Before
 	public void setUp() throws Exception {
 		build = mock(AbstractBuild.class);
 		pomStream = new ByteArrayInputStream(pomString.getBytes());
 		descriptor = new XMLCheck.DescriptorImpl();
-		check = new XMLCheck(filePath, expression) {
-			public CheckDescriptor getDescriptor() {
-				return descriptor;
-			}
+		check = new MockXMLCheck(filePath, expression) {
 		};
 	}
 
@@ -113,40 +126,32 @@ public class XMLCheckTest {
 	@Test
 	public void testCheckFindsPresentXMLTag() throws XPathExpressionException,
 			ParserConfigurationException, SAXException, IOException {
-		xmlCheck = new XMLCheck("pom.xml", "/project/parent/groupId") {
-			@Override
-			protected InputStream obtainInputStream(AbstractBuild build) {
-				return pomStream;
-			}
-		};
-		assertEquals(Result.SUCCESS, xmlCheck.doCheck(build, null, null));
+		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId"); 
+		assertEquals(Result.SUCCESS, xmlCheck.check(build, null, null)
+				.getResult());
 	}
 
 	@Test
 	public void testCheckDoesNotFindNonPresentXMLTag()
 			throws XPathExpressionException, ParserConfigurationException,
 			SAXException, IOException {
-		xmlCheck = new XMLCheck("pom.xml", "/project/parent/notHere") {
-			@Override
-			protected InputStream obtainInputStream(AbstractBuild build) {
-				return pomStream;
-			}
-		};
-		assertEquals(Result.FAILURE, xmlCheck.doCheck(build, null, null));
+		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere"); 
+		assertEquals(Result.FAILURE, xmlCheck.check(build, null, null)
+				.getResult());
 	}
 
 	@Test
-	public void testExceptionCausesFailureResult(){
-		xmlCheck = new XMLCheck("pom.xml", "/project/parent/notHere") {
+	public void testExceptionCausesFailureResult() {
+		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere") {
 			@Override
 			protected InputStream obtainInputStream(AbstractBuild build) {
-				throw new RuntimeException(); 
+				throw new RuntimeException();
 			}
 		};
-			Result result = xmlCheck.doCheck(build, null, null); 
-			assertEquals(Result.FAILURE, result); 
+		Result result = xmlCheck.check(build, null, null).getResult();
+		assertEquals(Result.FAILURE, result);
 	}
-	
+
 	@Test
 	public void testValidationOkForValidExpression() {
 		assertEquals(descriptor.doCheckExpression("/project/parent/groupId"),

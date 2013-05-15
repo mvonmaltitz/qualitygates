@@ -7,40 +7,37 @@ import hudson.model.Result;
 import hudson.model.AbstractBuild;
 
 import java.util.Collection;
-import java.util.logging.Logger;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.GateResult;
 
 public class QualityGateImpl extends QualityGate {
 
 	@DataBoundConstructor
 	public QualityGateImpl(String name, Collection<Check> checks) {
-		super(name, checks) ; 
+		super(name, checks);
 
 	}
 
 	@Override
-	public Result doCheck(AbstractBuild build, Launcher launcher,
-			BuildListener listener) {
-		listener.getLogger().println("QG " + this.getName()); 
-		Result result; 
+	public void doCheck(AbstractBuild build, Launcher launcher,
+			BuildListener listener, GateResult gateResult) {
+		listener.getLogger().println("QG " + this.getName());
 		if (checksAreAvailable()) {
-			result = doChecksAndGetResultFor(build, listener, launcher);
+			Result result = Result.SUCCESS;
+			for (Check check : this.checks) {
+				CheckResult checkResult = check.check(build, listener, launcher); 
+				result = result.combine(checkResult.getResult());
+				listener.getLogger().println( "Check: " + check.toString() + " Result: " + result.toString());
+				gateResult.addCheckResult(checkResult); 
+				gateResult.setResult(result); 
+			}
 		} else {
-			result = resultOfEmptyGate(); 
+			gateResult.setResult(this.resultOfEmptyGate());
 		}
-			return result;
-	}
-
-	private Result doChecksAndGetResultFor(AbstractBuild build, BuildListener listener, Launcher launcher) {
-		Result result = Result.SUCCESS;
-		for (Check check : this.checks) {
-			result = result.combine(check.doCheck(build, listener, launcher));
-			listener.getLogger().println("Check: " + check.toString() + " Result: " + result.toString());
-		}
-		return result;
 	}
 
 	private Result resultOfEmptyGate() {

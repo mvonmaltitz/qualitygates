@@ -8,10 +8,16 @@ import hudson.model.Describable;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
+import de.binarytree.plugins.qualitygates.result.CheckResult;
 
 public abstract class Check implements Describable<Check>, ExtensionPoint {
 
-	public abstract Result doCheck(AbstractBuild build, BuildListener listener, Launcher launcher);
+	public CheckResult check(AbstractBuild build, BuildListener listener, Launcher launcher){
+		CheckResult checkResult = new CheckResult(this); 
+		this.doCheck(build, listener, launcher, checkResult); 
+		return checkResult; 
+	}
+	public abstract void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult);
     
 	public String toString(){
 		return "Check [" + this.getDescriptor().getDisplayName() + "]"; 

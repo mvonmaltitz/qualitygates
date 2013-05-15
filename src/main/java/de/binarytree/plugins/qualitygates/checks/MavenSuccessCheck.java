@@ -2,6 +2,8 @@ package de.binarytree.plugins.qualitygates.checks;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import de.binarytree.plugins.qualitygates.result.CheckResult;
+
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.BuildListener;
@@ -16,12 +18,12 @@ public class MavenSuccessCheck extends Check{
 	public MavenSuccessCheck(){}
 	
 	@Override
-	public Result doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher) {
+	public void doCheck(AbstractBuild build, BuildListener listener,
+			Launcher launcher, CheckResult checkResult) {
 		if(build != null){
-			return build.getResult(); 
+			checkResult.setResult(build.getResult(), build.getBuildStatusSummary().message); 
 		}else{
-			return Result.FAILURE; 
+			checkResult.setResult(Result.FAILURE, "Build was null"); 
 		}
 	}
 

@@ -1,22 +1,15 @@
 package de.binarytree.plugins.qualitygates;
 
-import hudson.BulkChange;
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.XmlFile;
 import hudson.model.BuildListener;
 import hudson.model.Result;
-import hudson.model.Saveable;
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractItem;
 import hudson.model.AbstractProject;
-import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
-import hudson.util.DescribableList;
 import hudson.util.FormValidation;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -29,9 +22,9 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-
-import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
+import de.binarytree.plugins.qualitygates.result.BuildResultAction;
+import de.binarytree.plugins.qualitygates.result.GateResult;
+import de.binarytree.plugins.qualitygates.result.GatesResult;
 
 /**
  * Sample {@link Builder}.
@@ -50,14 +43,17 @@ import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
  * 
  * @author Kohsuke Kawaguchi
  */
-public class HelloWorldBuilder extends Builder{
+public class HelloWorldBuilder extends Builder {
 
 	private String name;
-	private List<QualityGate> gates = new LinkedList<QualityGate>(); 
+	private List<QualityGate> gates = new LinkedList<QualityGate>();
+	private GatesResult gatesResult;
 
 	@DataBoundConstructor
-	public HelloWorldBuilder(String name, Collection<QualityGate> gates) throws IOException {
+	public HelloWorldBuilder(String name, Collection<QualityGate> gates)
+			throws IOException {
 		this.name = name;
+		this.gatesResult = new GatesResult();
 		if (gates != null) {
 			this.gates.addAll(gates);
 		}
@@ -71,31 +67,45 @@ public class HelloWorldBuilder extends Builder{
 	}
 
 	public int getNumberOfGates() {
-		return this.gates.size(); 
+		return this.gates.size();
 	}
-	
+
 	@Override
 	public boolean perform(AbstractBuild build, Launcher launcher,
 			BuildListener listener) {
-//		if (getDescriptor().getUseFrench())
-//			listener.getLogger().println("Bonjour, " + name + "!");
-//		else
-//			listener.getLogger().println("Hello, " + name + "!");
-		for(QualityGate gate : this.gates){
-			listener.getLogger().println("Invoking Quality Gate " +  gate.getName()); 
-			Result result = gate.doCheck(build, launcher, listener); 
-			listener.getLogger().println("Result: " + result.toString()); 
+		boolean evaluateGates = true; 
+		for (QualityGate gate : this.gates) {
+			if (hasToBeEvaluated(gate)) {
+				GateResult gateResult = gate.check(build, launcher, listener);
+				gatesResult.addGateResult(gateResult);
+				if(shouldStopEvaluationDueTo(gateResult)){
+					evaluateGates = false; 
+				}
+			}
 		}
+		build.addAction(new BuildResultAction(gatesResult));
 		return true;
 
+	}
+
+	private boolean shouldStopEvaluationDueTo(GateResult gateResult) {
+		Result result = gateResult.getResult(); 
+		return result.equals(Result.FAILURE) || result.equals(Result.NOT_BUILT); 
+	}
+
+	private boolean hasToBeEvaluated(QualityGate gate) {
+		Result result  = this.gatesResult.getResultFor(gate); 
+		return result.equals(Result.NOT_BUILT);
 	}
 
 	public List<QualityGate> getGates() {
 		return gates;
 	}
+
 	public Collection<QualityGateDescriptor> getDescriptors() {
 		return QualityGate.all();
 	}
+
 	// Overridden for better type safety.
 	// If your plugin doesn't really define any property on Descriptor,
 	// you don't have to do this.
@@ -103,7 +113,6 @@ public class HelloWorldBuilder extends Builder{
 	public DescriptorImpl getDescriptor() {
 		return (DescriptorImpl) super.getDescriptor();
 	}
-
 
 	/**
 	 * Descriptor for {@link HelloWorldBuilder}. Used as a singleton. The class
@@ -127,7 +136,6 @@ public class HelloWorldBuilder extends Builder{
 		 * If you don't want fields to be persisted, use <tt>transient</tt>.
 		 */
 		private boolean useFrench;
-
 
 		/**
 		 * Performs on-the-fly validation of the form field 'name'.
@@ -184,7 +192,5 @@ public class HelloWorldBuilder extends Builder{
 			return useFrench;
 		}
 	}
-
-
 
 }

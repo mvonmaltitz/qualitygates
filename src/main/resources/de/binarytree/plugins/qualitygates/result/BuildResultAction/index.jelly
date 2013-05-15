@@ -1,0 +1,39 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+                     <style type="text/css">
+                     .gates{
+                     font-size: 120%; 
+                     }
+                     .FAILURE {
+                     background-color: red; 
+                     }
+                     .SUCCESS {
+                     background-color: lightgreen; 
+                     }
+                     .NOTBUILT {
+                     background-color: gray; 
+                     }
+                     </style>
+    <l:layout xmlns:plugin="/de/binarytree/plugins/qualitygates/tags" css="/de/binarytree/plugins/qualitygates/css/style.css">
+        <l:main-panel>
+            <h1>${it.displayName}</h1>
+            <h2>${it.gatesResult.numberOfGates} Gates</h2>
+            <ul class="gates">
+                <j:forEach var="gateResult" items="${it.gatesResult.gateResults}" >
+				    <li class="gate ${gateResult.result}">
+				    <h3>Gate "${gateResult.gateName}": ${gateResult.result}</h3>
+			    <ul class="checks">
+                <j:forEach var="checkResult" items="${gateResult.checkResults}" >
+                <li class="check ${checkResult.result}">
+                <h4>Check ${checkResult.checkName}: ${checkResult.result}</h4>
+                <p>${checkResult.reason}</p>
+                </li>
+			    </j:forEach>
+			    </ul>
+				    </li>
+			    </j:forEach>
+			    </ul>
+            <!--<st:include page="reportDetail.jelly"/>-->
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

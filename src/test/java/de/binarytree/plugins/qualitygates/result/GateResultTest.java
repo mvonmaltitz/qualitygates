@@ -16,34 +16,51 @@ public class GateResultTest {
 
 	private GateResult gateResult;
 	private Check check;
+	private Check check2;
+	private CheckResult checkResult1;
+	private CheckResult checkResult2;
 
 	@Before
 	public void setUp() {
 		GatesResult gatesResult = new GatesResult();
 		QualityGate gate = mock(QualityGate.class);
-		gateResult = gatesResult.addResultFor(gate);
+		gateResult = new GateResult(gate); 
 		check = mock(Check.class, Mockito.RETURNS_DEEP_STUBS);
-		when(check.getDescriptor().getDisplayName()).thenReturn("Check Type");
+		check2 = mock(Check.class, Mockito.RETURNS_DEEP_STUBS);
+		setCheckMockName(check, "Check Type One");
+		setCheckMockName(check2, "Check Type Two");
+		checkResult1 = new CheckResult(check); 
+		checkResult2 = new CheckResult(check2); 
+	}
+
+	private void setCheckMockName(Check check, String name) {
+		when(check.getDescriptor().getDisplayName()).thenReturn(name);
 		when(check.toString()).thenReturn("Check String Representation");
 	}
 
 	@Test
 	public void testNewCheckResultHasCorrectCheckName() {
-		CheckResult checkResult = gateResult.addResultFor(check);
-		assertEquals(checkResult.getCheckName(), check.getDescriptor()
+		assertEquals(checkResult1.getCheckName(), check.getDescriptor()
 				.getDisplayName());
-		assertEquals(checkResult.getDescription(), check.toString());
+		assertEquals(checkResult1.getDescription(), check.toString());
 	}
 
 	@Test
 	public void testAddingAGateIncrementsNumberOfGates() {
 		assertEquals(0, gateResult.getNumberOfChecks());
-		gateResult.addResultFor(check);
+		gateResult.addCheckResult(checkResult1); 
 		assertEquals(1, gateResult.getNumberOfChecks());
-		gateResult.addResultFor(check);
+		gateResult.addCheckResult(checkResult2); 
 		assertEquals(2, gateResult.getNumberOfChecks());
 	}
 	
+	@Test
+	public void testGetAddedChecks(){
+		gateResult.addCheckResult(checkResult1); 
+		gateResult.addCheckResult(checkResult2); 
+		assertTrue(gateResult.getCheckResults().contains(checkResult1)); 
+		assertTrue(gateResult.getCheckResults().contains(checkResult2)); 
+	}
 
 	@Test 
 	public void testSettingAndGettingOfResultOfGate(){

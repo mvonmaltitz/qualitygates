@@ -1,7 +1,7 @@
 package de.binarytree.plugins.qualitygates;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -17,6 +17,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
+import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.GateResult;
 
 public class QualityGateImplTest {
 
@@ -30,6 +33,7 @@ public class QualityGateImplTest {
 	private AbstractBuild build;
 	private LinkedList<Check> checkList;
 	private BuildListener listener;
+	private CheckDescriptor descriptor;
 
 	@Before
 	public void setUp() throws Exception {
@@ -39,6 +43,8 @@ public class QualityGateImplTest {
 		listener = mock(BuildListener.class);
 		when(listener.getLogger()).thenReturn(stream); 
 		checkList = new LinkedList<Check>();
+		descriptor = mock(CheckDescriptor.class);
+		when(descriptor.getDisplayName()).thenReturn("Mock Check");
 	}
 
 	@Test 
@@ -108,13 +114,16 @@ public class QualityGateImplTest {
 		
 	}
 	public void performGateCheckAndExpect(Result expectedResult) {
-		Result result = gate.doCheck(build, null, listener);
-		assertEquals(expectedResult, result);
+		GateResult result = gate.check(build, null, listener);
+		assertEquals(expectedResult, result.getResult());
 	}
 
 	public Check getCheckMockWithResult(Result result) {
 		Check check = mock(Check.class);
-		when(check.doCheck(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(result);
+		when(check.getDescriptor()).thenReturn(descriptor); 
+		CheckResult checkResult = new CheckResult(check); 
+		checkResult.setResult(result, "Mock Result"); 
+		when(check.check(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(checkResult);
 		return check;
 	}
 	

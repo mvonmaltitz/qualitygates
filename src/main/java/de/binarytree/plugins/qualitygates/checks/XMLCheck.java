@@ -26,6 +26,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import de.binarytree.plugins.qualitygates.result.CheckResult;
+
 public class XMLCheck extends Check {
 
 	private String expression;
@@ -46,17 +48,19 @@ public class XMLCheck extends Check {
 	}
 
 	@Override
-	public Result doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher) {
+	public void doCheck(AbstractBuild build, BuildListener listener,
+			Launcher launcher, CheckResult checkResult) {
 		try {
 			InputStream stream = obtainInputStream(build);
 			if (this.xmlContainsXPathExpression(stream)) {
-				return Result.SUCCESS;
+				checkResult.setResult(Result.SUCCESS);
+			} else {
+				checkResult.setResult(Result.FAILURE, this.getExpression()
+						+ " not found in " + this.getTargetFile());
 			}
 		} catch (Exception e) {
-			return Result.FAILURE;
+			checkResult.setResult(Result.FAILURE, e.getMessage());
 		}
-		return Result.FAILURE;
 	}
 
 	@Override
