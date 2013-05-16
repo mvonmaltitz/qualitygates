@@ -20,13 +20,13 @@ public class POMCheckTest {
 
 	@Test
 	public void testSettingAndGettingExpression() {
-		pomCheck = new POMCheck("Expression");
+		pomCheck = new POMCheck("Expression", true);
 		assertEquals("Expression", pomCheck.getExpression());
 	}
 
 	@Test
 	public void testGettingFile(){
-		pomCheck = new POMCheck("Expression");
+		pomCheck = new POMCheck("Expression", true);
 		assertEquals("pom.xml", pomCheck.getTargetFile());
 	}
 }

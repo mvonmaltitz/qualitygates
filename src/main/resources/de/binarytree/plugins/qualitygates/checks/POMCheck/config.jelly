@@ -12,4 +12,7 @@
   <f:entry title="Expression" field="expression">
     <f:textbox />
   </f:entry>
+  <f:entry title="Report content of matched Expression" field="reportContent">
+    <f:checkbox />
+  </f:entry>
 </j:jelly>

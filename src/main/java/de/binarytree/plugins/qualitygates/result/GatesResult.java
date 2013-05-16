@@ -7,56 +7,44 @@ import java.util.List;
 
 import de.binarytree.plugins.qualitygates.QualityGate;
 
-public class GatesResult {
+public class GatesResult extends ListContainer<GateResult>{
 
-	List<GateResult> gates = new LinkedList<GateResult>();
-
+	private List<GateResult> gates(){
+		return this.getItems(); 
+	}
+	
 	public int getNumberOfGates() {
-		return gates.size();
+		return gates().size();
 	}
 
 	public void addGateResult(GateResult gateResult) {
-		int index = getIndexOfResultWithSameGateReference(gateResult);
-		if (index == -1) {
-			this.gates.add(gateResult);
-		} else {
-			this.replaceGateResultAtIndex(index, gateResult);
-		}
-
-	}
-
-	private void replaceGateResultAtIndex(int index, GateResult gateResult) {
-		this.gates.remove(index);
-		this.gates.add(index, gateResult);
-	}
-
-	private int getIndexOfResultWithSameGateReference(GateResult gateResult) {
-		for (int i = 0; i < this.gates.size(); i++) {
-			if (this.gates.get(i).referencesSameGateAs(gateResult)) {
-				return i;
-			}
-		}
-		return -1;
+		this.addOrReplaceItem(gateResult); 
 	}
 
 	public List<GateResult> getGateResults() {
-		return new LinkedList<GateResult>(this.gates);
+		return new LinkedList<GateResult>(this.gates());
 	}
 
+	
 	public Result getResultFor(QualityGate gate) {
-		GateResult result = this.getResultForGate(gate);
+		GateResult result = this.getGateResultFor(gate);
 		if (result != null) {
 			return result.getResult();
 		}
 		return Result.NOT_BUILT;
 	}
 
-	private GateResult getResultForGate(QualityGate gate) {
-		for (GateResult result : this.gates) {
+	public GateResult getGateResultFor(QualityGate gate) {
+		for (GateResult result : this.gates()) {
 			if (result.belongsTo(gate)) {
 				return result;
 			}
 		}
 		return null;
+	}
+
+	@Override
+	protected boolean isSameItem(GateResult a, GateResult b) {
+		return a.referencesSameGateAs(b); 
 	}
 }

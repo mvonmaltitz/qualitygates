@@ -10,7 +10,7 @@
                      .SUCCESS {
                      background-color: lightgreen; 
                      }
-                     .NOTBUILT {
+                     .NOT_BUILT {
                      background-color: gray; 
                      }
                      </style>

@@ -7,8 +7,8 @@ import org.kohsuke.stapler.DataBoundConstructor;
 public class POMCheck extends XMLCheck {
 
 	@DataBoundConstructor
-	public POMCheck(String expression) {
-		super("pom.xml", expression); 
+	public POMCheck(String expression, boolean reportContent) {
+		super("pom.xml", expression, reportContent); 
 	}
 
 	@Extension

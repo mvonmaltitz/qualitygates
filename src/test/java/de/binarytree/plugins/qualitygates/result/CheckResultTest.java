@@ -63,7 +63,7 @@ public class CheckResultTest {
 			checkResult.setResult(result);
 			fail("Negative results without reason should be disallowed."); 
 			}catch(IllegalArgumentException e){
-				assertNull(checkResult.getResult()); 
+				assertEquals(Result.NOT_BUILT, checkResult.getResult()); 
 				assertNull(checkResult.getReason()); 
 			}
 		}
@@ -79,6 +79,13 @@ public class CheckResultTest {
 			assertEquals(result, checkResult.getResult()); 
 			assertEquals(reason, checkResult.getReason()); 
 		}
+	}
+	
+	@Test
+	public void testGetCheckResultDocumentation(){
+	 CheckResult checkResult = check.document(); 	
+	 assertEquals(Result.NOT_BUILT, checkResult.getResult()); 
+		
 	}
 
 }

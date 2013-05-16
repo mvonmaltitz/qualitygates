@@ -45,6 +45,13 @@ public abstract class QualityGate implements Describable<QualityGate>, Extension
 		this.doCheck(build, launcher, listener, gateResult); 
 		return gateResult; 
 	}
+	public GateResult document(){
+		GateResult gateResult = new GateResult(this); 
+		for(Check check: this.checks){
+			gateResult.addCheckResult(check.document()); 
+		}
+		return gateResult; 
+	}
 	public abstract void doCheck(AbstractBuild build, Launcher launcher, BuildListener listener, GateResult gateResult); 
 	
 	public QualityGateDescriptor getDescriptor(){

@@ -14,11 +14,11 @@
     </entry>
     <entry>
       <string>Project One/simpleproject:projectone</string>
-      <ranges>2-3,5-7,10-27,29-33,35-42</ranges>
+      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
     </entry>
     <entry>
       <string>Project One</string>
-      <ranges>2-3,5-7,10-27,29-33,35-42</ranges>
+      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
     </entry>
   </usages>
   <facets/>

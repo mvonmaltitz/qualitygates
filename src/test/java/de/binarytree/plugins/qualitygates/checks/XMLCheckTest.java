@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import de.binarytree.plugins.qualitygates.checks.XMLCheck.DescriptorImpl;
+import de.binarytree.plugins.qualitygates.result.CheckResult;
 
 public class XMLCheckTest {
 
@@ -29,12 +30,13 @@ public class XMLCheckTest {
 	private String expression = "/parent";
 	private String filePath = "aFile.xml";
 	private ByteArrayInputStream pomStream;
+	private String content = "contentCONTENTcontent"; 
 	private String pomString = "<project xmlns='http://maven.apache.org/POM/4.0.0' "
 			+ "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' "
 			+ "xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd'>"
 			+ "<modelVersion>4.0.0</modelVersion> "
 			+ "<parent>  "
-			+ "<groupId>org.jenkins-ci.plugins</groupId> "
+			+ "<groupId>" + content + "</groupId> "
 			+ "<artifactId>plugin</artifactId> <version>1.480.3</version>"
 			+ "<!-- which version of Jenkins is this plugin built against? --> "
 			+ "</parent>" + "</project>";
@@ -44,7 +46,7 @@ public class XMLCheckTest {
 	class MockXMLCheck extends XMLCheck {
 
 		public MockXMLCheck(String targetFile, String expression) {
-			super(targetFile, expression);
+			super(targetFile, expression, true);
 		}
 
 		@Override
@@ -76,6 +78,7 @@ public class XMLCheckTest {
 	public void testSettingAndGettingParameters() {
 		assertEquals(expression, check.getExpression());
 		assertEquals(filePath, check.getTargetFile());
+		assertEquals(true, check.getReportContent());
 	}
 
 	@Test
@@ -127,8 +130,9 @@ public class XMLCheckTest {
 	public void testCheckFindsPresentXMLTag() throws XPathExpressionException,
 			ParserConfigurationException, SAXException, IOException {
 		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId"); 
-		assertEquals(Result.SUCCESS, xmlCheck.check(build, null, null)
-				.getResult());
+		CheckResult result = xmlCheck.check(build, null, null);
+		assertEquals(Result.SUCCESS, result.getResult()); 
+		assertTrue(result .getReason().contains(content));
 	}
 
 	@Test

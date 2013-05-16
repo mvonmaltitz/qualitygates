@@ -1,13 +1,13 @@
-target/site/jacoco/jacoco.csv
 target/classes/model/Address.class
-target/site/cpd.html
+target/site/jacoco/jacoco.csv
 target/java-basic.xml
-src/main/java/model/Address.java
+target/site/cpd.html
 src/main/java/model/User.java
+src/main/java/model/Address.java
 target/test-classes/model/UserTest.class
 target/jacoco.exec
-target/site/jacoco/model/User.java.html
 target/java-unusedcode.xml
+target/site/jacoco/model/User.java.html
 target/surefire-reports/TEST-model.UserTest.xml
 target/site/jacoco/model/index.html
 target/site/jacoco/model/Address.java.html
@@ -22,6 +22,6 @@ target/classes/model/User.class
 target/site/jacoco/jacoco.xml
 target/surefire-reports/model.UserTest.txt
 target/site/jacoco/index.html
-target/site/pmd.html
-pom.xml
 target/projectone-0.0.1-SNAPSHOT.jar
+pom.xml
+target/site/pmd.html

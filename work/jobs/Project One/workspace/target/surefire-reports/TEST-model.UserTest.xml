@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.536" errors="0" skipped="0" tests="7" name="model.UserTest">
+<testsuite failures="0" time="1.383" errors="0" skipped="0" tests="7" name="model.UserTest">
   <properties>
     <property name="DISPLAY" value=":0"/>
     <property name="file.encoding.pkg" value="sun.io"/>
@@ -37,7 +37,7 @@
     <property name="user.timezone" value="Europe/Berlin"/>
     <property name="path.separator" value=":"/>
     <property name="WINDOWID" value="23068712"/>
-    <property name="BUILD_TAG" value="jenkins-Project One-42"/>
+    <property name="BUILD_TAG" value="jenkins-Project One-49"/>
     <property name="TERM" value="rxvt-unicode"/>
     <property name="rvm_warn_clr" value="&amp;#27;[38;5;3m"/>
     <property name="GTK_MODULES" value="overlay-scrollbar"/>
@@ -47,7 +47,7 @@
     <property name="DESKTOP_SESSION" value="awesome"/>
     <property name="rvm_prefix" value="/home/mvm"/>
     <property name="__array_start" value="0"/>
-    <property name="sun.java.command" value="org.jvnet.hudson.maven3.agent.Maven3Main /usr/share/maven3/ /home/mvm/git/Masterarbeit/code/qualitygates/target/work/webapp/WEB-INF/lib/remoting-2.22.jar /home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-interceptor-1.2.jar 44725"/>
+    <property name="sun.java.command" value="org.jvnet.hudson.maven3.agent.Maven3Main /usr/share/maven3/ /home/mvm/git/Masterarbeit/code/qualitygates/target/work/webapp/WEB-INF/lib/remoting-2.22.jar /home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-interceptor-1.2.jar 33672"/>
     <property name="HUDSON_URL" value="http://localhost:8080/"/>
     <property name="XDG_CONFIG_DIRS" value="/etc/xdg/xdg-awesome:/etc/xdg"/>
     <property name="JENKINS_SERVER_COOKIE" value="29b31d22884b70d2"/>
@@ -59,7 +59,7 @@
 "/>
     <property name="escape_flag" value="1"/>
     <property name="COLORTERM" value="rxvt-xpm"/>
-    <property name="BUILD_URL" value="http://localhost:8080/job/Project%20One/42/"/>
+    <property name="BUILD_URL" value="http://localhost:8080/job/Project%20One/49/"/>
     <property name="SSH_AGENT_PID" value="2472"/>
     <property name="SHLVL" value="2"/>
     <property name="M2_HOME" value="/usr/share/maven3/"/>
@@ -83,7 +83,7 @@
     <property name="os.name" value="Linux"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
-    <property name="BUILD_NUMBER" value="42"/>
+    <property name="BUILD_NUMBER" value="49"/>
     <property name="maven3.interceptor" value="/home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-interceptor-1.2.jar"/>
     <property name="java.library.path" value="/usr/java/packages/lib/amd64:/usr/lib/jni:/lib:/usr/lib"/>
     <property name="java.class.version" value="51.0"/>
@@ -93,7 +93,7 @@
     <property name="COLORFGBG" value="7;default"/>
     <property name="rvm_error_clr" value="&amp;#27;[38;5;1m"/>
     <property name="JENKINS_HOME" value="/home/mvm/git/Masterarbeit/code/qualitygates/./work"/>
-    <property name="BUILD_ID" value="2013-05-16_11-40-32"/>
+    <property name="BUILD_ID" value="2013-05-16_15-48-32"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
@@ -148,11 +148,11 @@
     <property name="java.specification.version" value="1.7"/>
     <property name="sun.arch.data.model" value="64"/>
   </properties>
-  <testcase time="0.047" classname="model.UserTest" name="testGetLastNameWhenEmpty"/>
-  <testcase time="0" classname="model.UserTest" name="testGetLastNameWhenNotEmpty"/>
+  <testcase time="0.057" classname="model.UserTest" name="testGetLastNameWhenNotEmpty"/>
   <testcase time="0" classname="model.UserTest" name="testGetFullnameSuccessfullWhenForeandLastNamespecified"/>
   <testcase time="0" classname="model.UserTest" name="testGetFullNameEmptyWhenForeNameEmpty"/>
   <testcase time="0" classname="model.UserTest" name="testGetFullNameEmptyWhenLastNameEmpty"/>
   <testcase time="0" classname="model.UserTest" name="testAddingNeighbourSavesGivenUserasNeighbour"/>
-  <testcase time="0.005" classname="model.UserTest" name="testRemovingExistentNeighbour"/>
+  <testcase time="0" classname="model.UserTest" name="testRemovingExistentNeighbour"/>
+  <testcase time="0" classname="model.UserTest" name="testGetLastNameWhenEmpty"/>
 </testsuite>

@@ -44,6 +44,12 @@ public class QualityGateTest {
 	}
 
 	@Test
+	public void testGetDocumentation(){
+	 GateResult gateResult = gate.document(); 	
+	 assertEquals(Result.NOT_BUILT, gateResult.getResult()); 
+	 assertEquals(2, gateResult.getCheckResults().size()); 
+	}
+	@Test
 	public void testNameParam() {
 		assertEquals("Name", gate.getName()); 
 	}

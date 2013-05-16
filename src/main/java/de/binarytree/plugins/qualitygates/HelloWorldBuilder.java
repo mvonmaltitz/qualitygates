@@ -3,7 +3,6 @@ package de.binarytree.plugins.qualitygates;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.BuildListener;
-import hudson.model.Result;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
@@ -22,32 +21,18 @@ import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
+
 import de.binarytree.plugins.qualitygates.result.BuildResultAction;
-import de.binarytree.plugins.qualitygates.result.GateResult;
 import de.binarytree.plugins.qualitygates.result.GatesResult;
 
 /**
- * Sample {@link Builder}.
- * 
- * <p>
- * When the user configures the project and enables this builder,
- * {@link DescriptorImpl#newInstance(StaplerRequest)} is invoked and a new
- * {@link HelloWorldBuilder} is created. The created instance is persisted to
- * the project configuration XML by using XStream, so this allows you to use
- * instance fields (like {@link #name}) to remember the configuration.
- * 
- * <p>
- * When a build is performed, the
- * {@link #perform(AbstractBuild, Launcher, BuildListener)} method will be
- * invoked.
- * 
- * @author Kohsuke Kawaguchi
+ * @author Marcel von Maltitz
  */
 public class HelloWorldBuilder extends Builder {
 
 	private String name;
 	private List<QualityGate> gates = new LinkedList<QualityGate>();
-	private GatesResult gatesResult = new GatesResult(); 
+	private GatesResult gatesResult;
 
 	@DataBoundConstructor
 	public HelloWorldBuilder(String name, Collection<QualityGate> gates)
@@ -72,30 +57,9 @@ public class HelloWorldBuilder extends Builder {
 	@Override
 	public boolean perform(AbstractBuild build, Launcher launcher,
 			BuildListener listener) {
-		boolean evaluateGates = true; 
-		for (QualityGate gate : this.gates) {
-			if (hasToBeEvaluated(gate)) {
-				GateResult gateResult = gate.check(build, launcher, listener);
-				gatesResult.addGateResult(gateResult);
-				if(shouldStopEvaluationDueTo(gateResult)){
-					evaluateGates = false; 
-					break; 
-				}
-			}
-		}
+		gatesResult = new GateEvaluator(this.gates).evaluate(build, launcher, listener);
 		build.addAction(new BuildResultAction(gatesResult));
 		return true;
-
-	}
-
-	private boolean shouldStopEvaluationDueTo(GateResult gateResult) {
-		Result result = gateResult.getResult(); 
-		return result.equals(Result.FAILURE) || result.equals(Result.NOT_BUILT); 
-	}
-
-	private boolean hasToBeEvaluated(QualityGate gate) {
-		Result result  = this.gatesResult.getResultFor(gate); 
-		return result.equals(Result.NOT_BUILT);
 	}
 
 	public List<QualityGate> getGates() {

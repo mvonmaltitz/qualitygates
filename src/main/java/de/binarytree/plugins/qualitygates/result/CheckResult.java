@@ -7,10 +7,12 @@ public class CheckResult {
 
 	private String checkName;
 	private String description;
-	private Result result;
+	private Result result = Result.NOT_BUILT;
 	private String reason;
+	private transient Check check;
 
 	public CheckResult(Check check) {
+		this.check = check; 
 		this.checkName = check.getDescriptor().getDisplayName();
 		this.description = check.toString();
 	}
@@ -45,4 +47,7 @@ public class CheckResult {
 		return this.reason; 
 	}
 
+	public boolean referencesSameCheckAs(CheckResult b) {
+		return this.check == b.check; 
+	}
 }

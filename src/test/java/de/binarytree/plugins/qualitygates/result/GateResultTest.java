@@ -75,5 +75,4 @@ public class GateResultTest {
 	public void testDefaultResultOfGateResult() {
 		assertEquals(Result.NOT_BUILT, gateResult.getResult());
 	}
-
 }
