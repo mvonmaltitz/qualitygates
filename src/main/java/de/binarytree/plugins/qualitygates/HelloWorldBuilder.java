@@ -47,13 +47,12 @@ public class HelloWorldBuilder extends Builder {
 
 	private String name;
 	private List<QualityGate> gates = new LinkedList<QualityGate>();
-	private GatesResult gatesResult;
+	private GatesResult gatesResult = new GatesResult(); 
 
 	@DataBoundConstructor
 	public HelloWorldBuilder(String name, Collection<QualityGate> gates)
 			throws IOException {
 		this.name = name;
-		this.gatesResult = new GatesResult();
 		if (gates != null) {
 			this.gates.addAll(gates);
 		}
@@ -80,6 +79,7 @@ public class HelloWorldBuilder extends Builder {
 				gatesResult.addGateResult(gateResult);
 				if(shouldStopEvaluationDueTo(gateResult)){
 					evaluateGates = false; 
+					break; 
 				}
 			}
 		}

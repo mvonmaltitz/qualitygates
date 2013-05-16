@@ -1,6 +1,5 @@
 package de.binarytree.plugins.qualitygates.result;
 
-
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import hudson.model.Result;
@@ -24,13 +23,13 @@ public class GateResultTest {
 	public void setUp() {
 		GatesResult gatesResult = new GatesResult();
 		QualityGate gate = mock(QualityGate.class);
-		gateResult = new GateResult(gate); 
+		gateResult = new GateResult(gate);
 		check = mock(Check.class, Mockito.RETURNS_DEEP_STUBS);
 		check2 = mock(Check.class, Mockito.RETURNS_DEEP_STUBS);
 		setCheckMockName(check, "Check Type One");
 		setCheckMockName(check2, "Check Type Two");
-		checkResult1 = new CheckResult(check); 
-		checkResult2 = new CheckResult(check2); 
+		checkResult1 = new CheckResult(check);
+		checkResult2 = new CheckResult(check2);
 	}
 
 	private void setCheckMockName(Check check, String name) {
@@ -48,26 +47,33 @@ public class GateResultTest {
 	@Test
 	public void testAddingAGateIncrementsNumberOfGates() {
 		assertEquals(0, gateResult.getNumberOfChecks());
-		gateResult.addCheckResult(checkResult1); 
+		gateResult.addCheckResult(checkResult1);
 		assertEquals(1, gateResult.getNumberOfChecks());
-		gateResult.addCheckResult(checkResult2); 
+		gateResult.addCheckResult(checkResult2);
 		assertEquals(2, gateResult.getNumberOfChecks());
 	}
-	
+
 	@Test
-	public void testGetAddedChecks(){
-		gateResult.addCheckResult(checkResult1); 
-		gateResult.addCheckResult(checkResult2); 
-		assertTrue(gateResult.getCheckResults().contains(checkResult1)); 
-		assertTrue(gateResult.getCheckResults().contains(checkResult2)); 
+	public void testGetAddedChecks() {
+		gateResult.addCheckResult(checkResult1);
+		gateResult.addCheckResult(checkResult2);
+		assertTrue(gateResult.getCheckResults().contains(checkResult1));
+		assertTrue(gateResult.getCheckResults().contains(checkResult2));
 	}
 
-	@Test 
-	public void testSettingAndGettingOfResultOfGate(){
-		Result[] results = new Result[]{Result.SUCCESS, Result.FAILURE, Result.NOT_BUILT, Result.UNSTABLE};
-		for(Result result : results){
-		gateResult.setResult(result); 
-	    assertEquals(result, gateResult.getResult()); 	
+	@Test
+	public void testSettingAndGettingOfResultOfGate() {
+		Result[] results = new Result[] { Result.SUCCESS, Result.FAILURE,
+				Result.NOT_BUILT, Result.UNSTABLE };
+		for (Result result : results) {
+			gateResult.setResult(result);
+			assertEquals(result, gateResult.getResult());
 		}
 	}
+
+	@Test
+	public void testDefaultResultOfGateResult() {
+		assertEquals(Result.NOT_BUILT, gateResult.getResult());
+	}
+
 }

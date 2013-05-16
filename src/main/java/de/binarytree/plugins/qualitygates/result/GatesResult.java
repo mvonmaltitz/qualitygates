@@ -20,10 +20,14 @@ public class GatesResult {
 		if (index == -1) {
 			this.gates.add(gateResult);
 		} else {
-			this.gates.remove(index);
-			this.gates.add(index, gateResult);
+			this.replaceGateResultAtIndex(index, gateResult);
 		}
 
+	}
+
+	private void replaceGateResultAtIndex(int index, GateResult gateResult) {
+		this.gates.remove(index);
+		this.gates.add(index, gateResult);
 	}
 
 	private int getIndexOfResultWithSameGateReference(GateResult gateResult) {

@@ -12,17 +12,6 @@
   <f:entry title="Name" field="name">
     <f:textbox />
   </f:entry>
-	 <f:block>
-    <p> ${descriptor.url} </p>
-    <p> ${descriptor.displayName} </p>
-	</f:block>
-    <j:forEach var="gate" items="${instance.gates}">
-    <f:block>
-            <li>
-              <a href="${gate.url}/">${gate.displayName}</a>
-            </li>
-          </f:block>
-          </j:forEach>
           <f:block>
             <f:hetero-list name="gates" hasHeader="true"
                            descriptors="${instance.descriptors}"

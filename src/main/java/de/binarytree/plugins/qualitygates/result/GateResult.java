@@ -14,7 +14,7 @@ public class GateResult {
 
 	private String gateName;
 	private List<CheckResult> checks = new LinkedList<CheckResult>();
-	private Result result; 
+	private Result result = Result.NOT_BUILT;  
 	private transient QualityGate gate; 
 
 	public GateResult(QualityGate gate) {
