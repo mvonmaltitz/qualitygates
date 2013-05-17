@@ -1,5 +1,6 @@
 package de.binarytree.plugins.qualitygates.checks;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -44,6 +45,10 @@ public class XMLCheckTest {
 	private AbstractBuild build;
 
 	class MockXMLCheck extends XMLCheck {
+
+		public MockXMLCheck(String targetFile, String expression, boolean reportContent) {
+			super(targetFile, expression, reportContent);
+		}
 
 		public MockXMLCheck(String targetFile, String expression) {
 			super(targetFile, expression, true);
@@ -140,8 +145,10 @@ public class XMLCheckTest {
 			throws XPathExpressionException, ParserConfigurationException,
 			SAXException, IOException {
 		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere"); 
-		assertEquals(Result.FAILURE, xmlCheck.check(build, null, null)
+		CheckResult checkResult = xmlCheck.check(build, null, null);
+		assertEquals(Result.FAILURE, checkResult
 				.getResult());
+		assertFalse(checkResult.getReason().contains("Exception"));
 	}
 
 	@Test
@@ -152,8 +159,9 @@ public class XMLCheckTest {
 				throw new RuntimeException();
 			}
 		};
-		Result result = xmlCheck.check(build, null, null).getResult();
-		assertEquals(Result.FAILURE, result);
+		CheckResult checkResult = xmlCheck.check(build, null, null);
+		assertEquals(Result.FAILURE, checkResult.getResult());
+		assertTrue(checkResult.getReason().contains("Exception"));
 	}
 
 	@Test
@@ -168,4 +176,11 @@ public class XMLCheckTest {
 				FormValidation.error("Invalid XPath expression").kind);
 	}
 
+	@Test
+	public void testReasonIsEmptyWhenReportingIsOff(){
+		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId", false); 
+		CheckResult result = xmlCheck.check(build, null, null);
+		assertEquals(Result.SUCCESS, result.getResult()); 
+		assertEquals("", result .getReason());
+	}
 }

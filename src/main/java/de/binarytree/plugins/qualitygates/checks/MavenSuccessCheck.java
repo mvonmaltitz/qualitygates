@@ -37,4 +37,9 @@ public class MavenSuccessCheck extends Check{
 		
 	}
 
+	@Override
+	public String getDescription() {
+		return "The result of the maven build process"; 
+	}
+
 }

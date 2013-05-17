@@ -37,4 +37,9 @@ public class FailingCheck extends Check {
 
 	}
 
+	@Override
+	public String getDescription() {
+		return "Always failing check"; 
+	}
+
 }

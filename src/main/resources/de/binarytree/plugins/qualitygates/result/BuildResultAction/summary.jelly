@@ -1,5 +1,18 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:local="local">
   <j:set var="action" value="${it}"/>
-  <div>Build Summ: Hier stehen Quality Gates Ergebnisse</div>
+      
+      <t:summary icon="${rootURL}/../plugin/qualitygates/images/48x48/qualitygate_icon.png">
+        <a href="${it.urlName}">${it.displayName}</a>
+           <p>${it.gatesResult.numberOfSuccessfulGates}/${it.gatesResult.numberOfGates} Gates successful</p>
+  <j:set var="terminationReasons" value="${it.gatesResult.reasonsOfTermination}"/>
+  <j:if test="${size(terminationReasons) > 0}"  >
+  Reasons for termination: 
+  <ul>
+                <j:forEach var="reason" items="${terminationReasons}" >
+				    <li> ${reason} </li>
+                </j:forEach>
+           </ul>
+           </j:if>
+    </t:summary>
 </j:jelly>

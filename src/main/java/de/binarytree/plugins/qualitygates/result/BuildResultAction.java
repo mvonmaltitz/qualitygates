@@ -4,6 +4,7 @@ import hudson.model.ProminentProjectAction;
 
 public class BuildResultAction implements ProminentProjectAction {
 
+	private final String ICONS_PREFIX = "/plugin/qualitygates/images/24x24/"; 
 
 	private GatesResult gatesResult;
 
@@ -15,7 +16,7 @@ public class BuildResultAction implements ProminentProjectAction {
 	}
 	
 	public String getIconFileName() {
-		return "icon.png";
+		return ICONS_PREFIX + "qualitygate_icon.png";
 	}
 
 	public String getDisplayName() {

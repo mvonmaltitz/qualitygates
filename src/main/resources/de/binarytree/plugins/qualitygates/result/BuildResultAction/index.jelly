@@ -10,6 +10,9 @@
                      .SUCCESS {
                      background-color: lightgreen; 
                      }
+                     .UNSTABLE {
+                     background-color: yellow; 
+                     }
                      .NOT_BUILT {
                      background-color: gray; 
                      }
@@ -25,7 +28,7 @@
 			    <ul class="checks">
                 <j:forEach var="checkResult" items="${gateResult.checkResults}" >
                 <li class="check ${checkResult.result}">
-                <h4>Check ${checkResult.checkName}: ${checkResult.result}</h4>
+                <h4>${checkResult.description}: ${checkResult.result}</h4>
                 <p>${checkResult.reason}</p>
                 </li>
 			    </j:forEach>

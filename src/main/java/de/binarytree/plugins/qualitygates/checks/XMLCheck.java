@@ -10,6 +10,7 @@ import hudson.util.FormValidation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -59,7 +60,11 @@ public class XMLCheck extends Check {
 		try {
 			matchExpression(build, checkResult);
 		} catch (Exception e) {
-			checkResult.setResult(Result.FAILURE, e.getMessage());
+			String reason = e.getMessage(); 
+			if(reason == null){
+				reason = Arrays.toString(e.getStackTrace()); 
+			}
+			checkResult.setResult(Result.FAILURE,"Exception: " +  reason);
 		}
 	}
 
@@ -76,7 +81,7 @@ public class XMLCheck extends Check {
 			if (reportContent) {
 				checkResult.setResult(Result.SUCCESS, "Content: " + content);
 			} else {
-				checkResult.setResult(Result.SUCCESS, "Content: " + content);
+				checkResult.setResult(Result.SUCCESS, "");
 			}
 		} else {
 			checkResult.setResult(Result.FAILURE, this.getExpression()
@@ -97,14 +102,22 @@ public class XMLCheck extends Check {
 
 		Object result = expr.evaluate(doc, XPathConstants.NODESET);
 		NodeList nodes = (NodeList) result;
-		// System.out.println(nodes.item(i).getTextContent());
-		return nodes.item(0).getTextContent();
+		if (nodes.getLength() > 0) {
+			return nodes.item(0).getTextContent();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public String toString() {
 		return super.toString() + "[Occurence of " + this.getExpression()
 				+ " in " + this.getTargetFile() + "]";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Occurence of " + this.getExpression() + " in " + this.getTargetFile(); 
 	}
 
 	protected InputStream obtainInputStream(AbstractBuild build)

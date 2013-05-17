@@ -14,7 +14,7 @@ public class CheckResult {
 	public CheckResult(Check check) {
 		this.check = check; 
 		this.checkName = check.getDescriptor().getDisplayName();
-		this.description = check.toString();
+		this.description = check.getDescription();
 	}
 
 	public String getDescription() {

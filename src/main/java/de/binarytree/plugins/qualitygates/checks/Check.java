@@ -24,6 +24,7 @@ public abstract class Check implements Describable<Check>, ExtensionPoint {
 	}
 	public abstract void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult);
     
+	public abstract String getDescription(); 
 	public String toString(){
 		return "Check [" + this.getDescriptor().getDisplayName() + "]"; 
 	}

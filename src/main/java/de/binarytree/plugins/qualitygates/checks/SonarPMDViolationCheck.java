@@ -55,4 +55,9 @@ public class SonarPMDViolationCheck extends SonarCheck {
 		}
 
 	}
+
+	@Override
+	public String getDescription() {
+		return "PMD Violations <= " + this.threshold; 
+	}
 }

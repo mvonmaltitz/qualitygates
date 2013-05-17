@@ -47,4 +47,30 @@ public class GatesResult extends ListContainer<GateResult>{
 	protected boolean isSameItem(GateResult a, GateResult b) {
 		return a.referencesSameGateAs(b); 
 	}
+
+	public int getNumberOfSuccessfulGates() {
+		int count = 0; 
+		for(GateResult result : this.gates()){
+			if(resultCausedTermination(result)){
+				break; 
+			}
+			count++; 
+		}
+		return count;
+	}
+
+	public List<String> getReasonsOfTermination() {
+		LinkedList<String> reasons = new LinkedList<String>(); 
+		for(GateResult result : this.gates()){
+			if(resultCausedTermination(result)){
+				reasons = result.getReasonOfFailure(); 
+				break; 
+			}
+		}
+		return reasons; 
+	}
+
+	private boolean resultCausedTermination(GateResult result) {
+		return result.getResult().isWorseOrEqualTo(Result.FAILURE);
+	}
 }

@@ -34,14 +34,14 @@ public class GateResultTest {
 
 	private void setCheckMockName(Check check, String name) {
 		when(check.getDescriptor().getDisplayName()).thenReturn(name);
-		when(check.toString()).thenReturn("Check String Representation");
+		when(check.getDescription()).thenReturn("Check String Representation");
 	}
 
 	@Test
 	public void testNewCheckResultHasCorrectCheckName() {
 		assertEquals(checkResult1.getCheckName(), check.getDescriptor()
 				.getDisplayName());
-		assertEquals(checkResult1.getDescription(), check.toString());
+		assertEquals(checkResult1.getDescription(), check.getDescription());
 	}
 
 	@Test

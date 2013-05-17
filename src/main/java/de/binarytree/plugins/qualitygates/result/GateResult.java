@@ -57,9 +57,18 @@ public class GateResult extends ListContainer<CheckResult>{
 	public boolean referencesSameGateAs(GateResult gateResult){
 		return this.gate == gateResult.gate; 
 	}
-
 	@Override
 	protected boolean isSameItem(CheckResult a, CheckResult b) {
 		return a.referencesSameCheckAs(b); 
+	}
+
+	public LinkedList<String> getReasonOfFailure() {
+		LinkedList<String> reasons = new LinkedList<String>(); 
+		for(CheckResult result : this.checks()){
+			if(result.getResult().isWorseOrEqualTo(Result.FAILURE)){
+				reasons.add(result.getReason()); 
+			}
+		}
+		return reasons; 
 	}
 }

@@ -35,6 +35,10 @@ public class CheckResultTest {
 		public void doCheck(AbstractBuild build, BuildListener listener,
 				Launcher launcher, CheckResult checkResult) {
 		}
+		@Override
+		public String getDescription() {
+			return "Check Description";
+		}
 		
 	};
 	private CheckResult checkResult;
