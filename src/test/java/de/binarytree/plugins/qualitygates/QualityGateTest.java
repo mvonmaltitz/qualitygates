@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
+import de.binarytree.plugins.qualitygates.result.CheckResult;
 import de.binarytree.plugins.qualitygates.result.GateResult;
 
 public class QualityGateTest {
@@ -21,10 +23,32 @@ public class QualityGateTest {
 	private QualityGate gate;
 	private LinkedList<Check> checkList;
 
+	class MockCheck extends Check {
+
+		private String name;
+		public MockCheck(String name){
+		this.name = name; 	
+		}
+		public CheckDescriptor getDescriptor(){
+			return new CheckDescriptor(){
+
+				@Override
+				public String getDisplayName() {
+					return name;
+				}
+				
+			}; 
+		}
+		@Override
+		public void doCheck(AbstractBuild build, BuildListener listener,
+				Launcher launcher, CheckResult checkResult) {
+		}
+		
+	}
 	@Before
 	public void setUp() throws Exception {
-		Check check1 = mock(Check.class); 
-		Check check2 = mock(Check.class); 
+		Check check1 = new MockCheck("Check1"); 
+		Check check2 = new MockCheck("Check2"); 
 		checkList = new LinkedList<Check>(); 
 		checkList.add(check1); 
 		checkList.add(check2); 
@@ -61,5 +85,6 @@ public class QualityGateTest {
 	public void testChecksContainOnlyChecksOfCollectionDuringConstruction(){
 		assertEquals(gate.getChecks(), checkList); 
 	}
+
 
 }

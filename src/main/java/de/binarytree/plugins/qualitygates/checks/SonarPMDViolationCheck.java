@@ -50,7 +50,6 @@ public class SonarPMDViolationCheck extends SonarCheck {
 
 		@Override
 		public String getDisplayName() {
-			System.out.println("getDisplayName in PMD");
 			return "Quality Gate: Sonar PMD Violation Check";
 
 		}

@@ -14,7 +14,7 @@
   </f:entry>
           <f:block>
             <f:hetero-list name="gates" hasHeader="true"
-                           descriptors="${instance.descriptors}"
+                           descriptors="${descriptor.descriptors}"
                            items="${instance.gates}"
                            addCaption="${%Add Gate}"/>
           </f:block>

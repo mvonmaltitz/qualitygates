@@ -14,7 +14,7 @@
   </f:entry>
           <f:block>
             <f:hetero-list name="checks" hasHeader="true"
-                           descriptors="${instance.descriptors}"
+                           descriptors="${descriptor.descriptors}"
                            items="${instance.checks}"
                            addCaption="${%Add Check}"/>
           </f:block>

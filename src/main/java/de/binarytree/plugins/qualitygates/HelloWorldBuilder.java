@@ -57,17 +57,14 @@ public class HelloWorldBuilder extends Builder {
 	@Override
 	public boolean perform(AbstractBuild build, Launcher launcher,
 			BuildListener listener) {
-		gatesResult = new GateEvaluator(this.gates).evaluate(build, launcher, listener);
+		gatesResult = new GateEvaluator(this.gates).evaluate(build, launcher,
+				listener);
 		build.addAction(new BuildResultAction(gatesResult));
 		return true;
 	}
 
 	public List<QualityGate> getGates() {
 		return gates;
-	}
-
-	public Collection<QualityGateDescriptor> getDescriptors() {
-		return QualityGate.all();
 	}
 
 	// Overridden for better type safety.
@@ -100,6 +97,10 @@ public class HelloWorldBuilder extends Builder {
 		 * If you don't want fields to be persisted, use <tt>transient</tt>.
 		 */
 		private boolean useFrench;
+
+		public Collection<QualityGateDescriptor> getDescriptors() {
+			return QualityGate.all();
+		}
 
 		/**
 		 * Performs on-the-fly validation of the form field 'name'.

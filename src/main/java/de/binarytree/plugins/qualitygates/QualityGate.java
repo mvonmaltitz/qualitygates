@@ -28,10 +28,6 @@ public abstract class QualityGate implements Describable<QualityGate>, Extension
 			this.checks.addAll(checks);
 		}
 	}
-
-	public DescriptorExtensionList<Check,CheckDescriptor> getDescriptors(){
-		return Check.all(); 
-	}
 	public List<Check> getChecks(){
 		return this.checks; 
 	}
