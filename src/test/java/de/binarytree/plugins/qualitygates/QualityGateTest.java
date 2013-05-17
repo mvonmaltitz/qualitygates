@@ -29,8 +29,6 @@ public class QualityGateTest {
 		checkList.add(check1); 
 		checkList.add(check2); 
 		gate = new QualityGate("Name", checkList){
-
-
 			@Override
 			public void doCheck(AbstractBuild build, Launcher launcher,
 					BuildListener listener, GateResult gateResult) {
