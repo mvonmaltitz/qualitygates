@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <fingerprint>
-  <timestamp>2013-05-11 21:52:45.215 CEST</timestamp>
+  <timestamp>2013-05-11 19:52:45.215 UTC</timestamp>
   <original>
     <name>Project One/simpleproject:projectone</name>
     <number>2</number>
@@ -10,11 +10,11 @@
   <usages>
     <entry>
       <string>Project One/simpleproject:projectone</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
     <entry>
       <string>Project One</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
   </usages>
   <facets/>

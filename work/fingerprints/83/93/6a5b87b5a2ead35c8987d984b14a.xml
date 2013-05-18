@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <fingerprint>
-  <timestamp>2013-05-11 21:52:45.620 CEST</timestamp>
+  <timestamp>2013-05-11 19:52:45.620 UTC</timestamp>
   <md5sum>83936a5b87b5a2ead35c8987d984b14a</md5sum>
   <fileName>org.apache.maven.doxia:doxia-sink-api-1.1.jar</fileName>
   <usages>
     <entry>
       <string>Project One/simpleproject:projectone</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
     <entry>
       <string>Project One</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
   </usages>
   <facets/>

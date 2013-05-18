@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <fingerprint>
-  <timestamp>2013-05-11 21:36:32.458 CEST</timestamp>
+  <timestamp>2013-05-11 19:36:32.458 UTC</timestamp>
   <md5sum>237a8e845441bad2e535c57d985c8204</md5sum>
   <fileName>commons-lang:commons-lang-2.4.jar</fileName>
   <usages>
@@ -14,11 +14,11 @@
     </entry>
     <entry>
       <string>Project One/simpleproject:projectone</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
     <entry>
       <string>Project One</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
   </usages>
   <facets/>

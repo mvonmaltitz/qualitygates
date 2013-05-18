@@ -1,0 +1,4 @@
+src/main/java/model/Address.java
+src/main/java/model/User.java
+pom.xml
+src/test/java/model/UserTest.java

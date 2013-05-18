@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <fingerprint>
-  <timestamp>2013-05-11 21:52:45.779 CEST</timestamp>
+  <timestamp>2013-05-11 19:52:45.779 UTC</timestamp>
   <md5sum>503a45919f711527649a6664b4f8e92c</md5sum>
   <fileName>org.apache.maven.reporting:maven-reporting-api-2.1.0.jar</fileName>
   <usages>
     <entry>
       <string>Project One/simpleproject:projectone</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
     <entry>
       <string>Project One</string>
-      <ranges>2-3,5-7,10-27,29-33,35-49</ranges>
+      <ranges>2-27,29-33,35-49</ranges>
     </entry>
   </usages>
   <facets/>

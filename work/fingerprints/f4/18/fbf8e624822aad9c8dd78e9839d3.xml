@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<fingerprint>
+  <timestamp>2013-05-17 16:08:15.751 UTC</timestamp>
+  <original>
+    <name>Project One/simpleproject:projectone</name>
+    <number>19</number>
+  </original>
+  <md5sum>f418fbf8e624822aad9c8dd78e9839d3</md5sum>
+  <fileName>projectone-0.0.1-SNAPSHOT.jar</fileName>
+  <usages>
+    <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>19</ranges>
+    </entry>
+    <entry>
+      <string>Project One</string>
+      <ranges>19</ranges>
+    </entry>
+  </usages>
+  <facets/>
+</fingerprint>

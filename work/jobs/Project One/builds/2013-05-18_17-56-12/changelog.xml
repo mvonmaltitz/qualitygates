@@ -1,0 +1,29 @@
+<log plugin="filesystem_scm@1.20">
+  <logs>
+    <changelog>
+      <parent reference="../../.."/>
+      <paths>
+        <path>
+          <value>src/test/java/model/UserTest.java</value>
+          <action>ADD</action>
+          <changelog reference="../../.."/>
+        </path>
+        <path>
+          <value>src/main/java/model/Address.java</value>
+          <action>ADD</action>
+          <changelog reference="../../.."/>
+        </path>
+        <path>
+          <value>src/main/java/model/User.java</value>
+          <action>ADD</action>
+          <changelog reference="../../.."/>
+        </path>
+        <path>
+          <value>pom.xml</value>
+          <action>ADD</action>
+          <changelog reference="../../.."/>
+        </path>
+      </paths>
+    </changelog>
+  </logs>
+</log>
