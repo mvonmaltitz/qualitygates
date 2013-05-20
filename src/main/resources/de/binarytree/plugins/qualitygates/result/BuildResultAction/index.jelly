@@ -2,32 +2,39 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
                      <style type="text/css">
+
                      #gatereport{
                        width: 500px; 
                      }
+
                      ul{
                        list-style-type: none; 
                        padding: 0px; 
                        margin: 0px; 
                      }
+
                      .gate, .gatetitle{
                        border-radius: 15px; 
                      }
-                     .gatetitle{
-                       border-bottom-left-radius: 0; 
-                       border-bottom-right-radius: 0; 
-                     }
+
                      .gate{
                        padding: 0px; 
                        padding-bottom: 10px; 
                        margin: 5px;
                      }
+
                      .gatetitle{
                        font-weight: 900; 
                        font-size: 140%; 
-                        line-height: 100%; 
+                       line-height: 100%; 
                        margin: 0;
                        padding: 6px; 
+                       border-bottom-left-radius: 0; 
+                       border-bottom-right-radius: 0; 
+                     }
+
+                     .checktitle {
+                     font-weight: 900; 
                      }
 
                      .checktitle, .reason{
@@ -36,9 +43,14 @@
                      padding: 2px; 
                      }
 
+                     .reason{
+                       width: 80%; 
+                     }
+
                      .check{
                      padding: 5px; 
                      }
+
                      .gates{
                      font-size: 120%; 
                      margin: 0px; 
@@ -72,19 +84,27 @@
                      background-color: yellow; 
                      }
 
-                     .gatetitle.NOT_BUILT:after, .checktitle.NOT_BUILT:after{
+                      .gateicon, .checkicon{
+                      float:right; 
+                      background: none; 
+                      }
+
+                     .gateicon.NOT_BUILT:after, .checkicon.NOT_BUILT:after{
                      content:" ?"; 
                      font-size: 160%; 
                      }
-                     .gatetitle.FAILURE:after, .checktitle.FAILURE:after{
+                     .gateicon.FAILURE:after, .checkicon.FAILURE:after{
+
                      content:" ✘"; 
                      font-size: 160%; 
                      }
-                     .gatetitle.UNSTABLE:after, .checktitle.UNSTABLE:after{
+
+                     .gateicon.UNSTABLE:after, .checkicon.UNSTABLE:after{
                      content:" ⚠"; 
                      font-size: 160%; 
                      }
-                     .gatetitle.SUCCESS:after, .checktitle.SUCCESS:after{
+
+                     .gateicon.SUCCESS:after, .checkicon.SUCCESS:after{
                      content:" ✔"; 
                      font-size: 160%; 
                      }
@@ -98,11 +118,13 @@
             <ul class="gates">
                 <j:forEach var="gateResult" items="${it.gatesResult.gateResults}" >
 				    <li class="gate ${gateResult.result}">
-				    <p class="gatetitle ${gateResult.result}">Gate "${gateResult.gateName}"</p>
+				    <p class="gatetitle ${gateResult.result}">Gate "${gateResult.gateName}"
+				    <span class="gateicon ${gateResult.result}" /></p>
 			    <ul class="checks">
                 <j:forEach var="checkResult" items="${gateResult.checkResults}" >
                 <li class="check ${checkResult.result}">
-                <p class="checktitle ${checkResult.result}">${checkResult.description}</p>
+                <p class="checktitle ${checkResult.result}">${checkResult.description}
+				    <span class="checkicon ${gateResult.result}" /></p>
                 <p class="reason">${checkResult.reason}</p>
                 </li>
 			    </j:forEach>
