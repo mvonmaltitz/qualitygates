@@ -2,35 +2,108 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
                      <style type="text/css">
+                     #gatereport{
+                       width: 500px; 
+                     }
+                     ul{
+                       list-style-type: none; 
+                       padding: 0px; 
+                       margin: 0px; 
+                     }
+                     .gate, .gatetitle{
+                       border-radius: 15px; 
+                     }
+                     .gatetitle{
+                       border-bottom-left-radius: 0; 
+                       border-bottom-right-radius: 0; 
+                     }
+                     .gate{
+                       padding: 0px; 
+                       padding-bottom: 10px; 
+                       margin: 5px;
+                     }
+                     .gatetitle{
+                       font-weight: 900; 
+                       font-size: 140%; 
+                        line-height: 100%; 
+                       margin: 0;
+                       padding: 6px; 
+                     }
+
+                     .checktitle, .reason{
+                     line-height: 80%; 
+                     margin: 0;
+                     padding: 2px; 
+                     }
+
+                     .check{
+                     padding: 5px; 
+                     }
                      .gates{
                      font-size: 120%; 
+                     margin: 0px; 
+                     padding: 0px; 
+                     }
+
+                     .UNSTABLE {
+                     background-color: #FFFF44; 
+                     }
+                     .NOT_BUILT {
+                     background-color: #dddddd; 
                      }
                      .FAILURE {
-                     background-color: red; 
+                     background-color: #FF7777; 
                      }
                      .SUCCESS {
                      background-color: lightgreen; 
                      }
-                     .UNSTABLE {
+
+                     .gatetitle.NOT_BUILT{
+                       background-color: #bbbbbb; 
+                     }
+                     .gatetitle.FAILURE{
+                     background-color: red; 
+                     }
+                     .gatetitle.SUCCESS{
+                     background-color: #00FF00; 
+                     }
+
+                     .gatetitle.UNSTABLE{
                      background-color: yellow; 
                      }
-                     .NOT_BUILT {
-                     background-color: gray; 
+
+                     .gatetitle.NOT_BUILT:after, .checktitle.NOT_BUILT:after{
+                     content:" ?"; 
+                     font-size: 160%; 
                      }
+                     .gatetitle.FAILURE:after, .checktitle.FAILURE:after{
+                     content:" ✘"; 
+                     font-size: 160%; 
+                     }
+                     .gatetitle.UNSTABLE:after, .checktitle.UNSTABLE:after{
+                     content:" ⚠"; 
+                     font-size: 160%; 
+                     }
+                     .gatetitle.SUCCESS:after, .checktitle.SUCCESS:after{
+                     content:" ✔"; 
+                     font-size: 160%; 
+                     }
+
                      </style>
     <l:layout xmlns:plugin="/de/binarytree/plugins/qualitygates/tags" css="/de/binarytree/plugins/qualitygates/css/style.css">
         <l:main-panel>
+        <div id="gatereport">
             <h1>${it.displayName}</h1>
             <h2>${it.gatesResult.numberOfGates} Gates</h2>
             <ul class="gates">
                 <j:forEach var="gateResult" items="${it.gatesResult.gateResults}" >
 				    <li class="gate ${gateResult.result}">
-				    <h3>Gate "${gateResult.gateName}": ${gateResult.result}</h3>
+				    <p class="gatetitle ${gateResult.result}">Gate "${gateResult.gateName}"</p>
 			    <ul class="checks">
                 <j:forEach var="checkResult" items="${gateResult.checkResults}" >
                 <li class="check ${checkResult.result}">
-                <h4>${checkResult.description}: ${checkResult.result}</h4>
-                <p>${checkResult.reason}</p>
+                <p class="checktitle ${checkResult.result}">${checkResult.description}</p>
+                <p class="reason">${checkResult.reason}</p>
                 </li>
 			    </j:forEach>
 			    </ul>
@@ -38,6 +111,7 @@
 			    </j:forEach>
 			    </ul>
             <!--<st:include page="reportDetail.jelly"/>-->
+            </div>
         </l:main-panel>
     </l:layout>
 </j:jelly>
