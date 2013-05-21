@@ -20,10 +20,10 @@ public class MavenSuccessCheck extends Check{
 	@Override
 	public void doCheck(AbstractBuild build, BuildListener listener,
 			Launcher launcher, CheckResult checkResult) {
-		if(build != null){
+		if(build != null && build.getResult() != null){
 			checkResult.setResult(build.getResult(), build.getBuildStatusSummary().message); 
 		}else{
-			checkResult.setResult(Result.FAILURE, "Build was null"); 
+			checkResult.setResult(Result.FAILURE, "Build or build result was null"); 
 		}
 	}
 
