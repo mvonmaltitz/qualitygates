@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<de.binarytree.plugins.qualitygates.HelloWorldBuilder_-DescriptorImpl>
-  <helpRedirect/>
+<de.binarytree.plugins.qualitygates.HelloWorldBuilder_-DescriptorImpl plugin="qualitygates@1.0-SNAPSHOT">
   <useFrench>false</useFrench>
 </de.binarytree.plugins.qualitygates.HelloWorldBuilder_-DescriptorImpl>

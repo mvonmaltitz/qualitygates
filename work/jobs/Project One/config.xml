@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <maven2-moduleset plugin="maven-plugin@1.480.3">
   <actions/>
-  <description></description>
-  <logRotator class="hudson.tasks.LogRotator">
-    <daysToKeep>-1</daysToKeep>
-    <numToKeep>1</numToKeep>
-    <artifactDaysToKeep>-1</artifactDaysToKeep>
-    <artifactNumToKeep>-1</artifactNumToKeep>
-  </logRotator>
+  <description>    </description>
   <keepDependencies>false</keepDependencies>
   <properties/>
   <scm class="hudson.plugins.filesystem_scm.FSSCM" plugin="filesystem_scm@1.20">
-    <path>/home/mvm/git/Masterarbeit/code/projectone/</path>
+    <path>/home/mvm/git/Masterarbeit/code/projectone</path>
     <clearWorkspace>true</clearWorkspace>
     <copyHidden>false</copyHidden>
     <filterEnabled>false</filterEnabled>
@@ -28,6 +22,7 @@
     <groupId>simpleproject</groupId>
     <artifactId>projectone</artifactId>
   </rootModule>
+  <mavenOpts>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001,suspend=n</mavenOpts>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
   <incrementalBuild>false</incrementalBuild>
   <perModuleEmail>true</perModuleEmail>
@@ -45,19 +40,14 @@
   <prebuilders/>
   <postbuilders>
     <de.binarytree.plugins.qualitygates.HelloWorldBuilder plugin="qualitygates@1.0-SNAPSHOT">
-      <name>Quality Gates!</name>
+      <name>Qualty Gates</name>
       <gates class="linked-list">
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
           <name>Build stability</name>
-          <checks class="linked-list">
-            <de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck/>
-            <de.binarytree.plugins.qualitygates.checks.ExecutionCheck>
-              <command>/tmp/command.sh</command>
-            </de.binarytree.plugins.qualitygates.checks.ExecutionCheck>
-          </checks>
+          <checks class="linked-list"/>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
-          <name>POM Documentation</name>
+          <name>POM correctness</name>
           <checks class="linked-list">
             <de.binarytree.plugins.qualitygates.checks.POMCheck>
               <expression>/project/groupId</expression>
@@ -67,33 +57,27 @@
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
-          <name>Static analysis</name>
+          <name>Misc</name>
           <checks class="linked-list">
-            <de.binarytree.plugins.qualitygates.checks.XMLCheck>
-              <expression>/violations</expression>
-              <targetFile>target/pmd.xml</targetFile>
-              <reportContent>true</reportContent>
-            </de.binarytree.plugins.qualitygates.checks.XMLCheck>
-            <de.binarytree.plugins.qualitygates.checks.XMLCheck>
-              <expression>/project</expression>
-              <targetFile>target/hugeddubel.xml</targetFile>
-              <reportContent>true</reportContent>
-            </de.binarytree.plugins.qualitygates.checks.XMLCheck>
-            <de.binarytree.plugins.qualitygates.checks.POMCheck>
-              <expression>/project/parent/zeug</expression>
-              <targetFile>pom.xml</targetFile>
-              <reportContent>true</reportContent>
-            </de.binarytree.plugins.qualitygates.checks.POMCheck>
+            <de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck/>
+            <de.binarytree.plugins.qualitygates.checks.ManualCheck>
+              <hash>13691210117621394926486</hash>
+            </de.binarytree.plugins.qualitygates.checks.ManualCheck>
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
-          <name>Misc</name>
+          <name>Static analysis</name>
           <checks class="linked-list">
             <de.binarytree.plugins.qualitygates.checks.POMCheck>
               <expression>/project</expression>
               <targetFile>pom.xml</targetFile>
-              <reportContent>true</reportContent>
+              <reportContent>false</reportContent>
             </de.binarytree.plugins.qualitygates.checks.POMCheck>
+            <de.binarytree.plugins.qualitygates.checks.XMLCheck>
+              <expression>/violations</expression>
+              <targetFile>target/pmd.xml</targetFile>
+              <reportContent>false</reportContent>
+            </de.binarytree.plugins.qualitygates.checks.XMLCheck>
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
       </gates>

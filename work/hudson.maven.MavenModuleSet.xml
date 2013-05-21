@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<hudson.maven.MavenModuleSet_-DescriptorImpl>
-  <helpRedirect/>
+<hudson.maven.MavenModuleSet_-DescriptorImpl plugin="maven-plugin@1.480.3">
+  <globalMavenOpts>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001,suspend=n</globalMavenOpts>
   <mavenValidationLevels class="linked-hash-map">
     <entry>
       <string>DEFAULT</string>
