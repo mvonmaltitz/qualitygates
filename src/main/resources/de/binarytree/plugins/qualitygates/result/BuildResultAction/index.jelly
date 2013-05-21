@@ -124,8 +124,8 @@
                 <j:forEach var="checkResult" items="${gateResult.checkResults}" >
                 <li class="check ${checkResult.result}">
                 <p class="checktitle ${checkResult.result}">${checkResult.description}
-				    <span class="checkicon ${gateResult.result}" /></p>
-                <p class="reason">${checkResult.reason}</p>
+				    <span class="checkicon ${checkResult.result}" /></p>
+                <p class="reason"><j:out value="${checkResult.reason}" /></p>
                 </li>
 			    </j:forEach>
 			    </ul>
