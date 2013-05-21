@@ -32,7 +32,7 @@ public class BuildResultAction implements ProminentProjectAction {
 	}
 
 	public String getDisplayName() {
-		return "Execution Results of Qualtity Gates";
+		return "Execution Results of Quality Gates";
 	}
 
 	public String getUrlName() {
