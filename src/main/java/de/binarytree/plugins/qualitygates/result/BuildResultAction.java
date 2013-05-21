@@ -11,6 +11,7 @@ import org.kohsuke.stapler.StaplerResponse;
 
 import de.binarytree.plugins.qualitygates.GateEvaluator;
 import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.checks.ManualCheck;
 
 public class BuildResultAction implements ProminentProjectAction {
 
@@ -43,10 +44,16 @@ public class BuildResultAction implements ProminentProjectAction {
 		GatesResult gatesResult = this.getGatesResult(); 
 		GateResult unbuiltGate = this.getNextUnbuiltGate(gatesResult); 
 		CheckResult unbuiltCheck = this.getNextUnbuiltCheck(unbuiltGate); 
-		unbuiltCheck.setResult(Result.SUCCESS, MANUALLY_APPROVED); 
+		Check check = unbuiltCheck.getCheck(); 
+		if(check instanceof ManualCheck){
+		((ManualCheck) check).approve(); 	
+		}else{
+			throw new IllegalArgumentException("Next unbuilt check is no check which can be approved."); 
+		}
 		AbstractBuild build = req.findAncestorObject(AbstractBuild.class); 
-//		this.gateEvaluator.evaluate(build, null, null); 
+		this.gateEvaluator.evaluate(build, null, null); 
 		build.save(); 
+		res.sendRedirect("."); 
 		
 	}
 

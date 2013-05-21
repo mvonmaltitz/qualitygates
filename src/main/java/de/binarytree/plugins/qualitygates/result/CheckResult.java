@@ -9,7 +9,7 @@ public class CheckResult {
 	private String description;
 	private Result result = Result.NOT_BUILT;
 	private String reason;
-	private transient Check check;
+	private Check check;
 
 	public CheckResult(Check check) {
 		this.check = check; 
@@ -53,5 +53,8 @@ public class CheckResult {
 
 	public boolean references(Check check) {
 		return this.check.equals(check); 
+	}
+	public Check getCheck(){
+		return this.check; 
 	}
 }

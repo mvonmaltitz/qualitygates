@@ -5,6 +5,7 @@ import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
+import hudson.model.User;
 
 import java.util.Random;
 
@@ -18,25 +19,40 @@ public class ManualCheck extends Check {
 
 	public String hash;
 
+	public boolean approved; 
 	@DataBoundConstructor
 	public ManualCheck() {
 		hash = Long.toString(System.currentTimeMillis())
 				+ Integer.toString((new Random()).nextInt());
 	}
 
+	public void approve(){
+		this.approved = true; 
+	}
+	
 	@Override
 	public void doCheck(AbstractBuild build, BuildListener listener,
 			Launcher launcher, CheckResult checkResult) {
-		if (checkResult.getResult().equals(Result.NOT_BUILT)) {
+		if (!approved) {
 			System.out.println(this.hash + " Setting manual wait.");
 			checkResult.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL
 					+ " <a href='approve'>Approve</a>");
 		} else {
 			System.out.println(this.hash
 					+ " Skipping manual as it is approved.");
+			checkResult.setResult(Result.SUCCESS, "Manually approved by " + this.getCurrentUserOrUnknown()); 
 		}
 	}
 
+	
+	public String getCurrentUserOrUnknown(){
+		User currentUser = User.current(); 
+		if(currentUser != null){
+		return currentUser.getFullName(); 
+		}else{
+			return "Unknown"; 
+		}
+	}
 	@Override
 	public String getDescription() {
 		return "Wait for manual approval (" + this.hash + ")";

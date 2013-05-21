@@ -39,6 +39,9 @@ public class BuildResultActionTest {
 
 	class MockManualCheck extends ManualCheck {
 
+		public String getCurrentUser(){
+			return "Current User"; 
+		}
 		public DescriptorImpl getDescriptor() {
 			return new ManualCheck.DescriptorImpl();
 		}
@@ -90,6 +93,7 @@ public class BuildResultActionTest {
 		CheckResult checkResult = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
 		CheckResult manualCheckResult = latestResults.getGateResultFor(gate2).getResultFor(mCheck1); 
 		assertEquals(manualCheckResult, checkResult);
+		assertEquals(manualCheckResult.getCheck(), mCheck1);
 	}
 
 	@Test
@@ -115,5 +119,7 @@ public class BuildResultActionTest {
 		action.doApprove(req, null);
 		CheckResult checkResultAfter = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
 		assertFalse(checkResultAfter.referencesSameCheckAs(checkResultBefore));
+		assertFalse(checkResultAfter.references(mCheck1));
+		assertTrue(checkResultAfter.references(mCheck2));
 	}
 }

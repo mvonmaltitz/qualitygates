@@ -39,7 +39,7 @@ public class GateEvaluator {
 	protected void evaluateGate(AbstractBuild build, Launcher launcher,
 			BuildListener listener, QualityGate gate) {
 		GateResult gateResult;
-		if (hasNeverBeenExecuted(gate)) {
+		if (hasNotFullyBeenExecuted(gate)) {
 			gateResult = processGateAndReport(build, launcher, listener, gate);
 		} else {
 			gateResult = getFormerGateResultFor(gate);
@@ -49,7 +49,7 @@ public class GateEvaluator {
 		}
 	}
 
-	protected boolean hasNeverBeenExecuted(QualityGate gate) {
+	protected boolean hasNotFullyBeenExecuted(QualityGate gate) {
 		Result result = this.gatesResult.getResultFor(gate);
 		return result.equals(Result.NOT_BUILT);
 	}
