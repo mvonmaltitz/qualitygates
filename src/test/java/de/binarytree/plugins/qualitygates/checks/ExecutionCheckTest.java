@@ -40,7 +40,7 @@ public class ExecutionCheckTest {
 		stream = new ByteArrayOutputStream();
 		TaskListener taskListener = new StreamTaskListener(stream);
 		launcher = new Launcher.LocalLauncher(taskListener);
-		command = "cat /tmp/testdatei";
+		command = "echo /tmp/testdatei";
 		check = new MockExecutionCheck(command); 
 		checkResult = new CheckResult(check);
 	}
@@ -60,14 +60,14 @@ public class ExecutionCheckTest {
 	}
 	
 	@Test
-	public void testExecutionOfUnknowCommand(){
+	public void testExecutionOfUnknownCommand(){
 		String unknownCommand = "asdlkjfalsdfjaldfjald";
 		check = new MockExecutionCheck(unknownCommand); 
 		check.doCheck(null, null, launcher, checkResult);
 		String logOutput = new String(stream.toByteArray());
 		assertEquals(Result.FAILURE, checkResult.getResult());
 		assertTrue(logOutput.contains(unknownCommand));
-		System.out.println(checkResult.getReason()); 
+// 		System.out.println(checkResult.getReason()); 
 	}
 	@Test
 	public void testExecutionOfNonZeroCommand(){
