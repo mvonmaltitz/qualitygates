@@ -57,9 +57,9 @@ public class HelloWorldBuilder extends Builder {
 	@Override
 	public boolean perform(AbstractBuild build, Launcher launcher,
 			BuildListener listener) {
-		gatesResult = new GateEvaluator(this.gates).evaluate(build, launcher,
-				listener);
-		build.addAction(new BuildResultAction(gatesResult));
+		GateEvaluator gateEvaluator = new GateEvaluator(this.gates);
+		gateEvaluator.evaluate(build, launcher, listener);
+		build.addAction(new BuildResultAction(gateEvaluator));
 		return true;
 	}
 

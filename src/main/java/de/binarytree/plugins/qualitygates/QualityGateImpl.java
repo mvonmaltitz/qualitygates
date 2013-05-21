@@ -25,13 +25,13 @@ public class QualityGateImpl extends QualityGate {
 	@Override
 	public void doCheck(AbstractBuild build, Launcher launcher,
 			BuildListener listener, GateResult gateResult) {
-		listener.getLogger().println("QG " + this.getName());
+//		listener.getLogger().println("QG " + this.getName());
 		if (checksAreAvailable()) {
 			Result result = Result.SUCCESS;
 			for (Check check : this.checks) {
 				CheckResult checkResult = check.check(build, listener, launcher); 
 				result = result.combine(checkResult.getResult());
-				listener.getLogger().println( "Check: " + check.toString() + " Result: " + result.toString());
+//				listener.getLogger().println( "Check: " + check.toString() + " Result: " + result.toString());
 				gateResult.addCheckResult(checkResult); 
 				gateResult.setResult(result); 
 			}

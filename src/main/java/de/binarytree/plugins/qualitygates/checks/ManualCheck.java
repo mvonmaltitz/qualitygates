@@ -16,7 +16,7 @@ public class ManualCheck extends Check {
 
 	public static final String AWAITING_MANUAL_APPROVAL = "Awaiting manual approval.";
 
-	public final String hash;
+	public String hash;
 
 	@DataBoundConstructor
 	public ManualCheck() {

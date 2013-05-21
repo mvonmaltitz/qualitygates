@@ -50,4 +50,8 @@ public class CheckResult {
 	public boolean referencesSameCheckAs(CheckResult b) {
 		return this.check == b.check; 
 	}
+
+	public boolean references(Check check) {
+		return this.check.equals(check); 
+	}
 }

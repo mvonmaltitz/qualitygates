@@ -14,6 +14,12 @@ import de.binarytree.plugins.qualitygates.result.CheckResult;
 
 public class ManualCheckTest {
 	class MockManualCheck extends ManualCheck {
+		public MockManualCheck(){
+			super(); 
+		}
+		public MockManualCheck(String hash){
+			this.hash = hash; 
+		}
 		public DescriptorImpl getDescriptor() {
 			return new ManualCheck.DescriptorImpl();
 		}
@@ -39,4 +45,19 @@ public class ManualCheckTest {
 		assertEquals(Result.NOT_BUILT, result.getResult());
 		assertTrue(result.getReason().startsWith(ManualCheck.AWAITING_MANUAL_APPROVAL));
 	}
+	@Test
+	public void testEqualsTrue(){
+		ManualCheck check1 = new MockManualCheck("hash"); 
+		ManualCheck check2 = new MockManualCheck("hash"); 
+		assertEquals(check1, check2); 
+		
+	}
+	@Test
+	public void testEqualsFalse(){
+		ManualCheck check1 = new MockManualCheck("hash1"); 
+		ManualCheck check2 = new MockManualCheck("hash2"); 
+		assertNotEquals(check1, check2); 
+		
+	}
+	
 }

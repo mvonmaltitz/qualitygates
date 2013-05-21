@@ -75,4 +75,20 @@ public class GateResultTest {
 	public void testDefaultResultOfGateResult() {
 		assertEquals(Result.NOT_BUILT, gateResult.getResult());
 	}
+
+	@Test
+	public void testGetResultForAvailableCheck() {
+		gateResult.addCheckResult(checkResult1);
+		gateResult.addCheckResult(checkResult2);
+		CheckResult foundResult = gateResult.getResultFor(check);
+		assertEquals(checkResult1, foundResult);
+	}
+	@Test 
+	public void testGetResultForUnavailableCheck(){
+		Check check = mock(Check.class); 
+		gateResult.addCheckResult(checkResult1);
+		gateResult.addCheckResult(checkResult2);
+		CheckResult foundResult = gateResult.getResultFor(check); 
+		assertNull(foundResult); 
+	}
 }

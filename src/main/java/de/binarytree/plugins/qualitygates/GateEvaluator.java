@@ -1,23 +1,30 @@
 package de.binarytree.plugins.qualitygates;
 
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.model.Result;
+import hudson.model.AbstractBuild;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import de.binarytree.plugins.qualitygates.result.BuildResultAction;
 import de.binarytree.plugins.qualitygates.result.GateResult;
 import de.binarytree.plugins.qualitygates.result.GatesResult;
 
-class GateEvaluator {
-	private List<QualityGate> gates;
+public class GateEvaluator {
+	private List<QualityGate> gates = new LinkedList<QualityGate>();
 	private boolean executeGates;
-	private GatesResult gatesResult = new GatesResult();
+	private GatesResult gatesResult;
 
-	public GateEvaluator(List<QualityGate> gate) {
-		this.gates = gate;
+	public GateEvaluator(List<QualityGate> gates) {
+		this(gates, new GatesResult());
+	}
+
+	public GateEvaluator(List<QualityGate> gates, GatesResult gatesResult) {
+		if (gates != null) {
+			this.gates.addAll(gates);
+		}
+		this.gatesResult = gatesResult;
 	}
 
 	public GatesResult evaluate(AbstractBuild build, Launcher launcher,
@@ -47,8 +54,8 @@ class GateEvaluator {
 		return result.equals(Result.NOT_BUILT);
 	}
 
-	private GateResult processGateAndReport(AbstractBuild build, Launcher launcher,
-			BuildListener listener, QualityGate gate) {
+	private GateResult processGateAndReport(AbstractBuild build,
+			Launcher launcher, BuildListener listener, QualityGate gate) {
 		GateResult gateResult;
 		if (executeGates) {
 			gateResult = executeGateAndAddToReport(build, launcher, listener,
@@ -79,5 +86,9 @@ class GateEvaluator {
 	protected boolean shouldStopExecutionDueTo(GateResult gateResult) {
 		Result result = gateResult.getResult();
 		return result.equals(Result.FAILURE) || result.equals(Result.NOT_BUILT);
+	}
+
+	public GatesResult getLatestResults() {
+		return this.gatesResult;
 	}
 }

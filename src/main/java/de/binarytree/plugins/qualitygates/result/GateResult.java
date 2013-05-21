@@ -71,4 +71,13 @@ public class GateResult extends ListContainer<CheckResult>{
 		}
 		return reasons; 
 	}
+
+	public CheckResult getResultFor(Check check) {
+		for(CheckResult result : this.getCheckResults()){
+			if(result.references(check)){
+				return result; 
+			}
+		}
+		return null; 
+	}
 }
