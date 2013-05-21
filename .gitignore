@@ -1,2 +1,7 @@
 /target
 */*.jar
+/bin
+work/jobs/*/builds
+work/jobs/*/modules/*/builds
+work/fingerprints/
+work/jobs/*/workspace/target/
