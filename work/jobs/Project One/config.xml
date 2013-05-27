@@ -47,16 +47,18 @@
   <prebuilders/>
   <postbuilders>
     <de.binarytree.plugins.qualitygates.HelloWorldBuilder plugin="qualitygates@1.0-SNAPSHOT">
-      <name>Quality Gates</name>
+      <name>QG</name>
       <gates class="linked-list">
         <de.binarytree.plugins.qualitygates.QualityGateImpl>
-          <name>Gate One</name>
+          <name>ONe</name>
           <checks class="linked-list">
-            <de.binarytree.plugins.qualitygates.checks.XPathExpressionCheck>
-              <expression>/project/artifactId</expression>
-              <targetFile>pom.xml</targetFile>
-              <reportContent>true</reportContent>
-            </de.binarytree.plugins.qualitygates.checks.XPathExpressionCheck>
+            <de.binarytree.plugins.qualitygates.checks.XPathExpressionCountCheck>
+              <expression>/pmd/file/violation</expression>
+              <targetFile>target/pmd.xml</targetFile>
+              <successThreshold>0</successThreshold>
+              <warningThreshold>2</warningThreshold>
+              <name>PMD Check</name>
+            </de.binarytree.plugins.qualitygates.checks.XPathExpressionCountCheck>
           </checks>
         </de.binarytree.plugins.qualitygates.QualityGateImpl>
       </gates>

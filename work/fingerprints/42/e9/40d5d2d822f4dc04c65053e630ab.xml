@@ -9,16 +9,16 @@
       <ranges>1</ranges>
     </entry>
     <entry>
+      <string>Project One/simpleproject:projectone</string>
+      <ranges>1-27,29-33,35-49</ranges>
+    </entry>
+    <entry>
       <string>Jenkins Testing Plugin</string>
       <ranges>1</ranges>
     </entry>
     <entry>
-      <string>Project One/simpleproject:projectone</string>
-      <ranges>2-27,29-33,35-49</ranges>
-    </entry>
-    <entry>
       <string>Project One</string>
-      <ranges>2-27,29-33,35-49</ranges>
+      <ranges>1-27,29-33,35-49</ranges>
     </entry>
   </usages>
   <facets/>

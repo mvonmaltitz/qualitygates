@@ -35,34 +35,36 @@ public class User{
 	}
 
 	public void removeNeighbour(User neighbour){
-<span class="fc" id="L38">		this.neighbours.remove(neighbour);</span>
-<span class="fc" id="L39">	}</span>
+<span class="fc" id="L38">		String asdf = null;</span>
+<span class="fc" id="L39">		this.neighbours.remove(neighbour);</span>
+<span class="fc" id="L40">	}</span>
 
 	public void setForeName(String forename){
-<span class="fc" id="L42">		this.forename = forename;</span>
-<span class="fc" id="L43">	}</span>
+<span class="fc" id="L43">		String asdf = null;</span>
+<span class="fc" id="L44">		this.forename = forename;</span>
+<span class="fc" id="L45">	}</span>
 
 	public void setLastName(String lastname){
-<span class="fc" id="L46">		String asdf = null;</span>
-<span class="fc" id="L47">		this.lastname = lastname;</span>
-<span class="fc" id="L48">	}</span>
+<span class="fc" id="L48">		String asdf = null;</span>
+<span class="fc" id="L49">		this.lastname = lastname;</span>
+<span class="fc" id="L50">	}</span>
 
 	public String getName(){
-<span class="fc" id="L51">		String s = &quot;&quot;;</span>
-<span class="fc bfc" id="L52" title="All 4 branches covered.">		if(this.lastname != null &amp;&amp; this.forename != null){</span>
-<span class="fc" id="L53">			s += this.forename;</span>
-<span class="fc" id="L54">			s += &quot; &quot;;</span>
-<span class="fc" id="L55">			s += this.lastname;</span>
+<span class="fc" id="L53">		String s = &quot;&quot;;</span>
+<span class="fc bfc" id="L54" title="All 4 branches covered.">		if(this.lastname != null &amp;&amp; this.forename != null){</span>
+<span class="fc" id="L55">			s += this.forename;</span>
+<span class="fc" id="L56">			s += &quot; &quot;;</span>
+<span class="fc" id="L57">			s += this.lastname;</span>
 		}
-<span class="fc" id="L57">		return s;</span>
+<span class="fc" id="L59">		return s;</span>
 	}
 
 	public String getFullName(){
-<span class="fc" id="L61">		return this.getName();</span>
+<span class="fc" id="L63">		return this.getName();</span>
 	}
 
 	public Object getLastName(){
-<span class="fc bfc" id="L65" title="All 2 branches covered.">		return this.lastname != null ? this.lastname : &quot;&quot;;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">		return this.lastname != null ? this.lastname : &quot;&quot;;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.2.201302030002</span></div></body></html>

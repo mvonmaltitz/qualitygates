@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="5.0.2" timestamp="2013-05-27T14:29:28.438">
+<pmd version="5.0.2" timestamp="2013-05-27T16:58:12.557">
 <file name="/Users/mvm/Documents/Eclipse/QualityGates/code/qualitygates/work/jobs/Project One/workspace/src/main/java/model/User.java">
-<violation beginline="46" endline="46" begincolumn="24" endcolumn="27" rule="UnusedLocalVariable" ruleset="Unused Code" package="model" class="User" method="setLastName" variable="asdf" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.2/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
+<violation beginline="38" endline="38" begincolumn="24" endcolumn="27" rule="UnusedLocalVariable" ruleset="Unused Code" package="model" class="User" method="removeNeighbour" variable="asdf" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.2/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
+Avoid unused local variables such as 'asdf'.
+</violation>
+<violation beginline="43" endline="43" begincolumn="24" endcolumn="27" rule="UnusedLocalVariable" ruleset="Unused Code" package="model" class="User" method="setForeName" variable="asdf" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.2/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
+Avoid unused local variables such as 'asdf'.
+</violation>
+<violation beginline="48" endline="48" begincolumn="24" endcolumn="27" rule="UnusedLocalVariable" ruleset="Unused Code" package="model" class="User" method="setLastName" variable="asdf" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.2/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
 Avoid unused local variables such as 'asdf'.
 </violation>
 </file>

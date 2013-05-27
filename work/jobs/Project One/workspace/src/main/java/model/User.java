@@ -35,10 +35,12 @@ public class User{
 	}
 
 	public void removeNeighbour(User neighbour){
+		String asdf = null;
 		this.neighbours.remove(neighbour);
 	}
 
 	public void setForeName(String forename){
+		String asdf = null;
 		this.forename = forename;
 	}
 
