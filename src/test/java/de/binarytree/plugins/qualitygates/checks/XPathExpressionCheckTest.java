@@ -1,13 +1,11 @@
 package de.binarytree.plugins.qualitygates.checks;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import hudson.FilePath;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
-import hudson.model.Job;
 import hudson.util.FormValidation;
 
 import java.io.ByteArrayInputStream;
