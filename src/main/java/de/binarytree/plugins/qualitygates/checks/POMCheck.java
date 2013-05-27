@@ -4,7 +4,7 @@ import hudson.Extension;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-public class POMCheck extends XMLCheck {
+public class POMCheck extends XPathExpressionCheck {
 
 	@DataBoundConstructor
 	public POMCheck(String expression, boolean reportContent) {
@@ -12,7 +12,7 @@ public class POMCheck extends XMLCheck {
 	}
 
 	@Extension
-	public static class DescriptorImpl extends XMLCheck.DescriptorImpl {
+	public static class DescriptorImpl extends XPathExpressionCheck.DescriptorImpl {
 
 		@Override
 		public String getDisplayName() {

@@ -1,12 +1,11 @@
 package de.binarytree.plugins.qualitygates.result;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import hudson.model.Result;
 import hudson.model.AbstractBuild;
 
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 
 import de.binarytree.plugins.qualitygates.GateEvaluator;
 import de.binarytree.plugins.qualitygates.QualityGate;
@@ -113,10 +113,11 @@ public class BuildResultActionTest {
 		CheckResult checkResultBefore = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
 		
 		StaplerRequest req = mock(StaplerRequest.class);
+		StaplerResponse res = mock(StaplerResponse.class);
 		AbstractBuild build = mock(AbstractBuild.class);
 
 		when(req.findAncestorObject(AbstractBuild.class)).thenReturn(build);
-		action.doApprove(req, null);
+		action.doApprove(req, res);
 		CheckResult checkResultAfter = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
 		assertFalse(checkResultAfter.referencesSameCheckAs(checkResultBefore));
 		assertFalse(checkResultAfter.references(mCheck1));

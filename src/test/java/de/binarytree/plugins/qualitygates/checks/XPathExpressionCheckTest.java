@@ -21,13 +21,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import de.binarytree.plugins.qualitygates.checks.XMLCheck.DescriptorImpl;
+import de.binarytree.plugins.qualitygates.checks.XPathExpressionCheck.DescriptorImpl;
 import de.binarytree.plugins.qualitygates.result.CheckResult;
 
-public class XMLCheckTest {
+public class XPathExpressionCheckTest {
 
-	private DescriptorImpl descriptor = new XMLCheck.DescriptorImpl();
-	private XMLCheck check;
+	private DescriptorImpl descriptor = new XPathExpressionCheck.DescriptorImpl();
+	private XPathExpressionCheck check;
 	private String expression = "/parent";
 	private String filePath = "aFile.xml";
 	private ByteArrayInputStream pomStream;
@@ -44,7 +44,7 @@ public class XMLCheckTest {
 	private XMLCheck xmlCheck;
 	private AbstractBuild build;
 
-	class MockXMLCheck extends XMLCheck {
+	class MockXMLCheck extends XPathExpressionCheck {
 
 		public MockXMLCheck(String targetFile, String expression, boolean reportContent) {
 			super(targetFile, expression, reportContent);
@@ -68,7 +68,7 @@ public class XMLCheckTest {
 	public void setUp() throws Exception {
 		build = mock(AbstractBuild.class);
 		pomStream = new ByteArrayInputStream(pomString.getBytes());
-		descriptor = new XMLCheck.DescriptorImpl();
+		descriptor = new XPathExpressionCheck.DescriptorImpl();
 		check = new MockXMLCheck(filePath, expression) {
 		};
 	}
