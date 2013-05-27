@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="5.0.2" timestamp="2013-05-21T09:24:10.248">
-<file name="/home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/src/main/java/model/User.java">
+<pmd version="5.0.2" timestamp="2013-05-27T14:29:28.438">
+<file name="/Users/mvm/Documents/Eclipse/QualityGates/code/qualitygates/work/jobs/Project One/workspace/src/main/java/model/User.java">
 <violation beginline="46" endline="46" begincolumn="24" endcolumn="27" rule="UnusedLocalVariable" ruleset="Unused Code" package="model" class="User" method="setLastName" variable="asdf" externalInfoUrl="http://pmd.sourceforge.net/pmd-5.0.2/rules/java/unusedcode.html#UnusedLocalVariable" priority="3">
 Avoid unused local variables such as 'asdf'.
 </violation>

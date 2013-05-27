@@ -6,5 +6,10 @@
       <home>/usr/share/maven3/</home>
       <properties/>
     </hudson.tasks.Maven_-MavenInstallation>
+    <hudson.tasks.Maven_-MavenInstallation>
+      <name>MVN OSX</name>
+      <home>/usr/share/java/maven-3.0.3/</home>
+      <properties/>
+    </hudson.tasks.Maven_-MavenInstallation>
   </installations>
 </hudson.tasks.Maven_-DescriptorImpl>

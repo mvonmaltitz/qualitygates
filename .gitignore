@@ -5,3 +5,5 @@ work/jobs/*/builds
 work/jobs/*/modules/*/builds
 work/fingerprints/
 work/jobs/*/workspace/target/
+*/work/jobs/*/workspace
+*/work/jobs/*/builds

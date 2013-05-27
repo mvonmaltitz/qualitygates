@@ -24,10 +24,6 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers class="vector"/>
   <concurrentBuild>false</concurrentBuild>
-  <rootModule>
-    <groupId>simpleproject</groupId>
-    <artifactId>projectone</artifactId>
-  </rootModule>
   <mavenName>MVN3</mavenName>
   <mavenOpts>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8002,suspend=n</mavenOpts>
   <aggregatorStyleBuild>true</aggregatorStyleBuild>
@@ -45,23 +41,7 @@
   <publishers/>
   <buildWrappers/>
   <prebuilders/>
-  <postbuilders>
-    <de.binarytree.plugins.qualitygates.HelloWorldBuilder plugin="qualitygates@1.0-SNAPSHOT">
-      <name>Quality Gates</name>
-      <gates class="linked-list">
-        <de.binarytree.plugins.qualitygates.QualityGateImpl>
-          <name>Gate One</name>
-          <checks class="linked-list">
-            <de.binarytree.plugins.qualitygates.checks.XPathExpressionCheck>
-              <expression>/project/artifactId</expression>
-              <targetFile>pom.xml</targetFile>
-              <reportContent>true</reportContent>
-            </de.binarytree.plugins.qualitygates.checks.XPathExpressionCheck>
-          </checks>
-        </de.binarytree.plugins.qualitygates.QualityGateImpl>
-      </gates>
-    </de.binarytree.plugins.qualitygates.HelloWorldBuilder>
-  </postbuilders>
+  <postbuilders/>
   <runPostStepsIfResult>
     <name>FAILURE</name>
     <ordinal>2</ordinal>
