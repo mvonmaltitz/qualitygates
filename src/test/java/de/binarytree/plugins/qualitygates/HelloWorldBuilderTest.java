@@ -15,7 +15,7 @@ public class HelloWorldBuilderTest {
 
 	@Test
 	public void testInitializeWithNullCollection() throws IOException {
-		HelloWorldBuilder builder = new HelloWorldBuilder("Builder", null);
+		QualityGateBuilder builder = new QualityGateBuilder("Builder", null);
 		assertEquals(0, builder.getNumberOfGates());
 	}
 

@@ -10,11 +10,6 @@
     It's also often useful to just check other similar scripts to see what
     tags they use. Views are always organized according to its owner class,
     so it should be straightforward to find them.
-  -->
-	<f:block>
-    <h2>Visiblity check</h2>
-    <p> ${descriptor.displayName} </p>
-	</f:block>
   <f:section title="Sonar configuration">
     <f:entry title="Sonar host" field="host"
       description="Host where Sonar is located">
@@ -25,4 +20,5 @@
       <f:textbox />
     </f:entry>
   </f:section>
+  -->
 </j:jelly>
