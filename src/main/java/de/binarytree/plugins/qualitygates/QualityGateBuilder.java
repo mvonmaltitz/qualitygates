@@ -93,7 +93,6 @@ public class QualityGateBuilder extends Builder {
          * <p>
          * If you don't want fields to be persisted, use <tt>transient</tt>.
          */
-        private boolean useFrench;
 
         public Collection<QualityGateDescriptor> getDescriptors() {
             return QualityGate.all();
@@ -135,11 +134,10 @@ public class QualityGateBuilder extends Builder {
         public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
             // To persist global configuration information,
             // set that to properties and call save().
-            useFrench = formData.getBoolean("useFrench");
             // ^Can also use req.bindJSON(this, formData);
             // (easier when there are many fields; need set* methods for this,
             // like setUseFrench)
-            save();
+            // save();
             return super.configure(req, formData);
         }
 

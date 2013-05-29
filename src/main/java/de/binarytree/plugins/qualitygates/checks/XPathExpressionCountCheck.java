@@ -19,99 +19,108 @@ import org.xml.sax.SAXException;
 
 import de.binarytree.plugins.qualitygates.result.CheckResult;
 
-public class XPathExpressionCountCheck extends XMLCheck{
+public class XPathExpressionCountCheck extends XMLCheck {
 
-	private int successThreshold;
-	private int warningThreshold;
-	private String name;
+    private int successThreshold;
 
-	@DataBoundConstructor
-	public XPathExpressionCountCheck(String name, String targetFile, String expression, int successThreshold, int warningThreshold){
-		this(targetFile, expression, successThreshold, warningThreshold); 
-		this.name = name; 
-	}
+    private int warningThreshold;
 
-	public XPathExpressionCountCheck(String targetFile, String expression, int successThreshold, int warningThreshold){
-		this.expression = expression;
-		this.targetFile = targetFile;
-		this.successThreshold = successThreshold;
-		this.warningThreshold = warningThreshold;
-	}
+    private String name;
 
-	public int getSucessThreshold(){
-		return this.successThreshold;
-	}
+    @DataBoundConstructor
+    public XPathExpressionCountCheck(String name, String targetFile, String expression, int successThreshold,
+            int warningThreshold) {
+        this(targetFile, expression, successThreshold, warningThreshold);
+        this.name = name;
+    }
 
-	public int getWarningThreshold(){
-		return this.warningThreshold;
-	}
+    public XPathExpressionCountCheck(String targetFile, String expression, int successThreshold, int warningThreshold) {
+        this.expression = expression;
+        this.targetFile = targetFile;
+        this.successThreshold = successThreshold;
+        this.warningThreshold = warningThreshold;
+    }
 
-	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult){
-		try{
-			matchExpression(build, checkResult);
-		}catch(Exception e){
-			String reason = e.getMessage();
-			if(reason == null){
-				reason = Arrays.toString(e.getStackTrace());
-			}
-			checkResult.setResult(Result.FAILURE, "Exception: " + reason);
-		}
-	}
+    public int getSuccessThreshold() {
+        return this.successThreshold;
+    }
 
-	private void matchExpression(AbstractBuild build, CheckResult checkResult) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException{
-		InputStream stream = this.obtainInputStream(build);
-		NodeList nodes = getMatchingNodes(stream);
-		this.setCheckResult(checkResult, nodes);
-	}
+    public int getWarningThreshold() {
+        return this.warningThreshold;
+    }
 
-	private void setCheckResult(CheckResult checkResult, NodeList nodes){
-		if(nodes != null){
-			int length = nodes.getLength();
+    public String getName() {
+        return this.name;
+    }
 
-			Result result = Result.FAILURE;
-			String reason;  
-			if(this.countIsSuccess(length)){
-				result = Result.SUCCESS;
-				reason = length + " <= success threshold(" + this.successThreshold + ")";
-			}else if(this.countIsWarning(length)){
-				result = Result.UNSTABLE;
-				reason = "success threshold(" + this.successThreshold + ") < " + length + " <= warning threshold(" + this.warningThreshold + ")";
-			}else{
-				reason = "warning threshold(" + this.warningThreshold + ") < " + length;
-			}
+    @Override
+    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult) {
+        try {
+            matchExpression(build, checkResult);
+        } catch (Exception e) {
+            String reason = e.getMessage();
+            if (reason == null) {
+                reason = Arrays.toString(e.getStackTrace());
+            }
+            checkResult.setResult(Result.FAILURE, "Exception: " + reason);
+        }
+    }
 
-			checkResult.setResult(result,this.name  + ": " +  reason);
-		}else{
-			checkResult.setResult(Result.SUCCESS, this.name + ": No occurrence");
-		}
-	}
+    private void matchExpression(AbstractBuild build, CheckResult checkResult) throws IOException,
+            ParserConfigurationException, SAXException, XPathExpressionException {
+        InputStream stream = this.obtainInputStream(build);
+        NodeList nodes = getMatchingNodes(stream);
+        this.setCheckResult(checkResult, nodes);
+    }
 
-	public boolean countIsSuccess(int count){
-		return count <= this.successThreshold;
-	}
+    private void setCheckResult(CheckResult checkResult, NodeList nodes) {
+        if (nodes != null) {
+            int length = nodes.getLength();
 
-	public boolean countIsWarning(int count){
-		return count <= this.warningThreshold;
-	}
+            Result result = Result.FAILURE;
+            String reason;
+            if (this.countIsSuccess(length)) {
+                result = Result.SUCCESS;
+                reason = length + " <= success threshold(" + this.successThreshold + ")";
+            } else if (this.countIsWarning(length)) {
+                result = Result.UNSTABLE;
+                reason = "success threshold(" + this.successThreshold + ") < " + length + " <= warning threshold("
+                        + this.warningThreshold + ")";
+            } else {
+                reason = "warning threshold(" + this.warningThreshold + ") < " + length;
+            }
 
-	@Override
-	public String toString(){
-		return super.toString() + "[Occurence of " + this.getExpression() + " in " + this.getTargetFile() + "]";
-	}
+            checkResult.setResult(result, this.name + ": " + reason);
+        } else {
+            checkResult.setResult(Result.SUCCESS, this.name + ": No occurrence");
+        }
+    }
 
-	@Override
-	public String getDescription(){
-		return "Count of " + this.getExpression() + " in " + this.getTargetFile();
-	}
+    public boolean countIsSuccess(int count) {
+        return count <= this.successThreshold;
+    }
 
-	@Extension
-	public static class DescriptorImpl extends XMLCheckDescriptor{
+    public boolean countIsWarning(int count) {
+        return count <= this.warningThreshold;
+    }
 
-		@Override
-		public String getDisplayName(){
-			return "Count the occurence of an XPath expression in an XML file";
-		}
+    @Override
+    public String toString() {
+        return super.toString() + "[Occurence of " + this.getExpression() + " in " + this.getTargetFile() + "]";
+    }
 
-	}
+    @Override
+    public String getDescription() {
+        return "Count of " + this.getExpression() + " in " + this.getTargetFile();
+    }
+
+    @Extension
+    public static class DescriptorImpl extends XMLCheckDescriptor {
+
+        @Override
+        public String getDisplayName() {
+            return "Count the occurence of an XPath expression in an XML file";
+        }
+
+    }
 }
