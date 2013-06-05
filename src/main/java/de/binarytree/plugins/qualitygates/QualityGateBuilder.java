@@ -1,14 +1,19 @@
 package de.binarytree.plugins.qualitygates;
 
+import hudson.BulkChange;
 import hudson.Extension;
 import hudson.Launcher;
+import hudson.XmlFile;
 import hudson.model.BuildListener;
+import hudson.model.Saveable;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -28,7 +33,7 @@ import de.binarytree.plugins.qualitygates.result.GatesResult;
 /**
  * @author Marcel von Maltitz
  */
-public class QualityGateBuilder extends Builder {
+public class QualityGateBuilder extends Builder implements Saveable {
 
     private String name;
 
@@ -42,6 +47,7 @@ public class QualityGateBuilder extends Builder {
         if (gates != null) {
             this.gates.addAll(gates);
         }
+        save();
     }
 
     /**
@@ -73,6 +79,24 @@ public class QualityGateBuilder extends Builder {
     @Override
     public DescriptorImpl getDescriptor() {
         return (DescriptorImpl) super.getDescriptor();
+    }
+
+    protected void load() throws IOException {
+        XmlFile xml = getConfigXml();
+        if (xml.exists()) {
+            xml.unmarshal(this);
+        }
+    }
+
+    public void save() throws IOException {
+        if (BulkChange.contains(this)) {
+            return;
+        }
+        getConfigXml().write(this);
+    }
+
+    protected XmlFile getConfigXml() {
+        return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance().getRootDir(), "qualitygates.xml"));
     }
 
     /**
