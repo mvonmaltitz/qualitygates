@@ -49,23 +49,38 @@ public class BuildResultAction implements ProminentProjectAction {
     }
 
     public void doApprove(StaplerRequest req, StaplerResponse res) throws IOException {
+        if (req.hasParameter("id")) {
+            String hashIdOfCheck = req.getParameter("id");
+            GatesResult gatesResult = this.getGatesResult();
+            GateResult unbuiltGate = this.getNextUnbuiltGate(gatesResult);
+            if (unbuiltGate != null) {
+                findAndApproveNextManualUnbuiltCheckIfExists(hashIdOfCheck, unbuiltGate);
+                AbstractBuild build = getFormerBuild(req);
+                BuildListener listener = new StreamBuildListener(getLogfileAppender(build));
+                Launcher launcher = this.getLauncher(listener);
+                this.gateEvaluator.evaluate(build, launcher, listener);
+                build.save();
+            }
+        }
+        res.sendRedirect(".");
 
-        GatesResult gatesResult = this.getGatesResult();
-        GateResult unbuiltGate = this.getNextUnbuiltGate(gatesResult);
+    }
+
+    private void findAndApproveNextManualUnbuiltCheckIfExists(String hashIdOfCheck, GateResult unbuiltGate) {
         CheckResult unbuiltCheck = this.getNextUnbuiltCheck(unbuiltGate);
         Check check = unbuiltCheck.getCheck();
         if (check instanceof ManualCheck) {
-            ((ManualCheck) check).approve();
+            approveCheckIfHashMatches(hashIdOfCheck, check);
         } else {
             throw new IllegalArgumentException("Next unbuilt check is no check which can be approved.");
         }
-        AbstractBuild build = getFormerBuild(req);
-        BuildListener listener = new StreamBuildListener(getLogfileAppender(build));
-        Launcher launcher = this.getLauncher(listener);
-        this.gateEvaluator.evaluate(build, launcher, listener);
-        build.save();
-        res.sendRedirect(".");
+    }
 
+    private void approveCheckIfHashMatches(String hashIdOfCheck, Check check) {
+        ManualCheck manualCheck = (ManualCheck) check;
+        if (manualCheck.hasHash(hashIdOfCheck)) {
+            manualCheck.approve();
+        }
     }
 
     private AbstractBuild getFormerBuild(StaplerRequest req) {

@@ -1,21 +1,29 @@
 package de.binarytree.plugins.qualitygates;
 
-import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import de.binarytree.plugins.qualitygates.result.GateResult;
+import hudson.Extension;
 
-public class ManualQualityGate extends QualityGate {
+import org.kohsuke.stapler.DataBoundConstructor;
 
-	public ManualQualityGate(String name) {
-		super(name, null);
-	}
+import de.binarytree.plugins.qualitygates.checks.ManualCheck;
 
-	@Override
-	public void doCheck(AbstractBuild build, Launcher launcher,
-			BuildListener listener, GateResult gateResult) {
-		// TODO Auto-generated method stub
+public class ManualQualityGate extends QualityGateImpl {
 
-	}
+    @DataBoundConstructor
+    public ManualQualityGate(String name) {
+        super(name, null);
+        this.setUpCheck();
+    }
 
+    private void setUpCheck() {
+        ManualCheck check = new ManualCheck();
+        this.checks.add(check);
+    }
+
+    @Extension
+    public static class DescriptorImpl extends QualityGateDescriptor {
+        @Override
+        public String getDisplayName() {
+            return "Manual Quality Gate";
+        }
+    }
 }

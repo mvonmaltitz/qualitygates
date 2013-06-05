@@ -36,12 +36,17 @@ public class ManualCheck extends Check {
         this.hash = Long.toString(System.currentTimeMillis()) + Integer.toString((new Random()).nextInt());
         if (!approved) {
             System.out.println(this.hash + " Setting manual wait.");
-            checkResult.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL + " <a href='approve'>Approve</a>");
+            String approveLink = generateApproveLink();
+            checkResult.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL + approveLink);
         } else {
             System.out.println(this.hash + " Skipping manual as it is approved.");
             checkResult.setResult(Result.SUCCESS, "Manually approved by " + this.getCurrentUserOrUnknown());
             this.approved = false;
         }
+    }
+
+    private String generateApproveLink() {
+        return " <a href='approve?id=" + this.hash + "'>Approve</a>";
     }
 
     public String getCurrentUserOrUnknown() {
@@ -69,5 +74,9 @@ public class ManualCheck extends Check {
         public String getDisplayName() {
             return "Manual Check";
         }
+    }
+
+    public boolean hasHash(String hash) {
+        return this.hash.equals(hash);
     }
 }
