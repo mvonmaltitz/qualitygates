@@ -20,127 +20,142 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 import de.binarytree.plugins.qualitygates.GateEvaluator;
-import de.binarytree.plugins.qualitygates.QualityGate;
-import de.binarytree.plugins.qualitygates.QualityGateImpl;
+import de.binarytree.plugins.qualitygates.Gate;
+import de.binarytree.plugins.qualitygates.AndGate;
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.ManualCheck;
 
-public class BuildResultActionTest {
+public class BuildResultActionTest{
 
-    private GateResult gateResult1;
+	private GateReport gateResult1;
 
-    private GateResult gateResult2;
+	private GateReport gateResult2;
 
-    private ManualCheck mCheck1;
+	private MockManualCheck mCheck1;
 
-    private ManualCheck mCheck2;
+	private MockManualCheck mCheck2;
 
-    private QualityGateImpl gate1;
+	private AndGate gate1;
 
-    private QualityGateImpl gate2;
+	private AndGate gate2;
 
-    private BuildResultAction action;
+	private BuildResultAction action;
 
-    private GatesResult gatesResult;
+	private QualityLineReport qualityLineReport;
 
-    private CheckResult mCheckResult2;
+	private CheckReport mCheckResult2;
 
-    private CheckResult mCheckResult1;
+	private CheckReport mCheckResult1;
 
-    private GateEvaluator gateEvaluator;
+	private GateEvaluator gateEvaluator;
 
-    class MockManualCheck extends ManualCheck {
+	class MockManualCheck extends ManualCheck{
 
-        public String getCurrentUser() {
-            return "Current User";
-        }
+		public MockManualCheck(String hash){
+			this.hash = hash;
 
-        @Override
-        public DescriptorImpl getDescriptor() {
-            return new ManualCheck.DescriptorImpl();
-        }
-    }
+		}
 
-    @Before
-    public void setUp() throws Exception {
-        mCheck1 = new MockManualCheck();
-        mCheck2 = new MockManualCheck();
-        final Launcher launcher = mock(Launcher.class);
-        LinkedList<Check> checks = new LinkedList<Check>();
-        checks.add(mCheck1);
-        checks.add(mCheck2);
-        gate1 = new QualityGateImpl("Gate 1", null);
-        gate2 = new QualityGateImpl("Gate 2", checks);
+		public String getCurrentUser(){
+			return "Current User";
+		}
 
-        gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        gateEvaluator.evaluate(null, null, null);
-        action = new BuildResultAction(gateEvaluator) {
-            @Override
-            public Launcher getLauncher(BuildListener listener) {
-                return launcher;
+		public void setHash(String hash){
+			this.hash = hash;
 
-            }
-        };
-    }
+		}
 
-    private GateEvaluator getGateEvaluatorFromGates(QualityGate... gates) {
-        LinkedList<QualityGate> gateList = new LinkedList<QualityGate>();
-        for (QualityGate gate : gates) {
-            gateList.add(gate);
-        }
-        gateEvaluator = new GateEvaluator(gateList);
-        return gateEvaluator;
-    }
+		@Override
+		public DescriptorImpl getDescriptor(){
+			return new ManualCheck.DescriptorImpl();
+		}
+	}
 
-    @Test
-    public void testGetNextUnbuiltGateUnsuccessfull() {
-        gate2 = new QualityGateImpl("Gate 2", null);
-        gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        GateResult gateResult = action.getNextUnbuiltGate(gateEvaluator.getLatestResults());
-        assertNull(gateResult);
-    }
+	@Before
+	public void setUp() throws Exception{
+		mCheck1 = new MockManualCheck("Hash1");
+		mCheck2 = new MockManualCheck("Hash2");
+		final Launcher launcher = mock(Launcher.class);
+		LinkedList<Check> checks = new LinkedList<Check>();
+		checks.add(mCheck1);
+		checks.add(mCheck2);
+		gate1 = new AndGate("Gate 1", null);
+		gate2 = new AndGate("Gate 2", checks);
 
-    @Test
-    public void testGetNextUnbuiltGateSuccessfull() {
-        GateResult gateResult = action.getNextUnbuiltGate(gateEvaluator.getLatestResults());
-        assertEquals("Gate 2", gateResult.getGateName());
-    }
+		gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
+		gateEvaluator.evaluate(null, null, null);
+		action = new BuildResultAction(gateEvaluator){
 
-    @Test
-    public void testGetNextUnbuiltCheckSuccessfull() {
-        GatesResult latestResults = gateEvaluator.getLatestResults();
-        CheckResult checkResult = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
-        CheckResult manualCheckResult = latestResults.getGateResultFor(gate2).getResultFor(mCheck1);
-        assertEquals(manualCheckResult, checkResult);
-        assertEquals(manualCheckResult.getCheck(), mCheck1);
-    }
+			@Override
+			public Launcher getLauncher(BuildListener listener){
+				return launcher;
 
-    @Test
-    public void testGetNextUnbuiltCheckUnsuccessfull() {
-        gate2 = new QualityGateImpl("Gate 2", null);
-        gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        gateEvaluator.evaluate(null, null, null);
-        GatesResult latestResults = gateEvaluator.getLatestResults();
-        CheckResult checkResult = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
-        assertNull(checkResult);
-    }
+			}
+		};
+		mCheck1.setHash("Hash1");
+		mCheck2.setHash("Hash2");
+	}
 
-    @Test
-    public void testManualApprovalViaGetRequest() throws IOException {
+	private GateEvaluator getGateEvaluatorFromGates(Gate... gates){
+		LinkedList<Gate> gateList = new LinkedList<Gate>();
+		for(Gate gate: gates){
+			gateList.add(gate);
+		}
+		gateEvaluator = new GateEvaluator(gateList);
+		return gateEvaluator;
+	}
 
-        GatesResult latestResults = gateEvaluator.getLatestResults();
-        CheckResult checkResultBefore = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
+	@Test
+	public void testGetNextUnbuiltGateUnsuccessfull(){
+		gate2 = new AndGate("Gate 2", null);
+		gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
+		GateReport gateReport = action.getNextUnbuiltGate(gateEvaluator.getLatestResults());
+		assertNull(gateReport);
+	}
 
-        StaplerRequest req = mock(StaplerRequest.class);
-        StaplerResponse res = mock(StaplerResponse.class);
-        AbstractBuild build = mock(AbstractBuild.class);
+	@Test
+	public void testGetNextUnbuiltGateSuccessfull(){
+		GateReport gateReport = action.getNextUnbuiltGate(gateEvaluator.getLatestResults());
+		assertEquals("Gate 2", gateReport.getGateName());
+	}
 
-        when(req.findAncestorObject(AbstractBuild.class)).thenReturn(build);
-        when(build.getLogFile()).thenReturn(new File("/tmp/logfile.log"));
-        action.doApprove(req, res);
-        CheckResult checkResultAfter = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
-        assertFalse(checkResultAfter.referencesSameCheckAs(checkResultBefore));
-        assertFalse(checkResultAfter.references(mCheck1));
-        assertTrue(checkResultAfter.references(mCheck2));
-    }
+	@Test
+	public void testGetNextUnbuiltCheckSuccessfull(){
+		QualityLineReport latestResults = gateEvaluator.getLatestResults();
+		CheckReport checkReport = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
+		CheckReport manualCheckResult = latestResults.getGateResultFor(gate2).getResultFor(mCheck1);
+		assertEquals(manualCheckResult, checkReport);
+		assertEquals(manualCheckResult.getCheck(), mCheck1);
+	}
+
+	@Test
+	public void testGetNextUnbuiltCheckUnsuccessfull(){
+		gate2 = new AndGate("Gate 2", null);
+		gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
+		gateEvaluator.evaluate(null, null, null);
+		QualityLineReport latestResults = gateEvaluator.getLatestResults();
+		CheckReport checkReport = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
+		assertNull(checkReport);
+	}
+
+	@Test
+	public void testManualApprovalViaGetRequest() throws IOException{
+
+		QualityLineReport latestResults = gateEvaluator.getLatestResults();
+		CheckReport checkResultBefore = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
+
+		StaplerRequest req = mock(StaplerRequest.class);
+		StaplerResponse res = mock(StaplerResponse.class);
+		AbstractBuild build = mock(AbstractBuild.class);
+
+		when(req.hasParameter("id")).thenReturn(true);
+		when(req.getParameter("id")).thenReturn("Hash1");
+		when(req.findAncestorObject(AbstractBuild.class)).thenReturn(build);
+		when(build.getLogFile()).thenReturn(new File("/tmp/logfile.log"));
+		action.doApprove(req, res);
+		CheckReport checkResultAfter = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
+		assertFalse(checkResultAfter.referencesSameCheckAs(checkResultBefore));
+		assertFalse(checkResultAfter.references(mCheck1));
+		assertTrue(checkResultAfter.references(mCheck2));
+	}
 }

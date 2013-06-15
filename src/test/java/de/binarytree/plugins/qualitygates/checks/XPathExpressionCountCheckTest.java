@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.XPathExpressionCountCheck.DescriptorImpl;
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class XPathExpressionCountCheckTest {
 
@@ -87,7 +87,7 @@ public class XPathExpressionCountCheckTest {
     @Test
     public void testNoMatchIsSuccess() {
         this.xmlStream = new ByteArrayInputStream(this.getXMLforNumberOfViolations(0).getBytes());
-        CheckResult result = check.check(build, null, null);
+        CheckReport result = check.check(build, null, null);
         assertEquals(Result.SUCCESS, result.getResult());
         assertTrue(result.getReason().contains("0"));
     }
@@ -95,7 +95,7 @@ public class XPathExpressionCountCheckTest {
     @Test
     public void testOnSuccessThresholdIsSuccess() {
         this.xmlStream = new ByteArrayInputStream(this.getXMLforNumberOfViolations(this.successThreshold).getBytes());
-        CheckResult result = check.check(build, null, null);
+        CheckReport result = check.check(build, null, null);
         assertEquals(Result.SUCCESS, result.getResult());
         assertTrue(result.getReason().contains(Integer.toString(this.successThreshold)));
     }
@@ -104,7 +104,7 @@ public class XPathExpressionCountCheckTest {
     public void testOverSuccessThresholdIsWarning() {
         this.xmlStream = new ByteArrayInputStream(this.getXMLforNumberOfViolations(this.successThreshold + 1)
                 .getBytes());
-        CheckResult result = check.check(build, null, null);
+        CheckReport result = check.check(build, null, null);
         assertEquals(Result.UNSTABLE, result.getResult());
         assertTrue(result.getReason().contains(Integer.toString(this.successThreshold + 1)));
     }
@@ -112,7 +112,7 @@ public class XPathExpressionCountCheckTest {
     @Test
     public void testOnWarningThresholdIsWarning() {
         this.xmlStream = new ByteArrayInputStream(this.getXMLforNumberOfViolations(this.warningThreshold).getBytes());
-        CheckResult result = check.check(build, null, null);
+        CheckReport result = check.check(build, null, null);
         assertEquals(Result.UNSTABLE, result.getResult());
         assertTrue(result.getReason().contains(Integer.toString(this.warningThreshold)));
     }
@@ -121,7 +121,7 @@ public class XPathExpressionCountCheckTest {
     public void testOverWarningThresholdIsFailure() {
         this.xmlStream = new ByteArrayInputStream(this.getXMLforNumberOfViolations(this.warningThreshold + 1)
                 .getBytes());
-        CheckResult result = check.check(build, null, null);
+        CheckReport result = check.check(build, null, null);
         assertEquals(Result.FAILURE, result.getResult());
         assertTrue(result.getReason().contains(Integer.toString(this.warningThreshold + 1)));
     }
@@ -130,7 +130,7 @@ public class XPathExpressionCountCheckTest {
     public void testOverWarningThresholdInMultipleFilesIsFailure() {
         this.xmlStream = new ByteArrayInputStream(this.getXMLforNumberOfViolationsInFiles(1, this.warningThreshold + 1)
                 .getBytes());
-        CheckResult result = check.check(build, null, null);
+        CheckReport result = check.check(build, null, null);
         assertEquals(Result.FAILURE, result.getResult());
         assertTrue(result.getReason().contains(Integer.toString(this.warningThreshold + 1)));
     }
@@ -144,9 +144,9 @@ public class XPathExpressionCountCheckTest {
                 throw new RuntimeException();
             }
         };
-        CheckResult checkResult = check.check(build, null, null);
-        assertEquals(Result.FAILURE, checkResult.getResult());
-        assertTrue(checkResult.getReason().contains("Exception"));
+        CheckReport checkReport = check.check(build, null, null);
+        assertEquals(Result.FAILURE, checkReport.getResult());
+        assertTrue(checkReport.getReason().contains("Exception"));
     }
 
     public String getXMLforNumberOfViolations(int violations) {

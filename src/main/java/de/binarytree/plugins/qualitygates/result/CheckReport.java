@@ -3,7 +3,7 @@ package de.binarytree.plugins.qualitygates.result;
 import hudson.model.Result;
 import de.binarytree.plugins.qualitygates.checks.Check;
 
-public class CheckResult {
+public class CheckReport {
 
 	private String checkName;
 	private String description;
@@ -11,7 +11,7 @@ public class CheckResult {
 	private String reason;
 	private Check check;
 
-	public CheckResult(Check check) {
+	public CheckReport(Check check) {
 		this.check = check; 
 		this.checkName = check.getDescriptor().getDisplayName();
 		this.description = check.getDescription();
@@ -47,7 +47,7 @@ public class CheckResult {
 		return this.reason; 
 	}
 
-	public boolean referencesSameCheckAs(CheckResult b) {
+	public boolean referencesSameCheckAs(CheckReport b) {
 		return this.check == b.check; 
 	}
 

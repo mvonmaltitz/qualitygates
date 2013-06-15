@@ -7,12 +7,12 @@ import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.StaplerRequest;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public abstract class SonarCheck extends Check {
 
     @Override
-    public abstract void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult);
+    public abstract void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport);
 
     @Override
     public String toString() {

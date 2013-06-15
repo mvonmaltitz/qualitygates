@@ -11,32 +11,32 @@ import java.util.Collection;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.result.CheckResult;
-import de.binarytree.plugins.qualitygates.result.GateResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateReport;
 
-public class QualityGateImpl extends QualityGate {
+public class AndGate extends Gate {
 
 	@DataBoundConstructor
-	public QualityGateImpl(String name, Collection<Check> checks) {
+	public AndGate(String name, Collection<Check> checks) {
 		super(name, checks);
 
 	}
 
 	@Override
 	public void doCheck(AbstractBuild build, Launcher launcher,
-			BuildListener listener, GateResult gateResult) {
+			BuildListener listener, GateReport gateReport) {
 //		listener.getLogger().println("QG " + this.getName());
 		if (checksAreAvailable()) {
 			Result result = Result.SUCCESS;
 			for (Check check : this.checks) {
-				CheckResult checkResult = check.check(build, listener, launcher); 
-				result = result.combine(checkResult.getResult());
+				CheckReport checkReport = check.check(build, listener, launcher); 
+				result = result.combine(checkReport.getResult());
 //				listener.getLogger().println( "Check: " + check.toString() + " Result: " + result.toString());
-				gateResult.addCheckResult(checkResult); 
-				gateResult.setResult(result); 
+				gateReport.addCheckResult(checkReport); 
+				gateReport.setResult(result); 
 			}
 		} else {
-			gateResult.setResult(this.resultOfEmptyGate());
+			gateReport.setResult(this.resultOfEmptyGate());
 		}
 	}
 
@@ -52,7 +52,7 @@ public class QualityGateImpl extends QualityGate {
 	public static class DescriptorImpl extends QualityGateDescriptor {
 		@Override
 		public String getDisplayName() {
-			return "Standard Quality Gate (AND-Gate)";
+			return "Standard Gate (AND-Gate)";
 		}
 	}
 

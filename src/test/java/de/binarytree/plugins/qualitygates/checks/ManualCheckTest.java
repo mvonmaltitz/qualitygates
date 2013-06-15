@@ -10,7 +10,7 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class ManualCheckTest {
 	class MockManualCheck extends ManualCheck {
@@ -40,7 +40,7 @@ public class ManualCheckTest {
 
 	@Test
 	public void testCheckResult() {
-		CheckResult result = new CheckResult(check);
+		CheckReport result = new CheckReport(check);
 		check.doCheck(build, listener, launcher, result);
 		assertEquals(Result.NOT_BUILT, result.getResult());
 		assertTrue(result.getReason().startsWith(ManualCheck.AWAITING_MANUAL_APPROVAL));

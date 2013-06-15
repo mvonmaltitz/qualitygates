@@ -5,11 +5,11 @@ import hudson.model.Result;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.binarytree.plugins.qualitygates.QualityGate;
+import de.binarytree.plugins.qualitygates.Gate;
 
-public class GatesResult extends ListContainer<GateResult>{
+public class QualityLineReport extends ListContainer<GateReport>{
 
-	private List<GateResult> gates(){
+	private List<GateReport> gates(){
 		return this.getItems(); 
 	}
 	
@@ -17,25 +17,25 @@ public class GatesResult extends ListContainer<GateResult>{
 		return gates().size();
 	}
 
-	public void addGateResult(GateResult gateResult) {
-		this.addOrReplaceItem(gateResult); 
+	public void addGateResult(GateReport gateReport) {
+		this.addOrReplaceItem(gateReport); 
 	}
 
-	public List<GateResult> getGateResults() {
-		return new LinkedList<GateResult>(this.gates());
+	public List<GateReport> getGateResults() {
+		return new LinkedList<GateReport>(this.gates());
 	}
 
 	
-	public Result getResultFor(QualityGate gate) {
-		GateResult result = this.getGateResultFor(gate);
+	public Result getResultFor(Gate gate) {
+		GateReport result = this.getGateResultFor(gate);
 		if (result != null) {
 			return result.getResult();
 		}
 		return Result.NOT_BUILT;
 	}
 
-	public GateResult getGateResultFor(QualityGate gate) {
-		for (GateResult result : this.gates()) {
+	public GateReport getGateResultFor(Gate gate) {
+		for (GateReport result : this.gates()) {
 			if (result.belongsTo(gate)) {
 				return result;
 			}
@@ -44,13 +44,13 @@ public class GatesResult extends ListContainer<GateResult>{
 	}
 
 	@Override
-	protected boolean isSameItem(GateResult a, GateResult b) {
+	protected boolean isSameItem(GateReport a, GateReport b) {
 		return a.referencesSameGateAs(b); 
 	}
 
 	public int getNumberOfSuccessfulGates() {
 		int count = 0; 
-		for(GateResult result : this.gates()){
+		for(GateReport result : this.gates()){
 			if(resultCausedTermination(result)){
 				break; 
 			}
@@ -61,7 +61,7 @@ public class GatesResult extends ListContainer<GateResult>{
 
 	public List<String> getReasonsOfTermination() {
 		LinkedList<String> reasons = new LinkedList<String>(); 
-		for(GateResult result : this.gates()){
+		for(GateReport result : this.gates()){
 			if(resultCausedTermination(result)){
 				reasons = result.getReasonOfFailure(); 
 				break; 
@@ -70,7 +70,7 @@ public class GatesResult extends ListContainer<GateResult>{
 		return reasons; 
 	}
 
-	private boolean resultCausedTermination(GateResult result) {
+	private boolean resultCausedTermination(GateReport result) {
 		return result.getResult().isWorseOrEqualTo(Result.FAILURE);
 	}
 }

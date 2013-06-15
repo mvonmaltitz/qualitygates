@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ManualQualityGateTest {
+public class ManualGateTest {
 
 	@Before
 	public void setUp() throws Exception {

@@ -12,7 +12,7 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.QualityGate;
+import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
 
@@ -43,7 +43,7 @@ public class CheckResultTest {
 
 		@Override
 		public void doCheck(AbstractBuild build, BuildListener listener,
-				Launcher launcher, CheckResult checkResult) {
+				Launcher launcher, CheckReport checkReport) {
 		}
 
 		@Override
@@ -54,19 +54,19 @@ public class CheckResultTest {
 	};
 
 	private Check check = new MockCheck("MockCheck"); 
-	private CheckResult checkResult;
+	private CheckReport checkReport;
 
 	@Before
 	public void setUp() {
-		checkResult = new CheckResult(check);
+		checkReport = new CheckReport(check);
 	}
 
 	@Test
 	public void testSettingAndGettingOfValidReasonlessResultOfCheck() {
 		Result[] results = new Result[] { Result.SUCCESS, Result.NOT_BUILT };
 		for (Result result : results) {
-			checkResult.setResult(result);
-			assertEquals(result, checkResult.getResult());
+			checkReport.setResult(result);
+			assertEquals(result, checkReport.getResult());
 		}
 	}
 
@@ -75,11 +75,11 @@ public class CheckResultTest {
 		Result[] results = new Result[] { Result.FAILURE, Result.UNSTABLE };
 		for (Result result : results) {
 			try {
-				checkResult.setResult(result);
+				checkReport.setResult(result);
 				fail("Negative results without reason should be disallowed.");
 			} catch (IllegalArgumentException e) {
-				assertEquals(Result.NOT_BUILT, checkResult.getResult());
-				assertNull(checkResult.getReason());
+				assertEquals(Result.NOT_BUILT, checkReport.getResult());
+				assertNull(checkReport.getReason());
 			}
 		}
 	}
@@ -89,28 +89,28 @@ public class CheckResultTest {
 		String reason = "It didn't function";
 		Result[] results = new Result[] { Result.FAILURE, Result.UNSTABLE };
 		for (Result result : results) {
-			checkResult.setResult(result, reason);
-			assertEquals(result, checkResult.getResult());
-			assertEquals(reason, checkResult.getReason());
+			checkReport.setResult(result, reason);
+			assertEquals(result, checkReport.getResult());
+			assertEquals(reason, checkReport.getReason());
 		}
 	}
 
 	@Test
 	public void testGetCheckResultDocumentation() {
-		CheckResult checkResult = check.document();
-		assertEquals(Result.NOT_BUILT, checkResult.getResult());
+		CheckReport checkReport = check.document();
+		assertEquals(Result.NOT_BUILT, checkReport.getResult());
 	}
 
 	@Test
 	public void testReferencesSameGate() {
-		CheckResult result1 = new CheckResult(check);
-		CheckResult result2 = new CheckResult(check);
+		CheckReport result1 = new CheckReport(check);
+		CheckReport result2 = new CheckReport(check);
 		assertTrue(result1.referencesSameCheckAs(result2));
 	}
 
 	@Test
 	public void testReferencesSameCheck() {
-		CheckResult result1 = new CheckResult(check);
+		CheckReport result1 = new CheckReport(check);
 		assertTrue(result1.references(check));
 	}
 
@@ -118,14 +118,14 @@ public class CheckResultTest {
 	public void testReferencesEqualCheckFalse() {
 		Check check1 = new MockCheck("Eins"); 
 		Check check2 = new MockCheck("Zwei"); 
-		CheckResult result1  = new CheckResult(check1); 
+		CheckReport result1  = new CheckReport(check1); 
 		assertFalse(result1.references(check2)); 
 	}
 	@Test
 	public void testReferencesEqualCheckTrue() {
 		Check check1 = new MockCheck("Eins"); 
 		Check check2 = new MockCheck("Eins"); 
-		CheckResult result1  = new CheckResult(check1); 
+		CheckReport result1  = new CheckReport(check1); 
 		assertTrue(result1.references(check2)); 
 	}
 }

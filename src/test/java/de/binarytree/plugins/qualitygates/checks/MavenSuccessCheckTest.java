@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck.MavenSuccessCheckDescriptor;
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class MavenSuccessCheckTest {
 
@@ -44,7 +44,7 @@ public class MavenSuccessCheckTest {
 	@Test
 	public void testBuildIsNull() {
 		build = null;
-		CheckResult result = check.check(build, null, null);
+		CheckReport result = check.check(build, null, null);
 		assertEquals(Result.FAILURE, result.getResult());
 	}
 
@@ -60,7 +60,7 @@ public class MavenSuccessCheckTest {
 
 	public void testBuildResult(Result desiredResult) {
 		when(build.getResult()).thenReturn(desiredResult);
-		CheckResult result = check.check(build, null, null);
+		CheckReport result = check.check(build, null, null);
 		assertEquals(desiredResult, result.getResult());
 	}
 

@@ -13,15 +13,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.result.GateResult;
+import de.binarytree.plugins.qualitygates.result.GateReport;
 
-public abstract class QualityGate implements Describable<QualityGate>, ExtensionPoint {
+public abstract class Gate implements Describable<Gate>, ExtensionPoint {
 
     protected String name;
 
     protected List<Check> checks = new LinkedList<Check>();
 
-    public QualityGate(String name, Collection<Check> checks) {
+    public Gate(String name, Collection<Check> checks) {
         this.name = name;
         if (checks != null) {
             this.checks.addAll(checks);
@@ -36,21 +36,21 @@ public abstract class QualityGate implements Describable<QualityGate>, Extension
         return this.checks.size();
     }
 
-    public GateResult check(AbstractBuild build, Launcher launcher, BuildListener listener) {
-        GateResult gateResult = new GateResult(this);
-        this.doCheck(build, launcher, listener, gateResult);
-        return gateResult;
+    public GateReport check(AbstractBuild build, Launcher launcher, BuildListener listener) {
+        GateReport gateReport = new GateReport(this);
+        this.doCheck(build, launcher, listener, gateReport);
+        return gateReport;
     }
 
-    public GateResult document() {
-        GateResult gateResult = new GateResult(this);
+    public GateReport document() {
+        GateReport gateReport = new GateReport(this);
         for (Check check : this.checks) {
-            gateResult.addCheckResult(check.document());
+            gateReport.addCheckResult(check.document());
         }
-        return gateResult;
+        return gateReport;
     }
 
-    public abstract void doCheck(AbstractBuild build, Launcher launcher, BuildListener listener, GateResult gateResult);
+    public abstract void doCheck(AbstractBuild build, Launcher launcher, BuildListener listener, GateReport gateReport);
 
     public QualityGateDescriptor getDescriptor() {
         return (QualityGateDescriptor) Hudson.getInstance().getDescriptor(getClass());
@@ -60,8 +60,8 @@ public abstract class QualityGate implements Describable<QualityGate>, Extension
         return this.name;
     }
 
-    public static DescriptorExtensionList<QualityGate, QualityGateDescriptor> all() {
-        return Hudson.getInstance().<QualityGate, QualityGateDescriptor> getDescriptorList(QualityGate.class);
+    public static DescriptorExtensionList<Gate, QualityGateDescriptor> all() {
+        return Hudson.getInstance().<Gate, QualityGateDescriptor> getDescriptorList(Gate.class);
     }
 
 }

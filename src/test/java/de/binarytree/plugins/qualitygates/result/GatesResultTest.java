@@ -14,69 +14,69 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import de.binarytree.plugins.qualitygates.QualityGate;
+import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.checks.Check;
 
 public class GatesResultTest {
-	private GatesResult gatesResult;
-	private GateResult gateResult;
-	private GateResult gateResultTwin;
-	private GateResult gateResult1;
-	private QualityGate gate;
-	private QualityGate gate1;
+	private QualityLineReport qualityLineReport;
+	private GateReport gateReport;
+	private GateReport gateResultTwin;
+	private GateReport gateResult1;
+	private Gate gate;
+	private Gate gate1;
 
 	@Before
 	public void setUp() {
-		gatesResult = new GatesResult();
+		qualityLineReport = new QualityLineReport();
 		gate = getGateMockForName("Gate Name");
-		gateResult = new GateResult(gate);
-		gateResultTwin = new GateResult(gate);
+		gateReport = new GateReport(gate);
+		gateResultTwin = new GateReport(gate);
 		gate1 = getGateMockForName("Gate Name");
-		gateResult1 = new GateResult(gate1);
+		gateResult1 = new GateReport(gate1);
 	}
 
-	private QualityGate getGateMockForName(String name) {
-		QualityGate gate = mock(QualityGate.class);
+	private Gate getGateMockForName(String name) {
+		Gate gate = mock(Gate.class);
 		when(gate.getName()).thenReturn(name);
 		return gate;
 	}
 
 	@Test
 	public void testNewGateResultHasCorrectGateName() {
-		assertEquals(gate.getName(), gateResult.getGateName());
+		assertEquals(gate.getName(), gateReport.getGateName());
 	}
 
 	@Test
 	public void testAddingAGateIncrementsNumberOfGates() {
-		gatesResult.addGateResult(gateResult);
-		assertEquals(1, gatesResult.getNumberOfGates());
-		gatesResult.addGateResult(gateResult1);
-		assertEquals(2, gatesResult.getNumberOfGates());
+		qualityLineReport.addGateResult(gateReport);
+		assertEquals(1, qualityLineReport.getNumberOfGates());
+		qualityLineReport.addGateResult(gateResult1);
+		assertEquals(2, qualityLineReport.getNumberOfGates());
 	}
 
 	@Test
 	public void testGetAddedGates() {
-		gatesResult.addGateResult(gateResult);
-		gatesResult.addGateResult(gateResult1);
-		assertTrue(gatesResult.getGateResults().contains(gateResult));
-		assertTrue(gatesResult.getGateResults().contains(gateResult1));
+		qualityLineReport.addGateResult(gateReport);
+		qualityLineReport.addGateResult(gateResult1);
+		assertTrue(qualityLineReport.getGateResults().contains(gateReport));
+		assertTrue(qualityLineReport.getGateResults().contains(gateResult1));
 	}
 
 	@Test
 	public void testAddAnotherResultForExistingGateResult() {
 		this.addResultAndItsTwinToGatesResult();
-		assertTrue(gatesResult.getGateResults().contains(gateResultTwin));
+		assertTrue(qualityLineReport.getGateResults().contains(gateResultTwin));
 	}
 
 	@Test
 	public void testAnotherResultRemovesExistingResultForSameGate() {
 		this.addResultAndItsTwinToGatesResult();
-		assertFalse(gatesResult.getGateResults().contains(gateResult));
+		assertFalse(qualityLineReport.getGateResults().contains(gateReport));
 	}
 
-	private void addArbitraryGateResults(GatesResult gatesResult, int count) {
+	private void addArbitraryGateResults(QualityLineReport qualityLineReport, int count) {
 		for (int i = 0; i < count; i++) {
-			gatesResult.addGateResult(new GateResult(this
+			qualityLineReport.addGateResult(new GateReport(this
 					.getGateMockForName("Gate " + i)));
 		}
 	}
@@ -84,49 +84,49 @@ public class GatesResultTest {
 	@Test
 	public void testAnotherResultForExistingResultDoesntIncrementGateCount() {
 		this.addResultAndItsTwinToGatesResult();
-		assertEquals(27, gatesResult.getNumberOfGates());
+		assertEquals(27, qualityLineReport.getNumberOfGates());
 	}
 
 	@Test
 	public void testAnotherResultForExistingResultChangeResultOfGate() {
 		this.addResultAndItsTwinToGatesResult();
-		assertEquals(gatesResult.getResultFor(gate), Result.SUCCESS);
+		assertEquals(qualityLineReport.getResultFor(gate), Result.SUCCESS);
 	}
 
 	private void addResultAndItsTwinToGatesResult() {
-		this.addArbitraryGateResults(gatesResult, 7);
-		gateResult.setResult(Result.FAILURE);
-		gatesResult.addGateResult(gateResult);
-		this.addArbitraryGateResults(gatesResult, 19);
+		this.addArbitraryGateResults(qualityLineReport, 7);
+		gateReport.setResult(Result.FAILURE);
+		qualityLineReport.addGateResult(gateReport);
+		this.addArbitraryGateResults(qualityLineReport, 19);
 		gateResultTwin.setResult(Result.SUCCESS);
-		gatesResult.addGateResult(gateResultTwin);
+		qualityLineReport.addGateResult(gateResultTwin);
 	}
 
 	@Test
 	public void testRetrieveResultForGate() {
-		gateResult.setResult(Result.FAILURE);
-		gatesResult.addGateResult(gateResult);
-		assertEquals(Result.FAILURE, gatesResult.getResultFor(gate));
+		gateReport.setResult(Result.FAILURE);
+		qualityLineReport.addGateResult(gateReport);
+		assertEquals(Result.FAILURE, qualityLineReport.getResultFor(gate));
 	}
 
 	@Test
 	public void testGetNOTBUILTForUnknownGate() {
-		gatesResult.addGateResult(gateResult);
-		assertEquals(Result.NOT_BUILT, gatesResult.getResultFor(gate1));
+		qualityLineReport.addGateResult(gateReport);
+		assertEquals(Result.NOT_BUILT, qualityLineReport.getResultFor(gate1));
 	}
 
 	@Test
 	public void testGetTerminationReasonWhenGateFails() {
-		gateResult.setResult(Result.SUCCESS);
+		gateReport.setResult(Result.SUCCESS);
 		gateResult1.setResult(Result.FAILURE);
-		QualityGate gate3 = getGateMockForName("Gate Name");
-		GateResult r3 = new GateResult(gate3);
+		Gate gate3 = getGateMockForName("Gate Name");
+		GateReport r3 = new GateReport(gate3);
 		r3.setResult(Result.NOT_BUILT);
 
-		CheckResult check0 = new CheckResult(getCheckMock("Check0"));
-		CheckResult check1 = new CheckResult(getCheckMock("Check1"));
-		CheckResult check2 = new CheckResult(getCheckMock("Check2"));
-		CheckResult check3 = new CheckResult(getCheckMock("Check3")); //NOT_BUILT
+		CheckReport check0 = new CheckReport(getCheckMock("Check0"));
+		CheckReport check1 = new CheckReport(getCheckMock("Check1"));
+		CheckReport check2 = new CheckReport(getCheckMock("Check2"));
+		CheckReport check3 = new CheckReport(getCheckMock("Check3")); //NOT_BUILT
 		check0.setResult(Result.SUCCESS, "Zeroth reason");
 		check1.setResult(Result.FAILURE, "First reason");
 		check2.setResult(Result.FAILURE, "Second reason");
@@ -136,13 +136,13 @@ public class GatesResultTest {
 		
 		r3.addCheckResult(check3);
 
-		gatesResult.addGateResult(gateResult);
-		gatesResult.addGateResult(gateResult1);
-		gatesResult.addGateResult(r3);
+		qualityLineReport.addGateResult(gateReport);
+		qualityLineReport.addGateResult(gateResult1);
+		qualityLineReport.addGateResult(r3);
 		
-		assertEquals(3, gatesResult.getNumberOfGates());
-		assertEquals(1, gatesResult.getNumberOfSuccessfulGates());
-		List<String> reasonOfTermination = gatesResult.getReasonsOfTermination();
+		assertEquals(3, qualityLineReport.getNumberOfGates());
+		assertEquals(1, qualityLineReport.getNumberOfSuccessfulGates());
+		List<String> reasonOfTermination = qualityLineReport.getReasonsOfTermination();
 		
 		assertTrue(reasonOfTermination.contains("First reason"));
 		assertTrue(reasonOfTermination.contains("Second reason"));
@@ -151,7 +151,7 @@ public class GatesResultTest {
 
 	@Test 
 	public void testGetTerminationReaonsWhenAllGatesAreSuccessfull(){
-		assertEquals(new LinkedList<String>(), gatesResult.getReasonsOfTermination()); 
+		assertEquals(new LinkedList<String>(), qualityLineReport.getReasonsOfTermination()); 
 		
 	}
 	

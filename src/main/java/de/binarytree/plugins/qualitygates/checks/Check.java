@@ -11,26 +11,26 @@ import hudson.model.Hudson;
 
 import java.util.Arrays;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public abstract class Check implements Describable<Check>, ExtensionPoint {
 
-    public CheckResult check(AbstractBuild build, BuildListener listener, Launcher launcher) {
-        CheckResult checkResult = this.document();
+    public CheckReport check(AbstractBuild build, BuildListener listener, Launcher launcher) {
+        CheckReport checkReport = this.document();
         try {
-            this.doCheck(build, listener, launcher, checkResult);
+            this.doCheck(build, listener, launcher, checkReport);
         } catch (Exception e) {
-            checkResult.setResult(Result.FAILURE, Arrays.toString(e.getStackTrace()));
+            checkReport.setResult(Result.FAILURE, Arrays.toString(e.getStackTrace()));
         }
-        return checkResult;
+        return checkReport;
     }
 
-    public CheckResult document() {
-        CheckResult checkResult = new CheckResult(this);
-        return checkResult;
+    public CheckReport document() {
+        CheckReport checkReport = new CheckReport(this);
+        return checkReport;
     }
 
-    public abstract void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult);
+    public abstract void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport);
 
     public abstract String getDescription();
 

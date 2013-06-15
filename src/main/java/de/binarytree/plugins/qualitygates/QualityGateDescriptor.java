@@ -5,10 +5,10 @@ import hudson.model.Descriptor;
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
 
-public abstract class QualityGateDescriptor extends Descriptor<QualityGate>{
+public abstract class QualityGateDescriptor extends Descriptor<Gate>{
 
 	
-	protected QualityGateDescriptor(Class<? extends QualityGate> clazz){
+	protected QualityGateDescriptor(Class<? extends Gate> clazz){
 		super(clazz); 
 	}
 	protected QualityGateDescriptor(){}

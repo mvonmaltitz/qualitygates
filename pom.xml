@@ -26,6 +26,15 @@
 		<version>1.8.4</version>
 	</dependency>
 </dependencies>
+  <build>
+     <plugins>
+       <plugin>
+         <groupId>org.jenkins-ci.tools</groupId>
+         <artifactId>maven-hpi-plugin</artifactId>
+         <version>1.95</version>
+       </plugin>
+     </plugins>
+   </build> 
   <pluginRepositories>
     <pluginRepository>
       <id>repo.jenkins-ci.org</id>

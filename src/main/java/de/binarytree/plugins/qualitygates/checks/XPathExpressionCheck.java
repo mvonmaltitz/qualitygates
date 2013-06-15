@@ -17,7 +17,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class XPathExpressionCheck extends XMLCheck{
 
@@ -35,33 +35,33 @@ public class XPathExpressionCheck extends XMLCheck{
 	}
 
 	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult){
+	public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport){
 		try{
-			matchExpression(build, checkResult);
+			matchExpression(build, checkReport);
 		}catch(Exception e){
 			String reason = e.getMessage();
 			if(reason == null){
 				reason = Arrays.toString(e.getStackTrace());
 			}
-			checkResult.setResult(Result.FAILURE, "Exception: " + reason);
+			checkReport.setResult(Result.FAILURE, "Exception: " + reason);
 		}
 	}
 
-	private void matchExpression(AbstractBuild build, CheckResult checkResult) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException{
+	private void matchExpression(AbstractBuild build, CheckReport checkReport) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException{
 		InputStream stream = this.obtainInputStream(build);
 		String content = this.getXMLContentForXPathExpression(stream);
-		this.setCheckResult(checkResult, content);
+		this.setCheckResult(checkReport, content);
 	}
 
-	private void setCheckResult(CheckResult checkResult, String content){
+	private void setCheckResult(CheckReport checkReport, String content){
 		if(content != null){
 			if(reportContent){
-				checkResult.setResult(Result.SUCCESS, "Content: " + content);
+				checkReport.setResult(Result.SUCCESS, "Content: " + content);
 			}else{
-				checkResult.setResult(Result.SUCCESS, "");
+				checkReport.setResult(Result.SUCCESS, "");
 			}
 		}else{
-			checkResult.setResult(Result.FAILURE, this.getExpression() + " not found in " + this.getTargetFile());
+			checkReport.setResult(Result.FAILURE, this.getExpression() + " not found in " + this.getTargetFile());
 		}
 	}
 

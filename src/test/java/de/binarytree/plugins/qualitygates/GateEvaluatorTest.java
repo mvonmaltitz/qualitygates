@@ -14,13 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.result.GateResult;
-import de.binarytree.plugins.qualitygates.result.GatesResult;
+import de.binarytree.plugins.qualitygates.result.GateReport;
+import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 
 public class GateEvaluatorTest {
 
 	private int gateCounter;
-	private LinkedList<QualityGate> gateList;
+	private LinkedList<Gate> gateList;
 	private BuildListener listener;
 	private Launcher launcher;
 	private AbstractBuild build;
@@ -28,7 +28,7 @@ public class GateEvaluatorTest {
 	@Before
 	public void setUp() throws Exception {
 		gateCounter = 0;
-		gateList = new LinkedList<QualityGate>();
+		gateList = new LinkedList<Gate>();
 		build = mock(AbstractBuild.class);
 		launcher = mock(Launcher.class);
 		listener = mock(BuildListener.class);
@@ -37,7 +37,7 @@ public class GateEvaluatorTest {
 	@Test
 	public void testOneGateSucessfull() {
 		gateList.add(this.getGate(Result.SUCCESS));
-		GatesResult result = this.evaluate();
+		QualityLineReport result = this.evaluate();
 		assertEquals(1, result.getGateResults().size());
 		assertEquals(Result.SUCCESS, result.getGateResults().get(0).getResult());
 	}
@@ -47,7 +47,7 @@ public class GateEvaluatorTest {
 		this.addGateSequence(new Result[] { Result.SUCCESS,
 				Result.NOT_BUILT, Result.SUCCESS, Result.SUCCESS }); 
 		
-		GatesResult result = this.evaluate();
+		QualityLineReport result = this.evaluate();
 		
 		assertEquals(4, result.getGateResults().size());
 		this.assertSequence(result, new Result[] { Result.SUCCESS,
@@ -58,7 +58,7 @@ public class GateEvaluatorTest {
 		this.addGateSequence(new Result[] { Result.SUCCESS,
 				Result.FAILURE, Result.SUCCESS, Result.SUCCESS }); 
 		
-		GatesResult result = this.evaluate();
+		QualityLineReport result = this.evaluate();
 		
 		assertEquals(4, result.getGateResults().size());
 		this.assertSequence(result, new Result[] { Result.SUCCESS,
@@ -71,7 +71,7 @@ public class GateEvaluatorTest {
 		this.addGateSequence(new Result[] { Result.SUCCESS,
 				Result.FAILURE, Result.SUCCESS, Result.SUCCESS }); 
 		GateEvaluator gateEvaluator = new GateEvaluator(this.gateList); 
-		GatesResult result = gateEvaluator.evaluate(build, launcher, listener); 
+		QualityLineReport result = gateEvaluator.evaluate(build, launcher, listener); 
 		this.assertSequence(result, new Result[] { Result.SUCCESS,
 				Result.FAILURE, Result.NOT_BUILT, Result.NOT_BUILT });
 		result = gateEvaluator.evaluate(build, launcher, listener); 
@@ -87,30 +87,30 @@ public class GateEvaluatorTest {
 		}
 	}
 
-	public void assertSequence(GatesResult gatesResult, Result... results) {
-		if (gatesResult.getGateResults().size() != results.length) {
+	public void assertSequence(QualityLineReport qualityLineReport, Result... results) {
+		if (qualityLineReport.getGateResults().size() != results.length) {
 			fail("Different length of gates and expected results");
 		}
 		for (int i = 0; i < results.length; i++) {
-			assertEquals(results[i], gatesResult.getGateResults().get(i)
+			assertEquals(results[i], qualityLineReport.getGateResults().get(i)
 					.getResult());
 		}
 
 	}
 
-	public GatesResult evaluate() {
+	public QualityLineReport evaluate() {
 		return new GateEvaluator(gateList).evaluate(build, launcher, listener);
 	}
 
-	public QualityGate getGate(final Result result) {
+	public Gate getGate(final Result result) {
 		String name = "Gate " + gateCounter++;
 
 		LinkedList<Check> checkList = new LinkedList<Check>();
-		return new QualityGate(name, checkList) {
+		return new Gate(name, checkList) {
 			@Override
 			public void doCheck(AbstractBuild build, Launcher launcher,
-					BuildListener listener, GateResult gateResult) {
-				gateResult.setResult(result);
+					BuildListener listener, GateReport gateReport) {
+				gateReport.setResult(result);
 			}
 
 		};

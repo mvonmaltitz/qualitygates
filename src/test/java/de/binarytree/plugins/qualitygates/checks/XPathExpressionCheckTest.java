@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import de.binarytree.plugins.qualitygates.checks.XPathExpressionCheck.DescriptorImpl;
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class XPathExpressionCheckTest {
 
@@ -133,7 +133,7 @@ public class XPathExpressionCheckTest {
 	public void testCheckFindsPresentXMLTag() throws XPathExpressionException,
 			ParserConfigurationException, SAXException, IOException {
 		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId"); 
-		CheckResult result = xmlCheck.check(build, null, null);
+		CheckReport result = xmlCheck.check(build, null, null);
 		assertEquals(Result.SUCCESS, result.getResult()); 
 		assertTrue(result .getReason().contains(content));
 	}
@@ -143,10 +143,10 @@ public class XPathExpressionCheckTest {
 			throws XPathExpressionException, ParserConfigurationException,
 			SAXException, IOException {
 		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere"); 
-		CheckResult checkResult = xmlCheck.check(build, null, null);
-		assertEquals(Result.FAILURE, checkResult
+		CheckReport checkReport = xmlCheck.check(build, null, null);
+		assertEquals(Result.FAILURE, checkReport
 				.getResult());
-		assertFalse(checkResult.getReason().contains("Exception"));
+		assertFalse(checkReport.getReason().contains("Exception"));
 	}
 
 	@Test
@@ -157,9 +157,9 @@ public class XPathExpressionCheckTest {
 				throw new RuntimeException();
 			}
 		};
-		CheckResult checkResult = xmlCheck.check(build, null, null);
-		assertEquals(Result.FAILURE, checkResult.getResult());
-		assertTrue(checkResult.getReason().contains("Exception"));
+		CheckReport checkReport = xmlCheck.check(build, null, null);
+		assertEquals(Result.FAILURE, checkReport.getResult());
+		assertTrue(checkReport.getReason().contains("Exception"));
 	}
 
 	@Test
@@ -177,7 +177,7 @@ public class XPathExpressionCheckTest {
 	@Test
 	public void testReasonIsEmptyWhenReportingIsOff(){
 		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId", false); 
-		CheckResult result = xmlCheck.check(build, null, null);
+		CheckReport result = xmlCheck.check(build, null, null);
 		assertEquals(Result.SUCCESS, result.getResult()); 
 		assertEquals("", result .getReason());
 	}

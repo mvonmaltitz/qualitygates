@@ -6,10 +6,10 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import de.binarytree.plugins.qualitygates.checks.ManualCheck;
 
-public class ManualQualityGate extends QualityGateImpl {
+public class ManualGate extends AndGate {
 
     @DataBoundConstructor
-    public ManualQualityGate(String name) {
+    public ManualGate(String name) {
         super(name, null);
         this.setUpCheck();
     }

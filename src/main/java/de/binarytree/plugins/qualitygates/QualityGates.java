@@ -5,12 +5,12 @@ import java.util.List;
 
 public class QualityGates {
 
-	private List<QualityGate> qualityGates = new ArrayList<QualityGate>();  
-	public void add(QualityGate gate){
-		qualityGates.add(gate);  
+	private List<Gate> gates = new ArrayList<Gate>();  
+	public void add(Gate gate){
+		gates.add(gate);  
 	}
 
 	public int getNumberOfGates() {
-		return qualityGates.size(); 
+		return gates.size(); 
 	}
 }

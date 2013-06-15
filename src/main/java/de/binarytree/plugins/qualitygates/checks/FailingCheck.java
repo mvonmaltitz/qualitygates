@@ -8,7 +8,7 @@ import hudson.model.AbstractBuild;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class FailingCheck extends Check {
 
@@ -18,8 +18,8 @@ public class FailingCheck extends Check {
 
 	@Override
 	public void doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher, CheckResult checkResult) {
-		checkResult.setResult(Result.FAILURE, "This check always fails.");
+			Launcher launcher, CheckReport checkReport) {
+		checkReport.setResult(Result.FAILURE, "This check always fails.");
 	}
 
 	@Override

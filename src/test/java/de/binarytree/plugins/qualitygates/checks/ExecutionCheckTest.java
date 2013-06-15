@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class ExecutionCheckTest {
 
@@ -28,7 +28,7 @@ public class ExecutionCheckTest {
 
     private ExecutionCheck check;
 
-    private CheckResult checkResult;
+    private CheckReport checkReport;
 
     private LocalLauncher launcher;
 
@@ -62,7 +62,7 @@ public class ExecutionCheckTest {
         launcher = new Launcher.LocalLauncher(taskListener);
         command = "echo /tmp/testdatei";
         check = new MockExecutionCheck(command);
-        checkResult = new CheckResult(check);
+        checkReport = new CheckReport(check);
         build = mock(AbstractBuild.class);
     }
 
@@ -74,9 +74,9 @@ public class ExecutionCheckTest {
     @Test
     public void testExecutionOfCommand() throws IOException, InterruptedException {
         when(shell.perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenReturn(true);
-        check.doCheck(build, null, launcher, checkResult);
+        check.doCheck(build, null, launcher, checkReport);
         String logOutput = new String(stream.toByteArray());
-        assertEquals(Result.SUCCESS, checkResult.getResult());
+        assertEquals(Result.SUCCESS, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class));
     }
 
@@ -85,9 +85,9 @@ public class ExecutionCheckTest {
         when(shell.perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenReturn(false);
         String unknownCommand = "asdlkjfalsdfjaldfjald";
         check = new MockExecutionCheck(unknownCommand);
-        check.doCheck(build, null, launcher, checkResult);
+        check.doCheck(build, null, launcher, checkReport);
         String logOutput = new String(stream.toByteArray());
-        assertEquals(Result.FAILURE, checkResult.getResult());
+        assertEquals(Result.FAILURE, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class));
     }
 
@@ -96,11 +96,11 @@ public class ExecutionCheckTest {
         when(shell.perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenReturn(false);
         String command = "cat /aljf/aljf/asdfj/asdfjkdfjdkfj.txt";
         check = new MockExecutionCheck(command);
-        check.doCheck(build, null, launcher, checkResult);
+        check.doCheck(build, null, launcher, checkReport);
         String logOutput = new String(stream.toByteArray());
-        assertEquals(Result.FAILURE, checkResult.getResult());
+        assertEquals(Result.FAILURE, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class));
-        System.out.println(checkResult.getReason());
+        System.out.println(checkReport.getReason());
     }
 
 }

@@ -32,7 +32,7 @@ public class BuildResultAction implements ProminentProjectAction {
         this.gateEvaluator = gateEvaluator;
     }
 
-    public GatesResult getGatesResult() {
+    public QualityLineReport getGatesResult() {
         return this.gateEvaluator.getLatestResults();
     }
 
@@ -51,8 +51,8 @@ public class BuildResultAction implements ProminentProjectAction {
     public void doApprove(StaplerRequest req, StaplerResponse res) throws IOException {
         if (req.hasParameter("id")) {
             String hashIdOfCheck = req.getParameter("id");
-            GatesResult gatesResult = this.getGatesResult();
-            GateResult unbuiltGate = this.getNextUnbuiltGate(gatesResult);
+            QualityLineReport qualityLineReport = this.getGatesResult();
+            GateReport unbuiltGate = this.getNextUnbuiltGate(qualityLineReport);
             if (unbuiltGate != null) {
                 findAndApproveNextManualUnbuiltCheckIfExists(hashIdOfCheck, unbuiltGate);
                 AbstractBuild build = getFormerBuild(req);
@@ -66,13 +66,13 @@ public class BuildResultAction implements ProminentProjectAction {
 
     }
 
-    private void findAndApproveNextManualUnbuiltCheckIfExists(String hashIdOfCheck, GateResult unbuiltGate) {
-        CheckResult unbuiltCheck = this.getNextUnbuiltCheck(unbuiltGate);
+    private void findAndApproveNextManualUnbuiltCheckIfExists(String hashIdOfCheck, GateReport unbuiltGate) {
+        CheckReport unbuiltCheck = this.getNextUnbuiltCheck(unbuiltGate);
         Check check = unbuiltCheck.getCheck();
         if (check instanceof ManualCheck) {
             approveCheckIfHashMatches(hashIdOfCheck, check);
         } else {
-            throw new IllegalArgumentException("Next unbuilt check is no check which can be approved.");
+            throw new IllegalStateException("Next unbuilt check is no check which can be approved.");
         }
     }
 
@@ -95,12 +95,12 @@ public class BuildResultAction implements ProminentProjectAction {
         return Jenkins.getInstance().createLauncher(listener);
     }
 
-    public GateResult getNextUnbuiltGate(GatesResult gatesResult) {
-        for (GateResult gateResult : gatesResult.getGateResults()) {
-            if (isPassedGate(gateResult)) {
+    public GateReport getNextUnbuiltGate(QualityLineReport qualityLineReport) {
+        for (GateReport gateReport : qualityLineReport.getGateResults()) {
+            if (isPassedGate(gateReport)) {
                 continue;
-            } else if (isNotBuilt(gateResult)) {
-                return gateResult;
+            } else if (isNotBuilt(gateReport)) {
+                return gateReport;
             } else {
                 return null;
             }
@@ -108,24 +108,24 @@ public class BuildResultAction implements ProminentProjectAction {
         return null;
     }
 
-    private boolean isNotBuilt(GateResult gateResult) {
-        return gateResult.getResult().equals(Result.NOT_BUILT);
+    private boolean isNotBuilt(GateReport gateReport) {
+        return gateReport.getResult().equals(Result.NOT_BUILT);
     }
 
-    private boolean isPassedGate(GateResult gateResult) {
-        return gateResult.getResult().isBetterOrEqualTo(Result.UNSTABLE);
+    private boolean isPassedGate(GateReport gateReport) {
+        return gateReport.getResult().isBetterOrEqualTo(Result.UNSTABLE);
     }
 
-    public CheckResult getNextUnbuiltCheck(GateResult gateResult) {
-        for (CheckResult checkResult : gateResult.getCheckResults()) {
-            if (isNotBuilt(checkResult)) {
-                return checkResult;
+    public CheckReport getNextUnbuiltCheck(GateReport gateReport) {
+        for (CheckReport checkReport : gateReport.getCheckResults()) {
+            if (isNotBuilt(checkReport)) {
+                return checkReport;
             }
         }
         return null;
     }
 
-    private boolean isNotBuilt(CheckResult checkResult) {
-        return checkResult.getResult().equals(Result.NOT_BUILT);
+    private boolean isNotBuilt(CheckReport checkReport) {
+        return checkReport.getResult().equals(Result.NOT_BUILT);
     }
 }

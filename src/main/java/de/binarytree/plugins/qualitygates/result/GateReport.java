@@ -7,21 +7,21 @@ import java.util.List;
 
 import org.mockito.Matchers;
 
-import de.binarytree.plugins.qualitygates.QualityGate;
+import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.checks.Check;
 
-public class GateResult extends ListContainer<CheckResult>{
+public class GateReport extends ListContainer<CheckReport>{
 
 	private String gateName;
 	private Result result = Result.NOT_BUILT;  
-	private transient QualityGate gate; 
+	private transient Gate gate; 
 
-	public GateResult(QualityGate gate) {
+	public GateReport(Gate gate) {
 		this.gateName = gate.getName(); 
 		this.gate = gate; 
 	}
 
-	private List<CheckResult> checks(){
+	private List<CheckReport> checks(){
 		return this.getItems(); 
 	}
 	
@@ -41,30 +41,30 @@ public class GateResult extends ListContainer<CheckResult>{
 		this.result = result; 
 	}
 
-	public void addCheckResult(CheckResult checkResult) {
-		this.addOrReplaceItem(checkResult); 
+	public void addCheckResult(CheckReport checkReport) {
+		this.addOrReplaceItem(checkReport); 
 		
 	}
 
-	public List<CheckResult> getCheckResults() {
-		return new LinkedList<CheckResult>(this.checks()); 
+	public List<CheckReport> getCheckResults() {
+		return new LinkedList<CheckReport>(this.checks()); 
 	}
 
-	public boolean belongsTo(QualityGate gate){
+	public boolean belongsTo(Gate gate){
 		return this.gate == gate; 
 	}
 	
-	public boolean referencesSameGateAs(GateResult gateResult){
-		return this.gate == gateResult.gate; 
+	public boolean referencesSameGateAs(GateReport gateReport){
+		return this.gate == gateReport.gate; 
 	}
 	@Override
-	protected boolean isSameItem(CheckResult a, CheckResult b) {
+	protected boolean isSameItem(CheckReport a, CheckReport b) {
 		return a.referencesSameCheckAs(b); 
 	}
 
 	public LinkedList<String> getReasonOfFailure() {
 		LinkedList<String> reasons = new LinkedList<String>(); 
-		for(CheckResult result : this.checks()){
+		for(CheckReport result : this.checks()){
 			if(result.getResult().isWorseOrEqualTo(Result.FAILURE)){
 				reasons.add(result.getReason()); 
 			}
@@ -72,8 +72,8 @@ public class GateResult extends ListContainer<CheckResult>{
 		return reasons; 
 	}
 
-	public CheckResult getResultFor(Check check) {
-		for(CheckResult result : this.getCheckResults()){
+	public CheckReport getResultFor(Check check) {
+		for(CheckReport result : this.getCheckResults()){
 			if(result.references(check)){
 				return result; 
 			}

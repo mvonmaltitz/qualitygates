@@ -8,7 +8,7 @@ import hudson.model.AbstractBuild;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class SonarPMDViolationCheck extends SonarCheck {
 
@@ -35,8 +35,8 @@ public class SonarPMDViolationCheck extends SonarCheck {
 
 	@Override
 	public void doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher, CheckResult checkResult) {
-		checkResult.setResult(Result.FAILURE, "This is a dummy");
+			Launcher launcher, CheckReport checkReport) {
+		checkReport.setResult(Result.FAILURE, "This is a dummy");
 	}
 
 	@Override

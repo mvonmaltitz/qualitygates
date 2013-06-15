@@ -15,12 +15,12 @@ import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
-import de.binarytree.plugins.qualitygates.result.CheckResult;
-import de.binarytree.plugins.qualitygates.result.GateResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public class QualityGateTest {
 
-	private QualityGate gate;
+	private Gate gate;
 	private LinkedList<Check> checkList;
 
 	class MockCheck extends Check {
@@ -49,7 +49,7 @@ public class QualityGateTest {
 
 		@Override
 		public void doCheck(AbstractBuild build, BuildListener listener,
-				Launcher launcher, CheckResult checkResult) {
+				Launcher launcher, CheckReport checkReport) {
 		}
 
 	}
@@ -61,10 +61,10 @@ public class QualityGateTest {
 		checkList = new LinkedList<Check>();
 		checkList.add(check1);
 		checkList.add(check2);
-		gate = new QualityGate("Name", checkList) {
+		gate = new Gate("Name", checkList) {
 			@Override
 			public void doCheck(AbstractBuild build, Launcher launcher,
-					BuildListener listener, GateResult gateResult) {
+					BuildListener listener, GateReport gateReport) {
 				// TODO Auto-generated method stub
 
 			}
@@ -75,9 +75,9 @@ public class QualityGateTest {
 
 	@Test
 	public void testGetDocumentation() {
-		GateResult gateResult = gate.document();
-		assertEquals(Result.NOT_BUILT, gateResult.getResult());
-		assertEquals(2, gateResult.getCheckResults().size());
+		GateReport gateReport = gate.document();
+		assertEquals(Result.NOT_BUILT, gateReport.getResult());
+		assertEquals(2, gateReport.getCheckResults().size());
 	}
 
 	@Test

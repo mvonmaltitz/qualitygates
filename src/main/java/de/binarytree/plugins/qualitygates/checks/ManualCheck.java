@@ -11,7 +11,7 @@ import java.util.Random;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class ManualCheck extends Check {
 
@@ -32,15 +32,15 @@ public class ManualCheck extends Check {
     }
 
     @Override
-    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult) {
+    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport) {
         this.hash = Long.toString(System.currentTimeMillis()) + Integer.toString((new Random()).nextInt());
         if (!approved) {
             System.out.println(this.hash + " Setting manual wait.");
             String approveLink = generateApproveLink();
-            checkResult.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL + approveLink);
+            checkReport.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL + approveLink);
         } else {
             System.out.println(this.hash + " Skipping manual as it is approved.");
-            checkResult.setResult(Result.SUCCESS, "Manually approved by " + this.getCurrentUserOrUnknown());
+            checkReport.setResult(Result.SUCCESS, "Manually approved by " + this.getCurrentUserOrUnknown());
             this.approved = false;
         }
     }
@@ -79,4 +79,5 @@ public class ManualCheck extends Check {
     public boolean hasHash(String hash) {
         return this.hash.equals(hash);
     }
+
 }

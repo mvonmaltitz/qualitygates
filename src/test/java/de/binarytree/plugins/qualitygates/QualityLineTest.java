@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HelloWorldBuilderTest {
+public class QualityLineTest {
 
     @Before
     public void setUp() throws Exception {
@@ -17,7 +17,7 @@ public class HelloWorldBuilderTest {
 
     @Test
     public void testInitializeWithNullCollection() throws IOException {
-        QualityGateBuilder builder = new QualityGateBuilder("Builder", null) {
+        QualityLine builder = new QualityLine("Builder", null) {
             @Override
             protected XmlFile getConfigXml() {
                 return new XmlFile(new File("/tmp/tmp.xml"));

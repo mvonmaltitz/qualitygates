@@ -18,10 +18,10 @@ import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
-import de.binarytree.plugins.qualitygates.result.CheckResult;
-import de.binarytree.plugins.qualitygates.result.GateResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateReport;
 
-public class QualityGateImplTest {
+public class AndGateTest {
 
 	private Result SUCCESS = Result.SUCCESS;
 	private Result FAILURE = Result.FAILURE;
@@ -29,7 +29,7 @@ public class QualityGateImplTest {
 	private Result UNSTABLE = Result.UNSTABLE;
 	private Result NOT_BUILT = Result.NOT_BUILT;
 
-	private QualityGateImpl gate;
+	private AndGate gate;
 	private AbstractBuild build;
 	private LinkedList<Check> checkList;
 	private BuildListener listener;
@@ -49,15 +49,15 @@ public class QualityGateImplTest {
 
 	@Test 
 	public void testGetDisplayName(){
-		QualityGateDescriptor  descriptor = new QualityGateImpl.DescriptorImpl(); 
-		assertTrue(descriptor.getDisplayName().contains("Quality Gate")); 
+		QualityGateDescriptor  descriptor = new AndGate.DescriptorImpl(); 
+		assertTrue(descriptor.getDisplayName().contains("Gate")); 
 		assertTrue(descriptor.getDisplayName().contains("AND")); 
 	}
 	
 	@Test
 	public void testAddCheck() {
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		gate = new QualityGateImpl("Eins", checkList);
+		gate = new AndGate("Eins", checkList);
 		assertEquals(1, gate.getNumberOfChecks());
 	}
 
@@ -65,7 +65,7 @@ public class QualityGateImplTest {
 	public void testAddTwoChecks() {
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		gate = new QualityGateImpl("Eins", checkList);
+		gate = new AndGate("Eins", checkList);
 		assertEquals(2, gate.getNumberOfChecks());
 	}
 
@@ -73,7 +73,7 @@ public class QualityGateImplTest {
 	public void testGateIsSuccessfullWhenChecksSuccessfull() {
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		gate = new QualityGateImpl("Eins", checkList);
+		gate = new AndGate("Eins", checkList);
 		this.performGateCheckAndExpect(SUCCESS);
 	}
 
@@ -81,7 +81,7 @@ public class QualityGateImplTest {
 	public void testGateAbortedWhenOneCheckAborted() {
 		checkList.add(this.getCheckMockWithResult(ABORTED));
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		gate = new QualityGateImpl("Eins", checkList);
+		gate = new AndGate("Eins", checkList);
 		this.performGateCheckAndExpect(ABORTED);
 	}
 
@@ -89,7 +89,7 @@ public class QualityGateImplTest {
 	public void testGateAbortedWhenOneCheckAbortedAndAnotherFailed() {
 		checkList.add(this.getCheckMockWithResult(ABORTED));
 		checkList.add(this.getCheckMockWithResult(FAILURE));
-		gate = new QualityGateImpl("Eins", checkList);
+		gate = new AndGate("Eins", checkList);
 		this.performGateCheckAndExpect(ABORTED);
 	}
 
@@ -97,33 +97,33 @@ public class QualityGateImplTest {
 	public void testGateFailsWhenOneChecksFails() {
 		checkList.add(this.getCheckMockWithResult(Result.SUCCESS));
 		checkList.add(this.getCheckMockWithResult(FAILURE));
-		gate = new QualityGateImpl("Eins", checkList);
+		gate = new AndGate("Eins", checkList);
 		this.performGateCheckAndExpect(FAILURE);
 	}
 
 	@Test
 	public void testInitializeGateWithNullCollection() {
-		QualityGateImpl gate = new QualityGateImpl("NullGate", null);
+		AndGate gate = new AndGate("NullGate", null);
 		assertEquals(0, gate.getNumberOfChecks());
 	}
 
 	@Test
 	public void testEmptyGateIsUnstable(){
-		gate = new QualityGateImpl("NullGate", null);
+		gate = new AndGate("NullGate", null);
 		this.performGateCheckAndExpect(UNSTABLE); 
 		
 	}
 	public void performGateCheckAndExpect(Result expectedResult) {
-		GateResult result = gate.check(build, null, listener);
+		GateReport result = gate.check(build, null, listener);
 		assertEquals(expectedResult, result.getResult());
 	}
 
 	public Check getCheckMockWithResult(Result result) {
 		Check check = mock(Check.class);
 		when(check.getDescriptor()).thenReturn(descriptor); 
-		CheckResult checkResult = new CheckResult(check); 
-		checkResult.setResult(result, "Mock Result"); 
-		when(check.check(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(checkResult);
+		CheckReport checkReport = new CheckReport(check); 
+		checkReport.setResult(result, "Mock Result"); 
+		when(check.check(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(checkReport);
 		return check;
 	}
 	

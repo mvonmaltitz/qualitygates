@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class ExecutionCheck extends Check {
     private String command;
@@ -29,18 +29,18 @@ public class ExecutionCheck extends Check {
     }
 
     @Override
-    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult) {
+    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport) {
         Shell shell = this.getShell();
         try {
             boolean success = shell.perform(build, launcher, listener);
             if (success) {
-                checkResult.setResult(Result.SUCCESS);
+                checkReport.setResult(Result.SUCCESS);
             } else {
-                checkResult.setResult(Result.FAILURE, shell.getCommand()
+                checkReport.setResult(Result.FAILURE, shell.getCommand()
                         + " could not be performed. Check log for details.");
             }
         } catch (InterruptedException e) {
-            checkResult.setResult(Result.FAILURE, Arrays.toString(e.getStackTrace()));
+            checkReport.setResult(Result.FAILURE, Arrays.toString(e.getStackTrace()));
         }
 
     }
@@ -63,14 +63,14 @@ public class ExecutionCheck extends Check {
     //
     // }
 
-    private void executeProcStarter(Launcher launcher, CheckResult checkResult, ProcStarter procStarter)
+    private void executeProcStarter(Launcher launcher, CheckReport checkReport, ProcStarter procStarter)
             throws IOException, InterruptedException {
         Proc proc = launcher.launch(procStarter);
         int exitCode = proc.join();
         if (exitCode == 0) {
-            checkResult.setResult(Result.SUCCESS);
+            checkReport.setResult(Result.SUCCESS);
         } else {
-            checkResult.setResult(Result.FAILURE, "Execution has not been successful. Error code is " + exitCode
+            checkReport.setResult(Result.FAILURE, "Execution has not been successful. Error code is " + exitCode
                     + ". See log for more information");
         }
     }
@@ -82,8 +82,8 @@ public class ExecutionCheck extends Check {
         return procStarter;
     }
 
-    private void exceptionToCheckResult(CheckResult checkResult, Exception e) {
-        checkResult.setResult(Result.FAILURE, e.getMessage());
+    private void exceptionToCheckResult(CheckReport checkReport, Exception e) {
+        checkReport.setResult(Result.FAILURE, e.getMessage());
     }
 
     @Override

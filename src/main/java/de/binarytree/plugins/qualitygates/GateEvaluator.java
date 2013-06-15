@@ -8,87 +8,87 @@ import hudson.model.AbstractBuild;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.binarytree.plugins.qualitygates.result.GateResult;
-import de.binarytree.plugins.qualitygates.result.GatesResult;
+import de.binarytree.plugins.qualitygates.result.GateReport;
+import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 
 public class GateEvaluator {
-	private List<QualityGate> gates = new LinkedList<QualityGate>();
+	private List<Gate> gates = new LinkedList<Gate>();
 	private boolean executeGates;
-	private GatesResult gatesResult;
+	private QualityLineReport qualityLineReport;
 
-	public GateEvaluator(List<QualityGate> gates) {
-		this(gates, new GatesResult());
+	public GateEvaluator(List<Gate> gates) {
+		this(gates, new QualityLineReport());
 	}
 
-	public GateEvaluator(List<QualityGate> gates, GatesResult gatesResult) {
+	public GateEvaluator(List<Gate> gates, QualityLineReport qualityLineReport) {
 		if (gates != null) {
 			this.gates.addAll(gates);
 		}
-		this.gatesResult = gatesResult;
+		this.qualityLineReport = qualityLineReport;
 	}
 
-	public GatesResult evaluate(AbstractBuild build, Launcher launcher,
+	public QualityLineReport evaluate(AbstractBuild build, Launcher launcher,
 			BuildListener listener) {
 		executeGates = true;
-		for (QualityGate gate : this.gates) {
+		for (Gate gate : this.gates) {
 			evaluateGate(build, launcher, listener, gate);
 		}
-		return gatesResult;
+		return qualityLineReport;
 	}
 
 	protected void evaluateGate(AbstractBuild build, Launcher launcher,
-			BuildListener listener, QualityGate gate) {
-		GateResult gateResult;
+			BuildListener listener, Gate gate) {
+		GateReport gateReport;
 		if (hasNotFullyBeenExecuted(gate)) {
-			gateResult = processGateAndReport(build, launcher, listener, gate);
+			gateReport = processGateAndReport(build, launcher, listener, gate);
 		} else {
-			gateResult = getFormerGateResultFor(gate);
+			gateReport = getFormerGateResultFor(gate);
 		}
-		if (shouldStopExecutionDueTo(gateResult)) {
+		if (shouldStopExecutionDueTo(gateReport)) {
 			executeGates = false;
 		}
 	}
 
-	protected boolean hasNotFullyBeenExecuted(QualityGate gate) {
-		Result result = this.gatesResult.getResultFor(gate);
+	protected boolean hasNotFullyBeenExecuted(Gate gate) {
+		Result result = this.qualityLineReport.getResultFor(gate);
 		return result.equals(Result.NOT_BUILT);
 	}
 
-	private GateResult processGateAndReport(AbstractBuild build,
-			Launcher launcher, BuildListener listener, QualityGate gate) {
-		GateResult gateResult;
+	private GateReport processGateAndReport(AbstractBuild build,
+			Launcher launcher, BuildListener listener, Gate gate) {
+		GateReport gateReport;
 		if (executeGates) {
-			gateResult = executeGateAndAddToReport(build, launcher, listener,
+			gateReport = executeGateAndAddToReport(build, launcher, listener,
 					gate);
 		} else {
-			gateResult = addNotBuiltGateDocumentationToReport(gate);
+			gateReport = addNotBuiltGateDocumentationToReport(gate);
 		}
-		return gateResult;
+		return gateReport;
 	}
 
-	protected GateResult executeGateAndAddToReport(AbstractBuild build,
-			Launcher launcher, BuildListener listener, QualityGate gate) {
-		GateResult gateResult = gate.check(build, launcher, listener);
-		gatesResult.addGateResult(gateResult);
-		return gateResult;
+	protected GateReport executeGateAndAddToReport(AbstractBuild build,
+			Launcher launcher, BuildListener listener, Gate gate) {
+		GateReport gateReport = gate.check(build, launcher, listener);
+		qualityLineReport.addGateResult(gateReport);
+		return gateReport;
 	}
 
-	private GateResult getFormerGateResultFor(QualityGate gate) {
-		return this.gatesResult.getGateResultFor(gate);
+	private GateReport getFormerGateResultFor(Gate gate) {
+		return this.qualityLineReport.getGateResultFor(gate);
 	}
 
-	protected GateResult addNotBuiltGateDocumentationToReport(QualityGate gate) {
-		GateResult gateResult = gate.document();
-		gatesResult.addGateResult(gateResult);
-		return gateResult;
+	protected GateReport addNotBuiltGateDocumentationToReport(Gate gate) {
+		GateReport gateReport = gate.document();
+		qualityLineReport.addGateResult(gateReport);
+		return gateReport;
 	}
 
-	protected boolean shouldStopExecutionDueTo(GateResult gateResult) {
-		Result result = gateResult.getResult();
+	protected boolean shouldStopExecutionDueTo(GateReport gateReport) {
+		Result result = gateReport.getResult();
 		return result.equals(Result.FAILURE) || result.equals(Result.NOT_BUILT);
 	}
 
-	public GatesResult getLatestResults() {
-		return this.gatesResult;
+	public QualityLineReport getLatestResults() {
+		return this.qualityLineReport;
 	}
 }

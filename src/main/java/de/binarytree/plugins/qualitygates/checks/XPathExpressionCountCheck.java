@@ -17,7 +17,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import de.binarytree.plugins.qualitygates.result.CheckResult;
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class XPathExpressionCountCheck extends XMLCheck {
 
@@ -54,26 +54,26 @@ public class XPathExpressionCountCheck extends XMLCheck {
     }
 
     @Override
-    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult) {
+    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport) {
         try {
-            matchExpression(build, checkResult);
+            matchExpression(build, checkReport);
         } catch (Exception e) {
             String reason = e.getMessage();
             if (reason == null) {
                 reason = Arrays.toString(e.getStackTrace());
             }
-            checkResult.setResult(Result.FAILURE, "Exception: " + reason);
+            checkReport.setResult(Result.FAILURE, "Exception: " + reason);
         }
     }
 
-    private void matchExpression(AbstractBuild build, CheckResult checkResult) throws IOException,
+    private void matchExpression(AbstractBuild build, CheckReport checkReport) throws IOException,
             ParserConfigurationException, SAXException, XPathExpressionException {
         InputStream stream = this.obtainInputStream(build);
         NodeList nodes = getMatchingNodes(stream);
-        this.setCheckResult(checkResult, nodes);
+        this.setCheckResult(checkReport, nodes);
     }
 
-    private void setCheckResult(CheckResult checkResult, NodeList nodes) {
+    private void setCheckResult(CheckReport checkReport, NodeList nodes) {
         if (nodes != null) {
             int length = nodes.getLength();
 
@@ -90,9 +90,9 @@ public class XPathExpressionCountCheck extends XMLCheck {
                 reason = "warning threshold(" + this.warningThreshold + ") < " + length;
             }
 
-            checkResult.setResult(result, this.name + ": " + reason);
+            checkReport.setResult(result, this.name + ": " + reason);
         } else {
-            checkResult.setResult(Result.SUCCESS, this.name + ": No occurrence");
+            checkReport.setResult(Result.SUCCESS, this.name + ": No occurrence");
         }
     }
 

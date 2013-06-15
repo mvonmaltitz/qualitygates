@@ -10,7 +10,9 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Builder;
+import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Publisher;
+import hudson.tasks.Recorder;
 import hudson.util.FormValidation;
 
 import java.io.File;
@@ -28,21 +30,21 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import de.binarytree.plugins.qualitygates.result.BuildResultAction;
-import de.binarytree.plugins.qualitygates.result.GatesResult;
+import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 
 /**
  * @author Marcel von Maltitz
  */
-public class QualityGateBuilder extends Builder implements Saveable {
+public class QualityLine extends Recorder implements Saveable {
 
     private String name;
 
-    private List<QualityGate> gates = new LinkedList<QualityGate>();
+    private List<Gate> gates = new LinkedList<Gate>();
 
-    private GatesResult gatesResult;
+    private QualityLineReport qualityLineReport;
 
     @DataBoundConstructor
-    public QualityGateBuilder(String name, Collection<QualityGate> gates) throws IOException {
+    public QualityLine(String name, Collection<Gate> gates) throws IOException {
         this.name = name;
         if (gates != null) {
             this.gates.addAll(gates);
@@ -69,7 +71,7 @@ public class QualityGateBuilder extends Builder implements Saveable {
         return true;
     }
 
-    public List<QualityGate> getGates() {
+    public List<Gate> getGates() {
         return gates;
     }
 
@@ -100,7 +102,7 @@ public class QualityGateBuilder extends Builder implements Saveable {
     }
 
     /**
-     * Descriptor for {@link QualityGateBuilder}. Used as a singleton. The class is marked as public so that it can be
+     * Descriptor for {@link QualityLine}. Used as a singleton. The class is marked as public so that it can be
      * accessed from views.
      * 
      * <p>
@@ -109,8 +111,8 @@ public class QualityGateBuilder extends Builder implements Saveable {
      */
     @Extension
     // This indicates to Jenkins that this is an implementation of an extension
-    // point.
-    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
+    // point
+    public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         /**
          * To persist global configuration information, simply store it in a field and call save().
          * 
@@ -119,7 +121,7 @@ public class QualityGateBuilder extends Builder implements Saveable {
          */
 
         public Collection<QualityGateDescriptor> getDescriptors() {
-            return QualityGate.all();
+            return Gate.all();
         }
 
         /**
@@ -166,5 +168,9 @@ public class QualityGateBuilder extends Builder implements Saveable {
         }
 
     }
+
+	public BuildStepMonitor getRequiredMonitorService(){
+		return BuildStepMonitor.BUILD; 
+	}
 
 }
