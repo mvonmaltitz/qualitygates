@@ -61,7 +61,7 @@ public class QualityGateTest {
 		checkList = new LinkedList<Check>();
 		checkList.add(check1);
 		checkList.add(check2);
-		gate = new Gate("Name", checkList) {
+		gate = new Gate("Name") {
 			@Override
 			public void doCheck(AbstractBuild build, Launcher launcher,
 					BuildListener listener, GateReport gateReport) {
@@ -77,22 +77,11 @@ public class QualityGateTest {
 	public void testGetDocumentation() {
 		GateReport gateReport = gate.document();
 		assertEquals(Result.NOT_BUILT, gateReport.getResult());
-		assertEquals(2, gateReport.getCheckResults().size());
 	}
 
 	@Test
 	public void testNameParam() {
 		assertEquals("Name", gate.getName());
-	}
-
-	@Test
-	public void testGivenCollectionIsNotDirectlySet() {
-		assertNotSame(gate.getChecks(), checkList);
-	}
-
-	@Test
-	public void testChecksContainOnlyChecksOfCollectionDuringConstruction() {
-		assertEquals(gate.getChecks(), checkList);
 	}
 
 }

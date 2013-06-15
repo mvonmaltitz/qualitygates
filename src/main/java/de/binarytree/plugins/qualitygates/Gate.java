@@ -19,21 +19,9 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
 
     protected String name;
 
-    protected List<Check> checks = new LinkedList<Check>();
 
-    public Gate(String name, Collection<Check> checks) {
+    public Gate(String name) {
         this.name = name;
-        if (checks != null) {
-            this.checks.addAll(checks);
-        }
-    }
-
-    public List<Check> getChecks() {
-        return this.checks;
-    }
-
-    public int getNumberOfChecks() {
-        return this.checks.size();
     }
 
     public GateReport check(AbstractBuild build, Launcher launcher, BuildListener listener) {
@@ -44,9 +32,6 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
 
     public GateReport document() {
         GateReport gateReport = new GateReport(this);
-        for (Check check : this.checks) {
-            gateReport.addCheckResult(check.document());
-        }
         return gateReport;
     }
 

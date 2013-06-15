@@ -106,7 +106,7 @@ public class GateEvaluatorTest {
 		String name = "Gate " + gateCounter++;
 
 		LinkedList<Check> checkList = new LinkedList<Check>();
-		return new Gate(name, checkList) {
+		return new Gate(name) {
 			@Override
 			public void doCheck(AbstractBuild build, Launcher launcher,
 					BuildListener listener, GateReport gateReport) {

@@ -11,10 +11,10 @@ public class ManualGate extends AndGate {
     @DataBoundConstructor
     public ManualGate(String name) {
         super(name, null);
-        this.setUpCheck();
+        this.setUpSingleManualCheck();
     }
 
-    private void setUpCheck() {
+    private void setUpSingleManualCheck() {
         ManualCheck check = new ManualCheck();
         this.checks.add(check);
     }
@@ -23,7 +23,7 @@ public class ManualGate extends AndGate {
     public static class DescriptorImpl extends QualityGateDescriptor {
         @Override
         public String getDisplayName() {
-            return "Manual Quality Gate";
+            return "Manual Gate";
         }
     }
 }

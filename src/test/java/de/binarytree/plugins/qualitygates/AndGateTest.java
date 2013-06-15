@@ -1,5 +1,6 @@
 package de.binarytree.plugins.qualitygates;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -63,17 +64,13 @@ public class AndGateTest {
 
 	@Test
 	public void testAddTwoChecks() {
-		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		gate = new AndGate("Eins", checkList);
+		buildGateWithTwoSuccessfullChecks();
 		assertEquals(2, gate.getNumberOfChecks());
 	}
 
 	@Test
 	public void testGateIsSuccessfullWhenChecksSuccessfull() {
-		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		checkList.add(this.getCheckMockWithResult(SUCCESS));
-		gate = new AndGate("Eins", checkList);
+		buildGateWithTwoSuccessfullChecks();
 		this.performGateCheckAndExpect(SUCCESS);
 	}
 
@@ -124,7 +121,30 @@ public class AndGateTest {
 		CheckReport checkReport = new CheckReport(check); 
 		checkReport.setResult(result, "Mock Result"); 
 		when(check.check(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(checkReport);
+		when(check.document()).thenReturn(checkReport); 
 		return check;
 	}
+
+	@Test
+	public void testGivenCollectionIsNotDirectlySet() {
+		buildGateWithTwoSuccessfullChecks();
+		assertNotSame(gate.getChecks(), checkList);
+		assertEquals(gate.getChecks(), checkList);
+	}
+
+	@Test
+	public void testGetDocumentation() {
+		buildGateWithTwoSuccessfullChecks();
+		GateReport gateReport = gate.document();
+		assertEquals(Result.NOT_BUILT, gateReport.getResult());
+		assertEquals(2, gateReport.getCheckResults().size());
+	}
+
+	private void buildGateWithTwoSuccessfullChecks(){
+		checkList.add(this.getCheckMockWithResult(SUCCESS));
+		checkList.add(this.getCheckMockWithResult(SUCCESS));
+		gate = new AndGate("Eins", checkList);
+	}
+
 	
 }

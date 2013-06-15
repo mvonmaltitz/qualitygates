@@ -24,7 +24,6 @@ public class ManualCheck extends Check {
     @DataBoundConstructor
     public ManualCheck() {
         this.approved = false;
-        System.out.println("Instantiating ManualCheck  " + this.hash + " approved: " + this.approved);
     }
 
     public void approve() {
@@ -35,11 +34,9 @@ public class ManualCheck extends Check {
     public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport) {
         this.hash = Long.toString(System.currentTimeMillis()) + Integer.toString((new Random()).nextInt());
         if (!approved) {
-            System.out.println(this.hash + " Setting manual wait.");
             String approveLink = generateApproveLink();
             checkReport.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL + approveLink);
         } else {
-            System.out.println(this.hash + " Skipping manual as it is approved.");
             checkReport.setResult(Result.SUCCESS, "Manually approved by " + this.getCurrentUserOrUnknown());
             this.approved = false;
         }
