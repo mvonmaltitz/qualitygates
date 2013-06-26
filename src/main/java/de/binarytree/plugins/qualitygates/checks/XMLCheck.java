@@ -61,7 +61,6 @@ public abstract class XMLCheck extends Check{
 		return stream;
 	}
 
-	@Extension
 	public static class XMLCheckDescriptor extends CheckDescriptor {
 
 		@Override

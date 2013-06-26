@@ -10,6 +10,6 @@
     When submitted, it will be passed to the corresponding constructor parameter.
   -->
   <f:entry title="Command" field="command">
-    <f:textbox />
+    <f:textarea />
   </f:entry>
 </j:jelly>
