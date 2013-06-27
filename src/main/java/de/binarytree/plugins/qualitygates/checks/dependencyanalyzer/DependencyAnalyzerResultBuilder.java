@@ -20,62 +20,56 @@ import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.Depen
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.ModuleResult;
 
 public class DependencyAnalyzerResultBuilder {
-	public final static Logger LOGGER = Logger
-			.getLogger(DependencyAnalyzerResultBuilder.class.toString());
+    public final static Logger LOGGER = Logger.getLogger(DependencyAnalyzerResultBuilder.class.toString());
 
-	public static BuildResult buildResult(MavenModuleSetBuild build)
-			throws IOException {
-		Map<MavenModule, List<MavenBuild>> moduleBuilds = build
-				.getModuleBuilds();
+    public static BuildResult buildResult(MavenModuleSetBuild build) throws IOException {
+        Map<MavenModule, List<MavenBuild>> moduleBuilds = build.getModuleBuilds();
 
-		Iterator<MavenModule> iterator = moduleBuilds.keySet().iterator();
+        Iterator<MavenModule> iterator = moduleBuilds.keySet().iterator();
 
-		BuildResult analysisResult = new BuildResult();
+        BuildResult analysisResult = new BuildResult();
 
-		while (iterator.hasNext()) {
-			List<MavenBuild> builds = moduleBuilds.get(iterator.next());
-			// Desactivated modules have no builds
-			if (builds.size() > 0) {
-				MavenBuild moduleBuild = builds.get(0);
+        while (iterator.hasNext()) {
+            List<MavenBuild> builds = moduleBuilds.get(iterator.next());
+            // Desactivated modules have no builds
+            if (builds.size() > 0) {
+                MavenBuild moduleBuild = builds.get(0);
 
-				File logFile = moduleBuild.getLogFile();
-				MavenModule mavenModule = moduleBuild.getProject();
+                File logFile = moduleBuild.getLogFile();
+                MavenModule mavenModule = moduleBuild.getProject();
 
-				ModuleResult moduleResult = buildModuleResult(mavenModule,
-						logFile);
+                ModuleResult moduleResult = buildModuleResult(mavenModule, logFile);
 
-				analysisResult.addResult(moduleResult);
-			}
-		}
+                analysisResult.addResult(moduleResult);
+            }
+        }
 
-		return analysisResult;
-	}
+        return analysisResult;
+    }
 
-	private static ModuleResult buildModuleResult(MavenModule module,
-			File logFile) throws IOException {
-		ModuleResult moduleResult = new ModuleResult();
+    private static ModuleResult buildModuleResult(MavenModule module, File logFile) throws IOException {
+        ModuleResult moduleResult = new ModuleResult();
 
-		BuildLogFileParser logFileParser = new BuildLogFileParser();
-		logFileParser.parseLogFile(logFile);
+        BuildLogFileParser logFileParser = new BuildLogFileParser();
+        logFileParser.parseLogFile(logFile);
 
-		// extracting dependency section from log file
-		String dependencySection = logFileParser.getDependencyAnalyseBlock();
+        // extracting dependency section from log file
+        String dependencySection = logFileParser.getDependencyAnalyseBlock();
 
-		if (StringUtils.isBlank(dependencySection)) {
-			LOGGER
-					.info("No dependency section found. Add dependency:analyze on your job configuration.");
-			return moduleResult;
-		}
+        if (StringUtils.isBlank(dependencySection)) {
+            LOGGER.info("No dependency section found. Add dependency:analyze on your job configuration.");
+            return moduleResult;
+        }
 
-		// extracting informations from dependency section
-		Map<DependencyProblemType, List<String>> dependencyProblems = DependencyAnalysisParser
-				.parseDependencyAnalyzeSection(dependencySection);
+        // extracting informations from dependency section
+        Map<DependencyProblemType, List<String>> dependencyProblems = DependencyAnalysisParser
+                .parseDependencyAnalyzeSection(dependencySection).getMapOfViolations();
 
-		// populating result
-		moduleResult.setModuleName(module.getModuleName());
-		moduleResult.setDisplayName(module.getDisplayName());
-		moduleResult.setDependencyProblems(dependencyProblems);
+        // populating result
+        moduleResult.setModuleName(module.getModuleName());
+        moduleResult.setDisplayName(module.getDisplayName());
+        moduleResult.setDependencyProblems(dependencyProblems);
 
-		return moduleResult;
-	}
+        return moduleResult;
+    }
 }

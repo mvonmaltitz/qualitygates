@@ -20,96 +20,101 @@ import org.apache.commons.io.IOUtils;
  * 
  */
 public class BuildLogFileParser {
-	public static final Logger LOGGER = Logger
-			.getLogger(BuildLogFileParser.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(BuildLogFileParser.class.getName());
 
-	private final static String LOG_LEVEL_REGEX = "\\[(INFO|WARNING)\\] ";
-	private final static Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX
-			+ " ---.*");
-	private final static Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX
-			+ "[-]*$");
-	// To limit selection to maven output (filtering [HUDSON] tags)
-	private final static Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX
-			+ ".*");
-	public enum Goal {
-		DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX + "--- maven-dependency-plugin:[^:]+:analyze(-only)?.*");
+    private final static String LOG_LEVEL_REGEX = "\\[(INFO|WARNING)\\] ";
 
-		private Pattern pattern;
+    private final static Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX + " ---.*");
 
-		private Goal(String regex) {
-			pattern = Pattern.compile(regex);
-		}
+    private final static Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX + "[-]*$");
 
-		public Pattern getPattern() {
-			return pattern;
-		}
+    // To limit selection to maven output (filtering [HUDSON] tags)
+    private final static Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX + ".*");
 
-		public static Goal getMatchingGoal(String line) {
-			Goal[] goals = Goal.values();
+    public enum Goal {
+        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*");
 
-			for (Goal goal : goals) {
-				Pattern pattern = goal.pattern;
-				Matcher matcher = pattern.matcher(line);
-				if (matcher.matches()) {
-					return goal;
-				}
-			}
-			return null;
-		}
-	}
+        private Pattern pattern;
 
-	private boolean parsed = false;
-	private Map<Goal, String> goalsLog = new HashMap<Goal, String>();
+        private Goal(String regex) {
+            pattern = Pattern.compile(regex);
+        }
 
-	public void parseLogFile(File logFile) throws IOException {
-		LOGGER.fine("Parsing " + logFile.getAbsolutePath());
-		FileInputStream input = new FileInputStream(logFile);
+        public Pattern getPattern() {
+            return pattern;
+        }
 
-		List<String> lines = (List<String>) IOUtils.readLines(input);
+        public static Goal getMatchingGoal(String line) {
+            Goal[] goals = Goal.values();
 
-		Iterator<String> lineIterator = lines.iterator();
+            for (Goal goal : goals) {
+                Pattern pattern = goal.pattern;
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.matches()) {
+                    return goal;
+                }
+            }
+            return null;
+        }
+    }
 
-		while (lineIterator.hasNext()) {
-			String line = lineIterator.next();
-			line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", ""); 
+    private boolean parsed = false;
 
-			Goal goal = Goal.getMatchingGoal(line);
-			if (goal != null) {
-				StringBuilder section = new StringBuilder();
+    private Map<Goal, String> goalsLog = new HashMap<Goal, String>();
 
-				// Pass the search section to only keep content of the section
+    public void parseLogFile(File logFile) throws IOException {
+        LOGGER.fine("Parsing " + logFile.getAbsolutePath());
+        FileInputStream input = new FileInputStream(logFile);
 
-				while (lineIterator.hasNext() && !parsed) {
-					line = lineIterator.next();
-					line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", ""); 
-					if (GOAL_START.matcher(line).matches()
-							|| END_OF_BUILD.matcher(line).matches()) {
-						parsed = true;
-					} else {
-						if (MAVEN_OUTPUT.matcher(line).matches()) {
-							section.append(line).append("\n");
-						}
-					}
+        List<String> lines = IOUtils.readLines(input);
 
-				}
+        Iterator<String> lineIterator = lines.iterator();
 
-				goalsLog.put(goal, section.toString());
-			}
-		}
+        while (lineIterator.hasNext()) {
+            String line = lineIterator.next();
+            line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
 
-		parsed = true;
-	}
+            Goal goal = Goal.getMatchingGoal(line);
+            if (goal != null) {
+                StringBuilder section = new StringBuilder();
 
-	private String getContent(Goal goal) {
-		if (!parsed) {
-			throw new RuntimeException("No log file was parsed");
-		}
+                String formerSection = goalsLog.get(goal);
+                if (formerSection != null) {
+                    section.append(formerSection);
+                }
 
-		return goalsLog.get(goal);
-	}
+                // Pass the search section to only keep content of the section
 
-	public String getDependencyAnalyseBlock() {
-		return getContent(Goal.DEPENDENCY_ANALYSE);
-	}
+                while (lineIterator.hasNext() && !parsed) {
+                    line = lineIterator.next();
+                    line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
+                    if (GOAL_START.matcher(line).matches() || END_OF_BUILD.matcher(line).matches()) {
+                        parsed = true;
+                    } else {
+                        if (MAVEN_OUTPUT.matcher(line).matches()) {
+                            section.append(line).append("\n");
+                        }
+                    }
+
+                }
+
+                goalsLog.put(goal, section.toString());
+            }
+        }
+
+        parsed = true;
+    }
+
+    private String getContent(Goal goal) {
+        if (!parsed) {
+            throw new RuntimeException("No log file was parsed");
+        }
+
+        return goalsLog.get(goal);
+    }
+
+    public String getDependencyAnalyseBlock() {
+        return getContent(Goal.DEPENDENCY_ANALYSE);
+    }
 
 }

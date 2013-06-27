@@ -1,108 +1,129 @@
 package de.binarytree.plugins.qualitygates.checks.dependencyanalyzer;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.maven.MavenModuleSetBuild;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.logging.Logger;
+
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
-import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.persistence.BuildResultSerializer;
+import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.parser.BuildLogFileParser;
+import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.parser.DependencyAnalysisParser;
+import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.AnalysisResult;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.BuildResult;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.ModuleResult;
 import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class DependencyCheck extends Check {
 
-	@DataBoundConstructor
-	public DependencyCheck() {
-	}
+    public final static Logger LOGGER = Logger.getLogger(DependencyCheck.class.toString());
 
-	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher, CheckReport checkReport) {
-		if (!buildExists(build)) {
-			checkReport.setResult(Result.FAILURE,
-					"Cannot proceed, build has not been successful");
-		} else {
-			// Construct the build result
-			BuildResult analysis = null;
-			try {
-				analysis = DependencyAnalyzerResultBuilder
-						.buildResult((MavenModuleSetBuild) build);
-				BuildResultSerializer.serialize(build.getRootDir(), analysis);
-				gatherViolationsAndSetCheck(checkReport, analysis);
-			} catch (IOException e) {
-				setCheckResultToStacktrace(checkReport, e);
-			}
-		}
+    @DataBoundConstructor
+    public DependencyCheck() {
+    }
 
-	}
+    @Override
+    public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport) {
+        if (!buildExists(build)) {
+            checkReport.setResult(Result.FAILURE, "Cannot proceed, build has not been successful");
+        } else {
+            try {
+                BuildLogFileParser logFileParser = parseBuildLogFile(build);
+                String dependencySection = logFileParser.getDependencyAnalyseBlock();
 
-	private void gatherViolationsAndSetCheck(CheckReport checkReport,
-			BuildResult analysis) {
-		int numberOfUndeclaredDependencies = analysis
-				.getOverallNumberOfUndeclaredDependencies();
-		int numberOfUnusedDependencies = analysis
-				.getOverallNumberOfUnusedDependencies();
-		setCheckResultDependingOnNumberOfViolations(checkReport,
-				numberOfUndeclaredDependencies,
-				numberOfUnusedDependencies);
-	}
+                if (!dependencySectionWasFound(dependencySection)) {
+                    setCheckReportToUnstableDueToMissingDependencySection(checkReport);
+                } else {
+                    AnalysisResult dependencyProblems = DependencyAnalysisParser
+                            .parseDependencyAnalyzeSection(dependencySection);
 
-	private boolean buildExists(AbstractBuild build) {
-		Result result = build.getResult();
-		return (Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result));
-	}
+                    gatherViolationsAndSetCheckReport(checkReport, dependencyProblems);
+                }
+            } catch (IOException e) {
+                setCheckResultToStacktrace(checkReport, e);
+            }
+        }
 
-	private int getDependencyViolationCount(BuildResult analysis) {
-		int undeclared = 0;
-		int unused = 0;
-		for (ModuleResult module : analysis.getModules()) {
-			undeclared += module.getUndeclaredDependenciesCount();
-			unused += module.getUnusedDependenciesCount();
-		}
-		return undeclared + unused;
-	}
+    }
 
-	private void setCheckResultDependingOnNumberOfViolations(
-			CheckReport checkReport, int numberOfUndeclaredDependencies,
-			int numberOfUnusedDependencies) {
-		if (numberOfUndeclaredDependencies +  numberOfUnusedDependencies > 0) {
-			checkReport.setResult(Result.UNSTABLE, numberOfUndeclaredDependencies
-					+ " undeclared and " + numberOfUnusedDependencies + " unused dependencies found.");
-		} else {
-			checkReport.setResult(Result.SUCCESS,
-					"No dependency violations found");
-		}
-	}
+    /**
+     * @param checkReport
+     */
+    private void setCheckReportToUnstableDueToMissingDependencySection(CheckReport checkReport) {
+        LOGGER.info("No dependency section found. Add dependency:analyze on your job configuration.");
+        checkReport.setResult(Result.UNSTABLE,
+                "No dependency section found. Add dependency:analyze on your job configuration.");
+    }
 
-	private void setCheckResultToStacktrace(CheckReport checkReport,
-			IOException e) {
-		checkReport.setResult(Result.FAILURE,
-				Arrays.toString(e.getStackTrace()));
-	}
+    private boolean dependencySectionWasFound(String dependencySection) {
+        return !StringUtils.isBlank(dependencySection);
+    }
 
-	@Extension
-	public static class DescriptorImpl extends CheckDescriptor {
+    private BuildLogFileParser parseBuildLogFile(AbstractBuild build) throws IOException {
+        File logFile = build.getLogFile();
+        BuildLogFileParser logFileParser = new BuildLogFileParser();
+        logFileParser.parseLogFile(logFile);
+        return logFileParser;
+    }
 
-		@Override
-		public String getDisplayName() {
-			return "Maven Dependency Check";
-		}
+    private void gatherViolationsAndSetCheckReport(CheckReport checkReport, AnalysisResult analysis) {
+        int numberOfUndeclaredDependencies = analysis.getNumberOfUndeclaredDependencies();
+        int numberOfUnusedDependencies = analysis.getNumberOfUnusedDependencies();
+        setCheckResultDependingOnNumberOfViolations(checkReport, numberOfUndeclaredDependencies,
+                numberOfUnusedDependencies);
+    }
 
-	}
+    private boolean buildExists(AbstractBuild build) {
+        Result result = build.getResult();
+        return (Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result));
+    }
 
-	@Override
-	public String getDescription() {
-		return "Maven Dependency Check";
-	}
+    private int getDependencyViolationCount(BuildResult analysis) {
+        int undeclared = 0;
+        int unused = 0;
+        for (ModuleResult module : analysis.getModules()) {
+            undeclared += module.getUndeclaredDependenciesCount();
+            unused += module.getUnusedDependenciesCount();
+        }
+        return undeclared + unused;
+    }
+
+    private void setCheckResultDependingOnNumberOfViolations(CheckReport checkReport,
+            int numberOfUndeclaredDependencies, int numberOfUnusedDependencies) {
+        if ((numberOfUndeclaredDependencies + numberOfUnusedDependencies) > 0) {
+            checkReport.setResult(Result.UNSTABLE, numberOfUndeclaredDependencies + " undeclared and "
+                    + numberOfUnusedDependencies + " unused dependencies found.");
+        } else {
+            checkReport.setResult(Result.SUCCESS, "No dependency violations found");
+        }
+    }
+
+    private void setCheckResultToStacktrace(CheckReport checkReport, IOException e) {
+        checkReport.setResult(Result.FAILURE, e.getMessage() + Arrays.toString(e.getStackTrace()));
+    }
+
+    @Extension
+    public static class DescriptorImpl extends CheckDescriptor {
+
+        @Override
+        public String getDisplayName() {
+            return "Maven Dependency Check";
+        }
+
+    }
+
+    @Override
+    public String getDescription() {
+        return "Maven Dependency Check";
+    }
 
 }
