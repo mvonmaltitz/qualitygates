@@ -1,6 +1,8 @@
 package de.binarytree.plugins.qualitygates.checks;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import hudson.Launcher;
 import hudson.model.BuildListener;

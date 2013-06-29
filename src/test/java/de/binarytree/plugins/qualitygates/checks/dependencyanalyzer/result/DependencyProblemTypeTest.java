@@ -1,7 +1,7 @@
 package de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

@@ -1,5 +1,9 @@
 package de.binarytree.plugins.qualitygates.checks;
 
+import hudson.FilePath;
+import hudson.model.AbstractBuild;
+import hudson.util.FormValidation;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,14 +20,6 @@ import org.kohsuke.stapler.QueryParameter;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import hudson.Extension;
-import hudson.FilePath;
-import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import hudson.util.FormValidation;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 
 public abstract class XMLCheck extends Check{

@@ -1,6 +1,8 @@
 package de.binarytree.plugins.qualitygates.checks;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 
@@ -8,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.FailingCheck.DescriptorImpl;
-import static org.mockito.Mockito.*; 
 public class FailingCheckTest {
 
 	private FailingCheck check;

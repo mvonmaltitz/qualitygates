@@ -1,14 +1,12 @@
 package de.binarytree.plugins.qualitygates;
 
+import static org.junit.Assert.assertEquals;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 
 import java.util.LinkedList;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;

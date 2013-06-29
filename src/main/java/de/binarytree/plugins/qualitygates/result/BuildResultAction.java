@@ -22,9 +22,8 @@ import de.binarytree.plugins.qualitygates.checks.ManualCheck;
 
 public class BuildResultAction implements ProminentProjectAction {
 
-    private static final String MANUALLY_APPROVED = "Manually approved";
 
-    private final String ICONS_PREFIX = "/plugin/qualitygates/images/24x24/";
+    private final static String ICONS_PREFIX = "/plugin/qualitygates/images/24x24/";
 
     private GateEvaluator gateEvaluator;
 

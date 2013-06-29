@@ -5,8 +5,6 @@ import hudson.model.Result;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.Matchers;
-
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.checks.Check;
 

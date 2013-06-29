@@ -1,27 +1,23 @@
 package de.binarytree.plugins.qualitygates.checks.dependencyanalyzer;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.Launcher;
-import hudson.XmlFile;
 import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.model.AbstractBuild;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import de.binarytree.plugins.qualitygates.TestHelper;
-import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.DependencyCheck.DescriptorImpl;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.parser.BuildLogFileParser;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.AnalysisResult;
 import de.binarytree.plugins.qualitygates.result.CheckReport;

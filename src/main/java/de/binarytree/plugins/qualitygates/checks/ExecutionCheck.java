@@ -2,15 +2,10 @@ package de.binarytree.plugins.qualitygates.checks;
 
 import hudson.Extension;
 import hudson.Launcher;
-import hudson.Launcher.ProcStarter;
-import hudson.Proc;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
 import hudson.tasks.Shell;
-
-import java.io.IOException;
-import java.util.Arrays;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 

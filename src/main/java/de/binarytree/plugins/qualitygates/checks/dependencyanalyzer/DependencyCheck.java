@@ -8,7 +8,6 @@ import hudson.model.AbstractBuild;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
@@ -91,7 +90,7 @@ public class DependencyCheck extends Check {
 
     private boolean buildExists(AbstractBuild build) {
         Result result = build.getResult();
-        return (Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result));
+        return Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result);
     }
 
     private void setCheckResultDependingOnNumberOfViolations(CheckReport checkReport,

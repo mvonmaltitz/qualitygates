@@ -1,15 +1,14 @@
 package de.binarytree.plugins.qualitygates.checks;
 
-import org.kohsuke.stapler.DataBoundConstructor;
-
-import de.binarytree.plugins.qualitygates.result.CheckReport;
-
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.Result;
 import hudson.model.AbstractBuild;
-import hudson.model.Descriptor;
+
+import org.kohsuke.stapler.DataBoundConstructor;
+
+import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 
 public class MavenSuccessCheck extends Check{

@@ -1,10 +1,11 @@
 package de.binarytree.plugins.qualitygates.checks;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import hudson.Launcher;
 import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.model.AbstractBuild;
 
 import org.junit.Before;
 import org.junit.Test;

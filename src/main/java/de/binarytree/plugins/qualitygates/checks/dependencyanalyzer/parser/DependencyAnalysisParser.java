@@ -2,10 +2,7 @@ package de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.parser;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
@@ -63,7 +60,7 @@ public class DependencyAnalysisParser {
                 if (problemType != null) {
                     currentProblemType = problemType;
                 } else {
-                    if ((currentProblemType != null) && ARTIFACT_PATTERN.matcher(line).matches()) {
+                    if (currentProblemType != null && ARTIFACT_PATTERN.matcher(line).matches()) {
                         // removing log level
                         String violatingDependency = line.substring(line.lastIndexOf(']') + 1).trim(); 
                     	result.addViolation(currentProblemType, violatingDependency); 

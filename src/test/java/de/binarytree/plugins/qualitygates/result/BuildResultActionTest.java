@@ -20,13 +20,12 @@ import org.junit.Test;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
-import de.binarytree.plugins.qualitygates.GateEvaluator;
-import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.AndGate;
+import de.binarytree.plugins.qualitygates.Gate;
+import de.binarytree.plugins.qualitygates.GateEvaluator;
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.FailingCheck;
 import de.binarytree.plugins.qualitygates.checks.ManualCheck;
-import de.binarytree.plugins.qualitygates.checks.FailingCheck.DescriptorImpl;
 
 public class BuildResultActionTest{
 

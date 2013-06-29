@@ -7,12 +7,6 @@ import hudson.model.BuildListener;
 import hudson.model.Describable;
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public abstract class Gate implements Describable<Gate>, ExtensionPoint {

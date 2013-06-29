@@ -1,5 +1,6 @@
 package de.binarytree.plugins.qualitygates.checks;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -69,6 +70,7 @@ public class ExecutionCheckTest {
     @Test
     public void testSettingAndGettingParameter() {
         assertEquals(command, check.getCommand());
+        assertTrue(check.getDescription().startsWith("$ ")); 
     }
 
     @Test

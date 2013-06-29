@@ -13,7 +13,6 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import hudson.tasks.Recorder;
-import hudson.util.FormValidation;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,16 +20,12 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.ServletException;
-
 import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import de.binarytree.plugins.qualitygates.result.BuildResultAction;
-import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 
 /**
  * @author Marcel von Maltitz

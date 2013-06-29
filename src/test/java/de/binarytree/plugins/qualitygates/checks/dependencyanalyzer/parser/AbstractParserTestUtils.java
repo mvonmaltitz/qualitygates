@@ -23,12 +23,8 @@ public class AbstractParserTestUtils {
 	 * @throws Exception
 	 */
 	protected File getFile(String fileName) throws Exception {
-		Enumeration<URL> fileURL = this.getClass().getClassLoader()
-				.getResources(fileName);
-
-		String fullFileName = fileURL.nextElement().getFile();
-
-		File file = new File(fullFileName);
+		URL fileURL = this.getClass().getResource(fileName);
+		File file = new File(fileURL.toURI());
 		return file;
 	}
 

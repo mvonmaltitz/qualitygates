@@ -1,9 +1,10 @@
 package de.binarytree.plugins.qualitygates.result;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.Result;
@@ -12,7 +13,6 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.checks.Check;
 import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
 
