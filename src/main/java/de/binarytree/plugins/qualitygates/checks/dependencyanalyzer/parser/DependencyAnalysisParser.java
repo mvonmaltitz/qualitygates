@@ -51,8 +51,9 @@ public class DependencyAnalysisParser {
     };
 
     static public AnalysisResult parseDependencyAnalyzeSection(String content) throws IOException {
-        Map<DependencyProblemType, List<String>> result = new HashMap<DependencyProblemType, List<String>>();
+//        Map<DependencyProblemType, List<String>> result = new HashMap<DependencyProblemType, List<String>>();
 
+        AnalysisResult result = new AnalysisResult(); 
         List<String> lines = IOUtils.readLines(new StringReader(content));
 
         DependencyProblemType currentProblemType = null;
@@ -63,18 +64,14 @@ public class DependencyAnalysisParser {
                     currentProblemType = problemType;
                 } else {
                     if ((currentProblemType != null) && ARTIFACT_PATTERN.matcher(line).matches()) {
-                        List<String> problems = result.get(currentProblemType);
-                        if (problems == null) {
-                            problems = new ArrayList<String>();
-                            result.put(currentProblemType, problems);
-                        }
                         // removing log level
-                        problems.add(line.substring(line.lastIndexOf(']') + 1).trim());
+                        String violatingDependency = line.substring(line.lastIndexOf(']') + 1).trim(); 
+                    	result.addViolation(currentProblemType, violatingDependency); 
                     }
                 }
             }
         }
 
-        return new AnalysisResult(result);
+        return result; 
     }
 }

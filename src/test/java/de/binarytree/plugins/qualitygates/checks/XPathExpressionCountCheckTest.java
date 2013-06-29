@@ -27,8 +27,6 @@ public class XPathExpressionCountCheckTest {
 
     private ByteArrayInputStream xmlStream;
 
-    private String content = "contentCONTENTcontent";
-
     private String xmlHeader = "<pmd>";
 
     private String xmlFileStart = "<file name='file.txt'>";
@@ -46,10 +44,12 @@ public class XPathExpressionCountCheckTest {
 
     private int warningThreshold = 3;
 
+	private String name = "XMLCheck";
+
     class MockXMLCheck extends XPathExpressionCountCheck {
 
-        public MockXMLCheck(String targetFile, String expression, int successThreshold, int warningThreshold) {
-            super(targetFile, expression, successThreshold, warningThreshold);
+        public MockXMLCheck(String name, String targetFile, String expression, int successThreshold, int warningThreshold) {
+            super(name, targetFile, expression, successThreshold, warningThreshold);
         }
 
         @Override
@@ -67,7 +67,7 @@ public class XPathExpressionCountCheckTest {
     public void setUp() throws Exception {
         build = mock(AbstractBuild.class);
         descriptor = new XPathExpressionCountCheck.DescriptorImpl();
-        check = new MockXMLCheck(this.filePath, this.expression, this.successThreshold, this.warningThreshold);
+        check = new MockXMLCheck(name, this.filePath, this.expression, this.successThreshold, this.warningThreshold);
     }
 
     @Test
@@ -82,6 +82,7 @@ public class XPathExpressionCountCheckTest {
         assertEquals(filePath, check.getTargetFile());
         assertEquals(this.successThreshold, check.getSuccessThreshold());
         assertEquals(this.warningThreshold, check.getWarningThreshold());
+        assertEquals(this.name, check.getName());
     }
 
     @Test
@@ -137,7 +138,7 @@ public class XPathExpressionCountCheckTest {
 
     @Test
     public void testExceptionCausesFailureResult() {
-        check = new MockXMLCheck("pom.xml", "/project/parent/notHere", successThreshold, warningThreshold) {
+        check = new MockXMLCheck(name, "pom.xml", "/project/parent/notHere", successThreshold, warningThreshold) {
 
             @Override
             protected InputStream obtainInputStream(AbstractBuild build) {

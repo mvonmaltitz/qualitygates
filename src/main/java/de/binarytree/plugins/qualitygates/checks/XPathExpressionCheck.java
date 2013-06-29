@@ -19,76 +19,81 @@ import org.xml.sax.SAXException;
 
 import de.binarytree.plugins.qualitygates.result.CheckReport;
 
-public class XPathExpressionCheck extends XMLCheck{
+public class XPathExpressionCheck extends XMLCheck {
 
 	private boolean reportContent;
 
 	@DataBoundConstructor
-	public XPathExpressionCheck(String targetFile, String expression, boolean reportContent){
+	public XPathExpressionCheck(String targetFile, String expression,
+			boolean reportContent) {
 		this.expression = expression;
 		this.targetFile = targetFile;
 		this.reportContent = reportContent;
 	}
 
-	public boolean getReportContent(){
+	public boolean getReportContent() {
 		return this.reportContent;
 	}
 
 	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport){
-		try{
+	public void doCheck(AbstractBuild build, BuildListener listener,
+			Launcher launcher, CheckReport checkReport) {
+		try {
 			matchExpression(build, checkReport);
-		}catch(Exception e){
-			String reason = e.getMessage();
-			if(reason == null){
-				reason = Arrays.toString(e.getStackTrace());
-			}
-			checkReport.setResult(Result.FAILURE, "Exception: " + reason);
+		} catch (Exception e) {
+			failCheckAndlogExceptionInCheckReport(checkReport, e);
 		}
 	}
 
-	private void matchExpression(AbstractBuild build, CheckReport checkReport) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException{
+	private void matchExpression(AbstractBuild build, CheckReport checkReport)
+			throws IOException, ParserConfigurationException, SAXException,
+			XPathExpressionException {
 		InputStream stream = this.obtainInputStream(build);
 		String content = this.getXMLContentForXPathExpression(stream);
 		this.setCheckResult(checkReport, content);
 	}
 
-	private void setCheckResult(CheckReport checkReport, String content){
-		if(content != null){
-			if(reportContent){
+	private void setCheckResult(CheckReport checkReport, String content) {
+		if (content != null) {
+			if (reportContent) {
 				checkReport.setResult(Result.SUCCESS, "Content: " + content);
-			}else{
+			} else {
 				checkReport.setResult(Result.SUCCESS, "");
 			}
-		}else{
-			checkReport.setResult(Result.FAILURE, this.getExpression() + " not found in " + this.getTargetFile());
+		} else {
+			checkReport.setResult(Result.FAILURE, this.getExpression()
+					+ " not found in " + this.getTargetFile());
 		}
 	}
 
-	private String getXMLContentForXPathExpression(InputStream stream) throws XPathExpressionException, ParserConfigurationException, SAXException, IOException{
+	private String getXMLContentForXPathExpression(InputStream stream)
+			throws XPathExpressionException, ParserConfigurationException,
+			SAXException, IOException {
 		NodeList nodes = getMatchingNodes(stream);
-		if(nodes.getLength() > 0){
+		if (nodes.getLength() > 0) {
 			return nodes.item(0).getTextContent();
-		}else{
+		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public String toString(){
-		return super.toString() + "[Occurence of " + this.getExpression() + " in " + this.getTargetFile() + "]";
+	public String toString() {
+		return super.toString() + "[Occurence of " + this.getExpression()
+				+ " in " + this.getTargetFile() + "]";
 	}
 
 	@Override
-	public String getDescription(){
-		return "Occurence of " + this.getExpression() + " in " + this.getTargetFile();
+	public String getDescription() {
+		return "Occurence of " + this.getExpression() + " in "
+				+ this.getTargetFile();
 	}
 
 	@Extension
-	public static class DescriptorImpl extends XMLCheckDescriptor{
+	public static class DescriptorImpl extends XMLCheckDescriptor {
 
 		@Override
-		public String getDisplayName(){
+		public String getDisplayName() {
 			return "Check XML file for the occurence of an XPath expression";
 		}
 

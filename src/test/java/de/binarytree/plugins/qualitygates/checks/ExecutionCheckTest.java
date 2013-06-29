@@ -100,7 +100,15 @@ public class ExecutionCheckTest {
         String logOutput = new String(stream.toByteArray());
         assertEquals(Result.FAILURE, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class));
-        System.out.println(checkReport.getReason());
+    }
+
+    @Test
+    public void testReportIsFailureOnInterruptedException() throws InterruptedException {
+        when(shell.perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenThrow(new InterruptedException()); 
+        check.doCheck(build, null, launcher, checkReport);
+        String logOutput = new String(stream.toByteArray());
+        assertEquals(Result.FAILURE, checkReport.getResult());
+        Mockito.verify(shell).perform(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class));
     }
 
 }

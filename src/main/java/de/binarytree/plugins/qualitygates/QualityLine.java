@@ -41,8 +41,6 @@ public class QualityLine extends Recorder implements Saveable {
 
     private List<Gate> gates = new LinkedList<Gate>();
 
-    private QualityLineReport qualityLineReport;
-
     @DataBoundConstructor
     public QualityLine(String name, Collection<Gate> gates) throws IOException {
         this.name = name;
@@ -52,9 +50,6 @@ public class QualityLine extends Recorder implements Saveable {
         save();
     }
 
-    /**
-     * We'll use this from the <tt>config.jelly</tt>.
-     */
     public String getName() {
         return name;
     }
@@ -65,11 +60,16 @@ public class QualityLine extends Recorder implements Saveable {
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
-        GateEvaluator gateEvaluator = new GateEvaluator(this.gates);
+        GateEvaluator gateEvaluator = getGateEvaluatorForGates();
         gateEvaluator.evaluate(build, launcher, listener);
         build.addAction(new BuildResultAction(gateEvaluator));
         return true;
     }
+
+	protected GateEvaluator getGateEvaluatorForGates() {
+		GateEvaluator gateEvaluator = new GateEvaluator(this.gates);
+		return gateEvaluator;
+	}
 
     public List<Gate> getGates() {
         return gates;
@@ -124,22 +124,6 @@ public class QualityLine extends Recorder implements Saveable {
             return Gate.all();
         }
 
-        /**
-         * Performs on-the-fly validation of the form field 'name'.
-         * 
-         * @param value
-         *            This parameter receives the value that the user has typed.
-         * @return Indicates the outcome of the validation. This is sent to the browser.
-         */
-        public FormValidation doCheckName(@QueryParameter String value) throws IOException, ServletException {
-            if (value.length() == 0) {
-                return FormValidation.error("Please set a name");
-            }
-            if (value.length() < 4) {
-                return FormValidation.warning("Isn't the name too short?");
-            }
-            return FormValidation.ok();
-        }
 
         @Override
         public boolean isApplicable(Class<? extends AbstractProject> aClass) {

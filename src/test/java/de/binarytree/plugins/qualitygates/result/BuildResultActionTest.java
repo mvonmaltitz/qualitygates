@@ -13,6 +13,7 @@ import hudson.model.AbstractBuild;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,13 +24,12 @@ import de.binarytree.plugins.qualitygates.GateEvaluator;
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.AndGate;
 import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.checks.FailingCheck;
 import de.binarytree.plugins.qualitygates.checks.ManualCheck;
+import de.binarytree.plugins.qualitygates.checks.FailingCheck.DescriptorImpl;
 
 public class BuildResultActionTest{
 
-	private GateReport gateResult1;
-
-	private GateReport gateResult2;
 
 	private MockManualCheck mCheck1;
 
@@ -40,12 +40,6 @@ public class BuildResultActionTest{
 	private AndGate gate2;
 
 	private BuildResultAction action;
-
-	private QualityLineReport qualityLineReport;
-
-	private CheckReport mCheckResult2;
-
-	private CheckReport mCheckResult1;
 
 	private GateEvaluator gateEvaluator;
 
@@ -106,6 +100,21 @@ public class BuildResultActionTest{
 	}
 
 	@Test
+	public void testGetNextUnbuiltGateUnsuccessfullAsSecondGateFails(){
+		Check check = new FailingCheck(){
+			public DescriptorImpl getDescriptor(){
+				return new FailingCheck.DescriptorImpl(); 
+			}
+		}; 
+		List<Check> checks = new LinkedList<Check>(); 
+		checks.add(check); 
+		gate2 = new AndGate("Gate 2", checks);
+		gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
+		gateEvaluator.evaluate(null, null, null);
+		GateReport gateReport = action.getNextUnbuiltGate(gateEvaluator.getLatestResults());
+		assertNull(gateReport);
+	}
+	@Test
 	public void testGetNextUnbuiltGateUnsuccessfull(){
 		gate2 = new AndGate("Gate 2", null);
 		gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
@@ -123,9 +132,9 @@ public class BuildResultActionTest{
 	public void testGetNextUnbuiltCheckSuccessfull(){
 		QualityLineReport latestResults = gateEvaluator.getLatestResults();
 		CheckReport checkReport = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
-		CheckReport manualCheckResult = latestResults.getGateResultFor(gate2).getResultFor(mCheck1);
-		assertEquals(manualCheckResult, checkReport);
-		assertEquals(manualCheckResult.getCheck(), mCheck1);
+		CheckReport manualCheckReport = latestResults.getGateResultFor(gate2).getResultFor(mCheck1);
+		assertEquals(manualCheckReport, checkReport);
+		assertEquals(manualCheckReport.getCheck(), mCheck1);
 	}
 
 	@Test
@@ -144,6 +153,15 @@ public class BuildResultActionTest{
 		QualityLineReport latestResults = gateEvaluator.getLatestResults();
 		CheckReport checkResultBefore = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
 
+		fakeStaplerRequest();
+		
+		CheckReport checkResultAfter = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
+		assertFalse(checkResultAfter.referencesSameCheckAs(checkResultBefore));
+		assertFalse(checkResultAfter.references(mCheck1));
+		assertTrue(checkResultAfter.references(mCheck2));
+	}
+
+	private void fakeStaplerRequest() throws IOException {
 		StaplerRequest req = mock(StaplerRequest.class);
 		StaplerResponse res = mock(StaplerResponse.class);
 		AbstractBuild build = mock(AbstractBuild.class);
@@ -153,9 +171,5 @@ public class BuildResultActionTest{
 		when(req.findAncestorObject(AbstractBuild.class)).thenReturn(build);
 		when(build.getLogFile()).thenReturn(new File("/tmp/logfile.log"));
 		action.doApprove(req, res);
-		CheckReport checkResultAfter = action.getNextUnbuiltCheck(latestResults.getGateResultFor(gate2));
-		assertFalse(checkResultAfter.referencesSameCheckAs(checkResultBefore));
-		assertFalse(checkResultAfter.references(mCheck1));
-		assertTrue(checkResultAfter.references(mCheck2));
 	}
 }

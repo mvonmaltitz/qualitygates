@@ -111,7 +111,6 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
         String result = parser.getDependencyAnalyseBlock();
 
         Assert.assertNotNull("dependency:analyze block must be found", result);
-        System.err.println(result);
         List<String> lines = IOUtils.readLines(new StringReader(result));
         Assert.assertEquals("Wrong number of line returned, ", 3, lines.size());
 

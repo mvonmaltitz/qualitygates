@@ -61,12 +61,8 @@ public abstract class XMLCheck extends Check{
 		return stream;
 	}
 
-	public static class XMLCheckDescriptor extends CheckDescriptor {
+	public static abstract class XMLCheckDescriptor extends CheckDescriptor {
 
-		@Override
-		public String getDisplayName() {
-			return "Check XML file for tags";
-		}
 
 		public FormValidation doCheckExpression(@QueryParameter String value) {
 			if (value.length() == 0) {

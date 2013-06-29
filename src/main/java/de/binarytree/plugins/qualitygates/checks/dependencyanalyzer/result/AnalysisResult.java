@@ -1,41 +1,71 @@
 package de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class AnalysisResult {
-    private Map<DependencyProblemType, List<String>> violations;
+	private Map<DependencyProblemType, List<String>> violationsByType;
 
-    public AnalysisResult(Map<DependencyProblemType, List<String>> result) {
-        this.violations = result;
-    }
+	public AnalysisResult(Map<DependencyProblemType, List<String>> result) {
+		this.violationsByType = result;
+	}
 
-    public int getNumberOfUnusedDependencies() {
-        return getSizeOrZeroIfNull(this.getUnusedDependencies());
-    }
+	public AnalysisResult() {
+		this(new HashMap<DependencyProblemType, List<String>>());
+	}
 
-    public int getNumberOfUndeclaredDependencies() {
-        return getSizeOrZeroIfNull(this.getUndeclaredDependencies());
-    }
+	public int getNumberOfUnusedDependencies() {
+		return getSizeOrZeroIfNull(this.getUnusedDependencies());
+	}
 
-    public List<String> getUndeclaredDependencies() {
-        return this.violations.get(DependencyProblemType.UNDECLARED);
-    }
+	public int getNumberOfUndeclaredDependencies() {
+		return getSizeOrZeroIfNull(this.getUndeclaredDependencies());
+	}
 
-    public List<String> getUnusedDependencies() {
-        return this.violations.get(DependencyProblemType.UNUSED);
-    }
+	public List<String> getUndeclaredDependencies() {
+		return this.violationsByType.get(DependencyProblemType.UNDECLARED);
+	}
 
-    public Map<DependencyProblemType, List<String>> getMapOfViolations() {
-        return new HashMap<DependencyProblemType, List<String>>(this.violations);
-    }
+	public List<String> getUnusedDependencies() {
+		return this.violationsByType.get(DependencyProblemType.UNUSED);
+	}
 
-    private int getSizeOrZeroIfNull(List<String> violations) {
-        if (violations != null) {
-            return this.getUnusedDependencies().size();
-        } else {
-            return 0;
-        }
-    }
+	public Map<DependencyProblemType, List<String>> getMapOfViolations() {
+		return new HashMap<DependencyProblemType, List<String>>(
+				this.violationsByType);
+	}
+
+	private int getSizeOrZeroIfNull(List<String> violations) {
+		if (violations != null) {
+			return violations.size();
+		} else {
+			return 0;
+		}
+	}
+
+	public void addViolation(DependencyProblemType currentProblemType,
+			String violatingDependency) {
+		List<String> violations = getListOfViolationsOfType(currentProblemType);
+		addViolationIfNotAlreadyPresent(violatingDependency, violations);
+
+	}
+
+	private void addViolationIfNotAlreadyPresent(String violatingDependency,
+			List<String> violations) {
+		if (!violations.contains(violatingDependency)) {
+			violations.add(violatingDependency);
+		}
+	}
+
+	private List<String> getListOfViolationsOfType(
+			DependencyProblemType currentProblemType) {
+		List<String> violations = this.violationsByType.get(currentProblemType);
+		if (violations == null) {
+			violations = new LinkedList<String>();
+			this.violationsByType.put(currentProblemType, violations);
+		}
+		return violations;
+	}
 }

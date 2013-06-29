@@ -19,8 +19,6 @@ import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.parser.BuildLogFileParser;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.parser.DependencyAnalysisParser;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.AnalysisResult;
-import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.BuildResult;
-import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.ModuleResult;
 import de.binarytree.plugins.qualitygates.result.CheckReport;
 
 public class DependencyCheck extends Check {
@@ -43,17 +41,21 @@ public class DependencyCheck extends Check {
                 if (!dependencySectionWasFound(dependencySection)) {
                     setCheckReportToUnstableDueToMissingDependencySection(checkReport);
                 } else {
-                    AnalysisResult dependencyProblems = DependencyAnalysisParser
-                            .parseDependencyAnalyzeSection(dependencySection);
-
+                    AnalysisResult dependencyProblems = analyseDependencySection(dependencySection);
                     gatherViolationsAndSetCheckReport(checkReport, dependencyProblems);
                 }
             } catch (IOException e) {
-                setCheckResultToStacktrace(checkReport, e);
+                failCheckAndlogExceptionInCheckReport(checkReport, e);
             }
         }
 
     }
+
+	protected AnalysisResult analyseDependencySection(String dependencySection)
+			throws IOException {
+		return DependencyAnalysisParser
+		        .parseDependencyAnalyzeSection(dependencySection);
+	}
 
     /**
      * @param checkReport
@@ -70,10 +72,15 @@ public class DependencyCheck extends Check {
 
     private BuildLogFileParser parseBuildLogFile(AbstractBuild build) throws IOException {
         File logFile = build.getLogFile();
-        BuildLogFileParser logFileParser = new BuildLogFileParser();
+        BuildLogFileParser logFileParser = createLogFileParser();
         logFileParser.parseLogFile(logFile);
         return logFileParser;
     }
+
+	protected BuildLogFileParser createLogFileParser() {
+		BuildLogFileParser logFileParser = new BuildLogFileParser();
+		return logFileParser;
+	}
 
     private void gatherViolationsAndSetCheckReport(CheckReport checkReport, AnalysisResult analysis) {
         int numberOfUndeclaredDependencies = analysis.getNumberOfUndeclaredDependencies();
@@ -87,16 +94,6 @@ public class DependencyCheck extends Check {
         return (Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result));
     }
 
-    private int getDependencyViolationCount(BuildResult analysis) {
-        int undeclared = 0;
-        int unused = 0;
-        for (ModuleResult module : analysis.getModules()) {
-            undeclared += module.getUndeclaredDependenciesCount();
-            unused += module.getUnusedDependenciesCount();
-        }
-        return undeclared + unused;
-    }
-
     private void setCheckResultDependingOnNumberOfViolations(CheckReport checkReport,
             int numberOfUndeclaredDependencies, int numberOfUnusedDependencies) {
         if ((numberOfUndeclaredDependencies + numberOfUnusedDependencies) > 0) {
@@ -105,10 +102,6 @@ public class DependencyCheck extends Check {
         } else {
             checkReport.setResult(Result.SUCCESS, "No dependency violations found");
         }
-    }
-
-    private void setCheckResultToStacktrace(CheckReport checkReport, IOException e) {
-        checkReport.setResult(Result.FAILURE, e.getMessage() + Arrays.toString(e.getStackTrace()));
     }
 
     @Extension

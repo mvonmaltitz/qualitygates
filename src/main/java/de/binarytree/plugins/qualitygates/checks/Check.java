@@ -20,16 +20,22 @@ public abstract class Check implements Describable<Check>, ExtensionPoint {
         try {
             this.doCheck(build, listener, launcher, checkReport);
         } catch (Exception e) {
-            checkReport.setResult(Result.FAILURE, Arrays.toString(e.getStackTrace()));
+        	failCheckAndlogExceptionInCheckReport(checkReport, e); 
         }
         return checkReport;
     }
 
+    
     public CheckReport document() {
         CheckReport checkReport = new CheckReport(this);
         return checkReport;
     }
 
+
+    protected void failCheckAndlogExceptionInCheckReport(CheckReport checkReport, Exception e) {
+        checkReport.setResult(Result.FAILURE, e.getMessage() + Arrays.toString(e.getStackTrace()));
+    }
+    
     public abstract void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckReport checkReport);
 
     public abstract String getDescription();

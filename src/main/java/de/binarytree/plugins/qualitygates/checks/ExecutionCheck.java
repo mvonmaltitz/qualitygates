@@ -40,7 +40,7 @@ public class ExecutionCheck extends Check {
                         + " could not be performed. Check log for details.");
             }
         } catch (InterruptedException e) {
-            checkReport.setResult(Result.FAILURE, Arrays.toString(e.getStackTrace()));
+        	failCheckAndlogExceptionInCheckReport(checkReport, e); 
         }
 
     }
@@ -48,42 +48,6 @@ public class ExecutionCheck extends Check {
     protected Shell getShell() {
         return new Shell(this.command);
 
-    }
-
-    // @Override
-    // public void doCheck(AbstractBuild build, BuildListener listener, Launcher launcher, CheckResult checkResult) {
-    // ProcStarter procStarter = prepareCommand(launcher, build);
-    // try {
-    // executeProcStarter(launcher, checkResult, procStarter);
-    // } catch (IOException e) {
-    // exceptionToCheckResult(checkResult, e);
-    // } catch (InterruptedException e) {
-    // exceptionToCheckResult(checkResult, e);
-    // }
-    //
-    // }
-
-    private void executeProcStarter(Launcher launcher, CheckReport checkReport, ProcStarter procStarter)
-            throws IOException, InterruptedException {
-        Proc proc = launcher.launch(procStarter);
-        int exitCode = proc.join();
-        if (exitCode == 0) {
-            checkReport.setResult(Result.SUCCESS);
-        } else {
-            checkReport.setResult(Result.FAILURE, "Execution has not been successful. Error code is " + exitCode
-                    + ". See log for more information");
-        }
-    }
-
-    private ProcStarter prepareCommand(Launcher launcher, AbstractBuild build) {
-        ProcStarter procStarter = launcher.new ProcStarter();
-        procStarter = procStarter.cmdAsSingleString(this.command);
-        procStarter.envs(build.getBuildVariables());
-        return procStarter;
-    }
-
-    private void exceptionToCheckResult(CheckReport checkReport, Exception e) {
-        checkReport.setResult(Result.FAILURE, e.getMessage());
     }
 
     @Override
