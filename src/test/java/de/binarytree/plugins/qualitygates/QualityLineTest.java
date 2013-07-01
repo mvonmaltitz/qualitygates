@@ -1,5 +1,6 @@
 package de.binarytree.plugins.qualitygates;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -7,6 +8,7 @@ import hudson.Launcher;
 import hudson.XmlFile;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
+import hudson.tasks.BuildStepMonitor;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import de.binarytree.plugins.qualitygates.QualityLine.DescriptorImpl;
 
 public class QualityLineTest {
 
@@ -46,6 +50,7 @@ public class QualityLineTest {
 	private MockQualityLine line;
 	
 
+	
 	@Before
 	public void setUp() throws Exception {
 		List<Gate> gates = new LinkedList<Gate>(); 
@@ -54,6 +59,15 @@ public class QualityLineTest {
 		line = new MockQualityLine("Line", gates); 
 	}
 
+	@Test 
+	public void testDefaultConfiguration() {
+		DescriptorImpl descriptor = new QualityLine.DescriptorImpl(); 
+		assertTrue(descriptor.getDisplayName().toLowerCase().contains("quality")); 
+		assertTrue(descriptor.getDisplayName().toLowerCase().contains("quality")); 
+		assertTrue(descriptor.isApplicable(null)); 
+		assertEquals(BuildStepMonitor.BUILD, line.getRequiredMonitorService()); 
+		
+	}
 	@Test
 	public void testInitializeWithNullCollection() throws IOException {
 		QualityLine builder = new MockQualityLine("Line", null); 

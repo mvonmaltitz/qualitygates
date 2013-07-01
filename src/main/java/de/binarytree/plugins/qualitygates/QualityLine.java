@@ -96,6 +96,10 @@ public class QualityLine extends Recorder implements Saveable {
         return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance().getRootDir(), "qualitygates.xml"));
     }
 
+
+	public BuildStepMonitor getRequiredMonitorService(){
+		return BuildStepMonitor.BUILD; 
+	}
     /**
      * Descriptor for {@link QualityLine}. Used as a singleton. The class is marked as public so that it can be
      * accessed from views.
@@ -135,21 +139,17 @@ public class QualityLine extends Recorder implements Saveable {
             return "Quality Gates";
         }
 
-        @Override
-        public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
-            // To persist global configuration information,
-            // set that to properties and call save().
-            // ^Can also use req.bindJSON(this, formData);
-            // (easier when there are many fields; need set* methods for this,
-            // like setUseFrench)
-            // save();
-            return super.configure(req, formData);
-        }
+//        @Override
+//        public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
+//            // To persist global configuration information,
+//            // set that to properties and call save().
+//            // ^Can also use req.bindJSON(this, formData);
+//            // (easier when there are many fields; need set* methods for this,
+//            // like setUseFrench)
+//            // save();
+//            return super.configure(req, formData);
+//        }
 
     }
-
-	public BuildStepMonitor getRequiredMonitorService(){
-		return BuildStepMonitor.BUILD; 
-	}
 
 }
