@@ -1,7 +1,7 @@
 package de.binarytree.plugins.qualitygates.result;
 
 import hudson.model.Result;
-import de.binarytree.plugins.qualitygates.checks.GateStep;
+import de.binarytree.plugins.qualitygates.steps.GateStep;
 
 public class GateStepReport {
 

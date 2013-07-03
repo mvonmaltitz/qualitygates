@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import de.binarytree.plugins.qualitygates.Gate;
-import de.binarytree.plugins.qualitygates.checks.GateStep;
+import de.binarytree.plugins.qualitygates.steps.GateStep;
 
 public class GatesResultTest {
     private QualityLineReport qualityLineReport;

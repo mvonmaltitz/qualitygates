@@ -2,8 +2,8 @@ package de.binarytree.plugins.qualitygates;
 
 import hudson.DescriptorExtensionList;
 import hudson.model.Descriptor;
-import de.binarytree.plugins.qualitygates.checks.GateStep;
-import de.binarytree.plugins.qualitygates.checks.GateStepDescriptor;
+import de.binarytree.plugins.qualitygates.steps.GateStep;
+import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
 
 public abstract class QualityGateDescriptor extends Descriptor<Gate> {
 

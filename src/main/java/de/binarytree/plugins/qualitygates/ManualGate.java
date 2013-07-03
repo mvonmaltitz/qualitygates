@@ -4,7 +4,7 @@ import hudson.Extension;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.checks.manualcheck.ManualCheck;
+import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheck;
 
 public class ManualGate extends AndGate {
 

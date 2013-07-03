@@ -12,9 +12,9 @@ import java.util.List;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.checks.GateStep;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.GateReport;
+import de.binarytree.plugins.qualitygates.steps.GateStep;
 
 public class AndGate extends Gate {
 

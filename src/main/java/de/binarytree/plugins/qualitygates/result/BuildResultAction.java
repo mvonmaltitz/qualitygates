@@ -16,8 +16,8 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
 import de.binarytree.plugins.qualitygates.QualityLineEvaluator;
-import de.binarytree.plugins.qualitygates.checks.manualcheck.*;
-import de.binarytree.plugins.qualitygates.checks.manualcheck.ManualCheckFinder.ManualCheckManipulator;
+import de.binarytree.plugins.qualitygates.steps.manualcheck.*;
+import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheckFinder.ManualCheckManipulator;
 
 public class BuildResultAction implements ProminentProjectAction {
 
