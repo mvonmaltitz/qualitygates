@@ -12,8 +12,8 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.steps.XPathExpressionCountCheck;
 import de.binarytree.plugins.qualitygates.steps.XPathExpressionCountCheck.DescriptorImpl;
 

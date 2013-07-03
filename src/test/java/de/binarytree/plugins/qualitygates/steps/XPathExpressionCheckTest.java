@@ -19,8 +19,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.steps.XMLCheck;
 import de.binarytree.plugins.qualitygates.steps.XPathExpressionCheck;
 import de.binarytree.plugins.qualitygates.steps.XPathExpressionCheck.DescriptorImpl;

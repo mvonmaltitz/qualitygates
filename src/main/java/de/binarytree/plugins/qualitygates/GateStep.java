@@ -1,4 +1,4 @@
-package de.binarytree.plugins.qualitygates.steps;
+package de.binarytree.plugins.qualitygates;
 
 import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;

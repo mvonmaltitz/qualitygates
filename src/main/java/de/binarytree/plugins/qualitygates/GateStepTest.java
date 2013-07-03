@@ -1,4 +1,4 @@
-package de.binarytree.plugins.qualitygates.steps;
+package de.binarytree.plugins.qualitygates;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,10 +10,10 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.binarytree.plugins.qualitygates.GateStep;
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.TestHelper;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
-import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
 
 public class GateStepTest {
     String exceptionMessage = "Exception message";

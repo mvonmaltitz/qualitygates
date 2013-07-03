@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.QualityLineReport;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
 
 public class QualityLineEvaluatorTest {
 

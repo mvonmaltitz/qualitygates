@@ -13,8 +13,6 @@ import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.GateReport;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
-import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
 
 public class QualityGateTest {
 

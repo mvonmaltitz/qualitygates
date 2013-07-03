@@ -13,8 +13,8 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.steps.GateStep;
-import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
+import de.binarytree.plugins.qualitygates.GateStep;
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 
 public class CheckResultTest {
 

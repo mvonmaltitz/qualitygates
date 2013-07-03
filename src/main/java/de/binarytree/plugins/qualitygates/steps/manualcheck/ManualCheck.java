@@ -11,9 +11,9 @@ import java.util.Random;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import de.binarytree.plugins.qualitygates.GateStep;
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
-import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
 
 public class ManualCheck extends GateStep {
 

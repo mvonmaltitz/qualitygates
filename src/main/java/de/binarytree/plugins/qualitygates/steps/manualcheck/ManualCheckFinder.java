@@ -1,10 +1,10 @@
 package de.binarytree.plugins.qualitygates.steps.manualcheck;
 
 import hudson.model.Result;
+import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.QualityLineReport;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
 
 public class ManualCheckFinder {
     public static class ManualCheckManipulator{

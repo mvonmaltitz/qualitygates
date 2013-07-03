@@ -21,6 +21,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import de.binarytree.plugins.qualitygates.GateStep;
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
+
 public abstract class XMLCheck extends GateStep {
 
     private String expression;

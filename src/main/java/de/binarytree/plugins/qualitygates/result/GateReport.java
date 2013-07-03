@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.binarytree.plugins.qualitygates.Gate;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
+import de.binarytree.plugins.qualitygates.GateStep;
 
 public class GateReport extends ListContainer<GateStepReport> {
 

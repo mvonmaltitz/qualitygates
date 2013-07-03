@@ -9,6 +9,8 @@ import hudson.tasks.Shell;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import de.binarytree.plugins.qualitygates.GateStep;
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class ShellAction extends GateStep {

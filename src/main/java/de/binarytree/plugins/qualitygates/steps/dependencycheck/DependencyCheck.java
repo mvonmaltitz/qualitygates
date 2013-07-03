@@ -13,9 +13,9 @@ import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import de.binarytree.plugins.qualitygates.GateStep;
+import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
-import de.binarytree.plugins.qualitygates.steps.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.DependencyAnalysisParser;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.AnalysisResult;

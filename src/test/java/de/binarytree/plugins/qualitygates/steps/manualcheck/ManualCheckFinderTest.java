@@ -20,12 +20,12 @@ import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.AndGate;
 import de.binarytree.plugins.qualitygates.Gate;
+import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.QualityLineEvaluator;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 import de.binarytree.plugins.qualitygates.steps.FailingCheck;
-import de.binarytree.plugins.qualitygates.steps.GateStep;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheck;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheckFinder;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheckFinder.ManualCheckManipulator;
