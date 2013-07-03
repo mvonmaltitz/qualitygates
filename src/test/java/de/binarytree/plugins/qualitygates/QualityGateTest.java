@@ -18,68 +18,68 @@ import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public class QualityGateTest {
 
-	private Gate gate;
-	private LinkedList<GateStep> checkList;
+    private Gate gate;
+    private LinkedList<GateStep> checkList;
 
-	class MockCheck extends GateStep {
+    class MockCheck extends GateStep {
 
-		private String name;
+        private String name;
 
-		public MockCheck(String name) {
-			this.name = name;
-		}
+        public MockCheck(String name) {
+            this.name = name;
+        }
 
-		@Override
-		public String getDescription() {
-			return "Check Description";
-		}
+        @Override
+        public String getDescription() {
+            return "Check Description";
+        }
 
-		public GateStepDescriptor getDescriptor() {
-			return new GateStepDescriptor() {
+        public GateStepDescriptor getDescriptor() {
+            return new GateStepDescriptor() {
 
-				@Override
-				public String getDisplayName() {
-					return name;
-				}
+                @Override
+                public String getDisplayName() {
+                    return name;
+                }
 
-			};
-		}
+            };
+        }
 
-		@Override
-		public void doStep(AbstractBuild build, BuildListener listener,
-				Launcher launcher, GateStepReport checkReport) {
-		}
+        @Override
+        public void doStep(AbstractBuild build, BuildListener listener,
+                Launcher launcher, GateStepReport checkReport) {
+        }
 
-	}
+    }
 
-	@Before
-	public void setUp() throws Exception {
-		GateStep check1 = new MockCheck("Check1");
-		GateStep check2 = new MockCheck("Check2");
-		checkList = new LinkedList<GateStep>();
-		checkList.add(check1);
-		checkList.add(check2);
-		gate = new Gate("Name") {
-			@Override
-			public void doEvaluation(AbstractBuild build, Launcher launcher,
-					BuildListener listener, GateReport gateReport) {
-				// TODO Auto-generated method stub
+    @Before
+    public void setUp() throws Exception {
+        GateStep check1 = new MockCheck("Check1");
+        GateStep check2 = new MockCheck("Check2");
+        checkList = new LinkedList<GateStep>();
+        checkList.add(check1);
+        checkList.add(check2);
+        gate = new Gate("Name") {
+            @Override
+            public void doEvaluation(AbstractBuild build, Launcher launcher,
+                    BuildListener listener, GateReport gateReport) {
+                // TODO Auto-generated method stub
 
-			}
+            }
 
-		};
+        };
 
-	}
+    }
 
-	@Test
-	public void testGetDocumentation() {
-		GateReport gateReport = gate.document();
-		assertEquals(Result.NOT_BUILT, gateReport.getResult());
-	}
+    @Test
+    public void testGetDocumentation() {
+        GateReport gateReport = gate.document();
+        assertEquals(Result.NOT_BUILT, gateReport.getResult());
+    }
 
-	@Test
-	public void testNameParam() {
-		assertEquals("Name", gate.getName());
-	}
+    @Test
+    public void testNameParam() {
+        assertEquals("Name", gate.getName());
+    }
 
 }

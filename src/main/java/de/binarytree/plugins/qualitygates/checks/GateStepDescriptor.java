@@ -4,12 +4,12 @@ import hudson.ExtensionPoint;
 import hudson.model.Descriptor;
 
 public abstract class GateStepDescriptor extends Descriptor<GateStep> implements
-		ExtensionPoint {
+        ExtensionPoint {
 
-	protected GateStepDescriptor(Class<? extends GateStep> clazz) {
-		super(clazz);
-	}
+    protected GateStepDescriptor(Class<? extends GateStep> clazz) {
+        super(clazz);
+    }
 
-	protected GateStepDescriptor() {
-	}
+    protected GateStepDescriptor() {
+    }
 }

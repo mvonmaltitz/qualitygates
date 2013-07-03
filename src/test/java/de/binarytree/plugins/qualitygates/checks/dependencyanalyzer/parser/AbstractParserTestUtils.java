@@ -14,18 +14,18 @@ import java.util.Enumeration;
  */
 public class AbstractParserTestUtils {
 
-	/**
-	 * return a file searching in the classpath
-	 * 
-	 * @param fileName
-	 *            the name of the file relative to the classpath
-	 * @return the file
-	 * @throws Exception
-	 */
-	protected File getFile(String fileName) throws Exception {
-		URL fileURL = this.getClass().getResource(fileName);
-		File file = new File(fileURL.toURI());
-		return file;
-	}
+    /**
+     * return a file searching in the classpath
+     * 
+     * @param fileName
+     *            the name of the file relative to the classpath
+     * @return the file
+     * @throws Exception
+     */
+    protected File getFile(String fileName) throws Exception {
+        URL fileURL = this.getClass().getResource(fileName);
+        File file = new File(fileURL.toURI());
+        return file;
+    }
 
 }

@@ -18,67 +18,67 @@ import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.Depen
  * @author Vincent Sellier
  */
 public final class DependencyAnalysisParser {
-	private DependencyAnalysisParser() {
-	}
+    private DependencyAnalysisParser() {
+    }
 
-	private static final Pattern ARTIFACT_PATTERN = Pattern
-			.compile(".*:.*:.*:.*:.*");
+    private static final Pattern ARTIFACT_PATTERN = Pattern
+            .compile(".*:.*:.*:.*:.*");
 
-	public static enum DependencyProblemTypesDetection {
-		UNUSED(DependencyProblemType.UNUSED, ".*Unused declared.*"), UNDECLARED(
-				DependencyProblemType.UNDECLARED, ".*Used undeclared.*");
+    public static enum DependencyProblemTypesDetection {
+        UNUSED(DependencyProblemType.UNUSED, ".*Unused declared.*"), UNDECLARED(
+                DependencyProblemType.UNDECLARED, ".*Used undeclared.*");
 
-		private Pattern pattern;
+        private Pattern pattern;
 
-		private DependencyProblemType problemType;
+        private DependencyProblemType problemType;
 
-		private DependencyProblemTypesDetection(
-				DependencyProblemType problemType, String regex) {
-			this.problemType = problemType;
-			pattern = Pattern.compile(regex);
-		}
+        private DependencyProblemTypesDetection(
+                DependencyProblemType problemType, String regex) {
+            this.problemType = problemType;
+            pattern = Pattern.compile(regex);
+        }
 
-		private DependencyProblemType getProblemType() {
-			return problemType;
-		}
+        private DependencyProblemType getProblemType() {
+            return problemType;
+        }
 
-		public static DependencyProblemType matchAny(String line) {
-			for (DependencyProblemTypesDetection problem : DependencyProblemTypesDetection
-					.values()) {
-				if (problem.pattern.matcher(line).matches()) {
-					return problem.getProblemType();
-				}
-			}
-			return null;
-		}
-	};
+        public static DependencyProblemType matchAny(String line) {
+            for (DependencyProblemTypesDetection problem : DependencyProblemTypesDetection
+                    .values()) {
+                if (problem.pattern.matcher(line).matches()) {
+                    return problem.getProblemType();
+                }
+            }
+            return null;
+        }
+    };
 
-	public static AnalysisResult parseDependencyAnalyzeSection(String content)
-			throws IOException {
+    public static AnalysisResult parseDependencyAnalyzeSection(String content)
+            throws IOException {
 
-		AnalysisResult result = new AnalysisResult();
-		List<String> lines = IOUtils.readLines(new StringReader(content));
+        AnalysisResult result = new AnalysisResult();
+        List<String> lines = IOUtils.readLines(new StringReader(content));
 
-		DependencyProblemType currentProblemType = null;
-		for (String line : lines) {
-			if (!StringUtils.isBlank(line)) {
-				DependencyProblemType problemType = DependencyProblemTypesDetection
-						.matchAny(line);
-				if (problemType != null) {
-					currentProblemType = problemType;
-				} else {
-					if (currentProblemType != null
-							&& ARTIFACT_PATTERN.matcher(line).matches()) {
-						// removing log level
-						String violatingDependency = line.substring(
-								line.lastIndexOf(']') + 1).trim();
-						result.addViolation(currentProblemType,
-								violatingDependency);
-					}
-				}
-			}
-		}
+        DependencyProblemType currentProblemType = null;
+        for (String line : lines) {
+            if (!StringUtils.isBlank(line)) {
+                DependencyProblemType problemType = DependencyProblemTypesDetection
+                        .matchAny(line);
+                if (problemType != null) {
+                    currentProblemType = problemType;
+                } else {
+                    if (currentProblemType != null
+                            && ARTIFACT_PATTERN.matcher(line).matches()) {
+                        // removing log level
+                        String violatingDependency = line.substring(
+                                line.lastIndexOf(']') + 1).trim();
+                        result.addViolation(currentProblemType,
+                                violatingDependency);
+                    }
+                }
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

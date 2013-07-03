@@ -7,15 +7,15 @@ import de.binarytree.plugins.qualitygates.checks.GateStepDescriptor;
 
 public abstract class QualityGateDescriptor extends Descriptor<Gate> {
 
-	protected QualityGateDescriptor(Class<? extends Gate> clazz) {
-		super(clazz);
-	}
+    protected QualityGateDescriptor(Class<? extends Gate> clazz) {
+        super(clazz);
+    }
 
-	protected QualityGateDescriptor() {
-	}
+    protected QualityGateDescriptor() {
+    }
 
-	public DescriptorExtensionList<GateStep, GateStepDescriptor> getDescriptors() {
-		return GateStep.all();
-	}
+    public DescriptorExtensionList<GateStep, GateStepDescriptor> getDescriptors() {
+        return GateStep.all();
+    }
 
 }

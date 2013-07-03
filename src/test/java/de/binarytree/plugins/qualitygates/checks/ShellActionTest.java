@@ -25,107 +25,107 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class ShellActionTest {
 
-	private String command;
+    private String command;
 
-	private ShellAction check;
+    private ShellAction check;
 
-	private GateStepReport checkReport;
+    private GateStepReport checkReport;
 
-	private LocalLauncher launcher;
+    private LocalLauncher launcher;
 
-	private ByteArrayOutputStream stream;
+    private ByteArrayOutputStream stream;
 
-	private Shell shell = mock(Shell.class);
+    private Shell shell = mock(Shell.class);
 
-	private AbstractBuild build;
+    private AbstractBuild build;
 
-	class MockExecutionCheck extends ShellAction {
+    class MockExecutionCheck extends ShellAction {
 
-		public MockExecutionCheck(String command) {
-			super(command);
-		}
+        public MockExecutionCheck(String command) {
+            super(command);
+        }
 
-		@Override
-		public DescriptorImpl getDescriptor() {
-			return new DescriptorImpl();
-		}
+        @Override
+        public DescriptorImpl getDescriptor() {
+            return new DescriptorImpl();
+        }
 
-		@Override
-		public Shell getShell() {
-			return shell;
-		}
-	}
+        @Override
+        public Shell getShell() {
+            return shell;
+        }
+    }
 
-	@Before
-	public void setUp() throws Exception {
-		stream = new ByteArrayOutputStream();
-		TaskListener taskListener = new StreamTaskListener(stream);
-		launcher = new Launcher.LocalLauncher(taskListener);
-		command = "echo /tmp/testdatei";
-		check = new MockExecutionCheck(command);
-		checkReport = new GateStepReport(check);
-		build = mock(AbstractBuild.class);
-	}
+    @Before
+    public void setUp() throws Exception {
+        stream = new ByteArrayOutputStream();
+        TaskListener taskListener = new StreamTaskListener(stream);
+        launcher = new Launcher.LocalLauncher(taskListener);
+        command = "echo /tmp/testdatei";
+        check = new MockExecutionCheck(command);
+        checkReport = new GateStepReport(check);
+        build = mock(AbstractBuild.class);
+    }
 
-	@Test
-	public void testSettingAndGettingParameter() {
-		assertEquals(command, check.getCommand());
-		assertTrue(check.getDescription().startsWith("$ "));
-	}
+    @Test
+    public void testSettingAndGettingParameter() {
+        assertEquals(command, check.getCommand());
+        assertTrue(check.getDescription().startsWith("$ "));
+    }
 
-	@Test
-	public void testExecutionOfCommand() throws IOException,
-			InterruptedException {
-		when(
-				shell.perform(any(AbstractBuild.class), any(Launcher.class),
-						any(BuildListener.class))).thenReturn(true);
-		check.doStep(build, null, launcher, checkReport);
-		String logOutput = new String(stream.toByteArray());
-		assertEquals(Result.SUCCESS, checkReport.getResult());
-		Mockito.verify(shell).perform(any(AbstractBuild.class),
-				any(Launcher.class), any(BuildListener.class));
-	}
+    @Test
+    public void testExecutionOfCommand() throws IOException,
+            InterruptedException {
+        when(
+                shell.perform(any(AbstractBuild.class), any(Launcher.class),
+                        any(BuildListener.class))).thenReturn(true);
+        check.doStep(build, null, launcher, checkReport);
+        String logOutput = new String(stream.toByteArray());
+        assertEquals(Result.SUCCESS, checkReport.getResult());
+        Mockito.verify(shell).perform(any(AbstractBuild.class),
+                any(Launcher.class), any(BuildListener.class));
+    }
 
-	@Test
-	public void testExecutionOfUnknownCommand() throws InterruptedException {
-		when(
-				shell.perform(any(AbstractBuild.class), any(Launcher.class),
-						any(BuildListener.class))).thenReturn(false);
-		String unknownCommand = "asdlkjfalsdfjaldfjald";
-		check = new MockExecutionCheck(unknownCommand);
-		check.doStep(build, null, launcher, checkReport);
-		String logOutput = new String(stream.toByteArray());
-		assertEquals(Result.FAILURE, checkReport.getResult());
-		Mockito.verify(shell).perform(any(AbstractBuild.class),
-				any(Launcher.class), any(BuildListener.class));
-	}
+    @Test
+    public void testExecutionOfUnknownCommand() throws InterruptedException {
+        when(
+                shell.perform(any(AbstractBuild.class), any(Launcher.class),
+                        any(BuildListener.class))).thenReturn(false);
+        String unknownCommand = "asdlkjfalsdfjaldfjald";
+        check = new MockExecutionCheck(unknownCommand);
+        check.doStep(build, null, launcher, checkReport);
+        String logOutput = new String(stream.toByteArray());
+        assertEquals(Result.FAILURE, checkReport.getResult());
+        Mockito.verify(shell).perform(any(AbstractBuild.class),
+                any(Launcher.class), any(BuildListener.class));
+    }
 
-	@Test
-	public void testExecutionOfNonZeroCommand() throws InterruptedException {
-		when(
-				shell.perform(any(AbstractBuild.class), any(Launcher.class),
-						any(BuildListener.class))).thenReturn(false);
-		String command = "cat /aljf/aljf/asdfj/asdfjkdfjdkfj.txt";
-		check = new MockExecutionCheck(command);
-		check.doStep(build, null, launcher, checkReport);
-		String logOutput = new String(stream.toByteArray());
-		assertEquals(Result.FAILURE, checkReport.getResult());
-		Mockito.verify(shell).perform(any(AbstractBuild.class),
-				any(Launcher.class), any(BuildListener.class));
-	}
+    @Test
+    public void testExecutionOfNonZeroCommand() throws InterruptedException {
+        when(
+                shell.perform(any(AbstractBuild.class), any(Launcher.class),
+                        any(BuildListener.class))).thenReturn(false);
+        String command = "cat /aljf/aljf/asdfj/asdfjkdfjdkfj.txt";
+        check = new MockExecutionCheck(command);
+        check.doStep(build, null, launcher, checkReport);
+        String logOutput = new String(stream.toByteArray());
+        assertEquals(Result.FAILURE, checkReport.getResult());
+        Mockito.verify(shell).perform(any(AbstractBuild.class),
+                any(Launcher.class), any(BuildListener.class));
+    }
 
-	@Test
-	public void testReportIsFailureOnInterruptedException()
-			throws InterruptedException {
-		when(
-				shell.perform(any(AbstractBuild.class), any(Launcher.class),
-						any(BuildListener.class))).thenThrow(
-				new InterruptedException());
-		check.doStep(build, null, launcher, checkReport);
-		String logOutput = new String(stream.toByteArray());
-		assertEquals(Result.FAILURE, checkReport.getResult());
-		Mockito.verify(shell).perform(any(AbstractBuild.class),
-				any(Launcher.class), any(BuildListener.class));
-	}
+    @Test
+    public void testReportIsFailureOnInterruptedException()
+            throws InterruptedException {
+        when(
+                shell.perform(any(AbstractBuild.class), any(Launcher.class),
+                        any(BuildListener.class))).thenThrow(
+                new InterruptedException());
+        check.doStep(build, null, launcher, checkReport);
+        String logOutput = new String(stream.toByteArray());
+        assertEquals(Result.FAILURE, checkReport.getResult());
+        Mockito.verify(shell).perform(any(AbstractBuild.class),
+                any(Launcher.class), any(BuildListener.class));
+    }
 
 }

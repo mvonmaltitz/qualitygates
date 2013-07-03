@@ -13,40 +13,40 @@ import de.binarytree.plugins.qualitygates.checks.FailingCheck.DescriptorImpl;
 
 public class FailingCheckTest {
 
-	private FailingCheck check;
-	private DescriptorImpl descriptor;
+    private FailingCheck check;
+    private DescriptorImpl descriptor;
 
-	@Before
-	public void setUp() throws Exception {
-		descriptor = new FailingCheck.DescriptorImpl();
-		check = new FailingCheck() {
-			public DescriptorImpl getDescriptor() {
-				return descriptor;
-			}
-		};
+    @Before
+    public void setUp() throws Exception {
+        descriptor = new FailingCheck.DescriptorImpl();
+        check = new FailingCheck() {
+            public DescriptorImpl getDescriptor() {
+                return descriptor;
+            }
+        };
 
-	}
+    }
 
-	@Test
-	public void testDisplayName() {
-		assertTrue(descriptor.getDisplayName().contains("fail"));
-	}
+    @Test
+    public void testDisplayName() {
+        assertTrue(descriptor.getDisplayName().contains("fail"));
+    }
 
-	@Test
-	public void testDescription() {
-		assertTrue(check.toString().contains("FAIL"));
-	}
+    @Test
+    public void testDescription() {
+        assertTrue(check.toString().contains("FAIL"));
+    }
 
-	@Test
-	public void testFailingWithValidBuild() {
-		AbstractBuild build = mock(AbstractBuild.class);
-		assertEquals(Result.FAILURE, check.step(build, null, null).getResult());
-	}
+    @Test
+    public void testFailingWithValidBuild() {
+        AbstractBuild build = mock(AbstractBuild.class);
+        assertEquals(Result.FAILURE, check.step(build, null, null).getResult());
+    }
 
-	@Test
-	public void testFailingWithNullBuild() {
-		AbstractBuild build = null;
-		assertEquals(Result.FAILURE, check.step(build, null, null).getResult());
-	}
+    @Test
+    public void testFailingWithNullBuild() {
+        AbstractBuild build = null;
+        assertEquals(Result.FAILURE, check.step(build, null, null).getResult());
+    }
 
 }

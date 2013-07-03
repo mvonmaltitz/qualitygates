@@ -8,22 +8,22 @@ import de.binarytree.plugins.qualitygates.checks.ManualCheck;
 
 public class ManualGate extends AndGate {
 
-	@DataBoundConstructor
-	public ManualGate(String name) {
-		super(name, null);
-		this.setUpSingleManualCheck();
-	}
+    @DataBoundConstructor
+    public ManualGate(String name) {
+        super(name, null);
+        this.setUpSingleManualCheck();
+    }
 
-	private void setUpSingleManualCheck() {
-		ManualCheck check = new ManualCheck();
-		this.addStep(check);
-	}
+    private void setUpSingleManualCheck() {
+        ManualCheck check = new ManualCheck();
+        this.addStep(check);
+    }
 
-	@Extension
-	public static class DescriptorImpl extends QualityGateDescriptor {
-		@Override
-		public String getDisplayName() {
-			return "Manual Gate";
-		}
-	}
+    @Extension
+    public static class DescriptorImpl extends QualityGateDescriptor {
+        @Override
+        public String getDisplayName() {
+            return "Manual Gate";
+        }
+    }
 }

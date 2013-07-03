@@ -20,108 +20,108 @@ import org.apache.commons.io.IOUtils;
  * 
  */
 public class BuildLogFileParser {
-	public static final Logger LOGGER = Logger
-			.getLogger(BuildLogFileParser.class.getName());
+    public static final Logger LOGGER = Logger
+            .getLogger(BuildLogFileParser.class.getName());
 
-	private static final String LOG_LEVEL_REGEX = "\\[(INFO|WARNING)\\] ";
+    private static final String LOG_LEVEL_REGEX = "\\[(INFO|WARNING)\\] ";
 
-	private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX
-			+ " ---.*");
+    private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX
+            + " ---.*");
 
-	private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX
-			+ "[-]*$");
+    private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX
+            + "[-]*$");
 
-	// To limit selection to maven output (filtering [HUDSON] tags)
-	private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX
-			+ ".*");
+    // To limit selection to maven output (filtering [HUDSON] tags)
+    private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX
+            + ".*");
 
-	public enum Goal {
-		DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX
-				+ "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*");
+    public enum Goal {
+        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX
+                + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*");
 
-		private Pattern pattern;
+        private Pattern pattern;
 
-		private Goal(String regex) {
-			pattern = Pattern.compile(regex);
-		}
+        private Goal(String regex) {
+            pattern = Pattern.compile(regex);
+        }
 
-		public Pattern getPattern() {
-			return pattern;
-		}
+        public Pattern getPattern() {
+            return pattern;
+        }
 
-		public static Goal getMatchingGoal(String line) {
-			Goal[] goals = Goal.values();
+        public static Goal getMatchingGoal(String line) {
+            Goal[] goals = Goal.values();
 
-			for (Goal goal : goals) {
-				Pattern pattern = goal.pattern;
-				Matcher matcher = pattern.matcher(line);
-				if (matcher.matches()) {
-					return goal;
-				}
-			}
-			return null;
-		}
-	}
+            for (Goal goal : goals) {
+                Pattern pattern = goal.pattern;
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.matches()) {
+                    return goal;
+                }
+            }
+            return null;
+        }
+    }
 
-	private boolean parsed = false;
+    private boolean parsed = false;
 
-	private Map<Goal, String> goalsLog = new HashMap<Goal, String>();
+    private Map<Goal, String> goalsLog = new HashMap<Goal, String>();
 
-	public void parseLogFile(File logFile) throws IOException {
-		LOGGER.fine("Parsing " + logFile.getAbsolutePath());
-		FileInputStream input = new FileInputStream(logFile);
+    public void parseLogFile(File logFile) throws IOException {
+        LOGGER.fine("Parsing " + logFile.getAbsolutePath());
+        FileInputStream input = new FileInputStream(logFile);
 
-		List<String> lines = IOUtils.readLines(input);
+        List<String> lines = IOUtils.readLines(input);
 
-		Iterator<String> lineIterator = lines.iterator();
+        Iterator<String> lineIterator = lines.iterator();
 
-		while (lineIterator.hasNext()) {
-			String line = lineIterator.next();
-			line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
+        while (lineIterator.hasNext()) {
+            String line = lineIterator.next();
+            line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
 
-			Goal goal = Goal.getMatchingGoal(line);
-			if (goal != null) {
-				StringBuilder section = new StringBuilder();
+            Goal goal = Goal.getMatchingGoal(line);
+            if (goal != null) {
+                StringBuilder section = new StringBuilder();
 
-				String formerSection = goalsLog.get(goal);
-				if (formerSection != null) {
-					section.append(formerSection);
-				}
+                String formerSection = goalsLog.get(goal);
+                if (formerSection != null) {
+                    section.append(formerSection);
+                }
 
-				// Pass the search section to only keep content of the section
+                // Pass the search section to only keep content of the section
 
-				while (lineIterator.hasNext() && !parsed) {
-					line = lineIterator.next();
-					line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m",
-							"");
-					if (GOAL_START.matcher(line).matches()
-							|| END_OF_BUILD.matcher(line).matches()) {
-						parsed = true;
-					} else {
-						if (MAVEN_OUTPUT.matcher(line).matches()) {
-							section.append(line).append("\n");
-						}
-					}
+                while (lineIterator.hasNext() && !parsed) {
+                    line = lineIterator.next();
+                    line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m",
+                            "");
+                    if (GOAL_START.matcher(line).matches()
+                            || END_OF_BUILD.matcher(line).matches()) {
+                        parsed = true;
+                    } else {
+                        if (MAVEN_OUTPUT.matcher(line).matches()) {
+                            section.append(line).append("\n");
+                        }
+                    }
 
-				}
+                }
 
-				goalsLog.put(goal, section.toString());
-			}
-		}
+                goalsLog.put(goal, section.toString());
+            }
+        }
 
-		parsed = true;
-	}
+        parsed = true;
+    }
 
-	private String getContent(Goal goal) {
-		if (!parsed) {
-			throw new IllegalStateException("No log file was parsed");
-		}
+    private String getContent(Goal goal) {
+        if (!parsed) {
+            throw new IllegalStateException("No log file was parsed");
+        }
 
-		return goalsLog.get(goal);
-	}
+        return goalsLog.get(goal);
+    }
 
-	public String getDependencyAnalyseBlock() {
-		return getContent(Goal.DEPENDENCY_ANALYSE);
-	}
+    public String getDependencyAnalyseBlock() {
+        return getContent(Goal.DEPENDENCY_ANALYSE);
+    }
 
 }

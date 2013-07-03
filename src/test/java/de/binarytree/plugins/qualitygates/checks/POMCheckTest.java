@@ -10,24 +10,24 @@ import de.binarytree.plugins.qualitygates.checks.POMCheck.DescriptorImpl;
 
 public class POMCheckTest {
 
-	private POMCheck pomCheck;
-	private AbstractBuild build;
+    private POMCheck pomCheck;
+    private AbstractBuild build;
 
-	@Test
-	public void testDescriptionContainsPOM() {
-		DescriptorImpl descriptor = new POMCheck.DescriptorImpl();
-		assertTrue(descriptor.getDisplayName().contains("POM"));
-	}
+    @Test
+    public void testDescriptionContainsPOM() {
+        DescriptorImpl descriptor = new POMCheck.DescriptorImpl();
+        assertTrue(descriptor.getDisplayName().contains("POM"));
+    }
 
-	@Test
-	public void testSettingAndGettingExpression() {
-		pomCheck = new POMCheck("Expression", true);
-		assertEquals("Expression", pomCheck.getExpression());
-	}
+    @Test
+    public void testSettingAndGettingExpression() {
+        pomCheck = new POMCheck("Expression", true);
+        assertEquals("Expression", pomCheck.getExpression());
+    }
 
-	@Test
-	public void testGettingFile() {
-		pomCheck = new POMCheck("Expression", true);
-		assertEquals("pom.xml", pomCheck.getTargetFile());
-	}
+    @Test
+    public void testGettingFile() {
+        pomCheck = new POMCheck("Expression", true);
+        assertEquals("pom.xml", pomCheck.getTargetFile());
+    }
 }
