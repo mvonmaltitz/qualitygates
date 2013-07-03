@@ -12,48 +12,54 @@ import java.util.List;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.checks.GateStep;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public class AndGate extends Gate {
 
-    protected List<Check> checks = new LinkedList<Check>();
+	private List<GateStep> steps = new LinkedList<GateStep>();
+
 	@DataBoundConstructor
-	public AndGate(String name, Collection<Check> checks) {
+	public AndGate(String name, Collection<GateStep> steps) {
 		super(name);
-        if (checks != null) {
-            this.checks.addAll(checks);
-        }
+		if (steps != null) {
+			this.steps.addAll(steps);
+		}
 
 	}
 
-    public List<Check> getChecks() {
-        return this.checks;
-    }
+	public List<GateStep> getSteps() {
+		return this.steps;
+	}
 
-    public int getNumberOfChecks() {
-        return this.checks.size();
-    }
+	protected void addStep(GateStep step) {
+		this.steps.add(step);
+	}
 
-    public GateReport document() {
-    	GateReport gateReport = super.document(); 
-        for (Check check : this.checks) {
-            gateReport.addCheckResult(check.document());
-        }
-        return gateReport; 
-    }
-	
+	public int getNumberOfSteps() {
+		return this.steps.size();
+	}
+
+	public GateReport document() {
+		GateReport gateReport = super.document();
+		for (GateStep step : this.steps) {
+			gateReport.addStepReport(step.document());
+		}
+		return gateReport;
+	}
+
 	@Override
-	public void doCheck(AbstractBuild build, Launcher launcher,
+	public void doEvaluation(AbstractBuild build, Launcher launcher,
 			BuildListener listener, GateReport gateReport) {
-		if (checksAreAvailable()) {
+		if (stepsAreAvailable()) {
 			Result result = Result.SUCCESS;
-			for (Check check : this.checks) {
-				CheckReport checkReport = check.check(build, listener, launcher); 
-				result = result.combine(checkReport.getResult());
-				gateReport.addCheckResult(checkReport); 
-				gateReport.setResult(result); 
+			for (GateStep step : this.steps) {
+				GateStepReport stepReport = step
+						.step(build, listener, launcher);
+				result = result.combine(stepReport.getResult());
+				gateReport.addStepReport(stepReport);
+				gateReport.setResult(result);
 			}
 		} else {
 			gateReport.setResult(this.resultOfEmptyGate());
@@ -64,8 +70,8 @@ public class AndGate extends Gate {
 		return Result.UNSTABLE;
 	}
 
-	private boolean checksAreAvailable() {
-		return this.checks.size() != 0;
+	private boolean stepsAreAvailable() {
+		return this.steps.size() != 0;
 	}
 
 	@Extension

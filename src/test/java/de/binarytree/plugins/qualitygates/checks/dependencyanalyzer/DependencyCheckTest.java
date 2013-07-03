@@ -20,7 +20,7 @@ import org.junit.Test;
 import de.binarytree.plugins.qualitygates.TestHelper;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.parser.BuildLogFileParser;
 import de.binarytree.plugins.qualitygates.checks.dependencyanalyzer.result.AnalysisResult;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class DependencyCheckTest {
 
@@ -64,7 +64,7 @@ public class DependencyCheckTest {
 	private BuildListener listener;
 	private Launcher launcher;
 	private MockDependencyCheck check;
-	private CheckReport report;
+	private GateStepReport report;
 
 	@Before
 	public void setUp() throws Exception {
@@ -72,27 +72,27 @@ public class DependencyCheckTest {
 		listener = TestHelper.getListenerMock();
 		launcher = TestHelper.getLauncherMock();
 		check = new MockDependencyCheck();
-		report = new CheckReport(check);
+		report = new GateStepReport(check);
 	}
 
 	@Test
 	public void testResultIsFailureIfBuildFailed() {
 		when(build.getResult()).thenReturn(Result.FAILURE);
-		check.doCheck(build, listener, launcher, report);
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.FAILURE, report.getResult());
 	}
 
 	@Test
 	public void testResultIsFailureIfBuildNotBuilt() {
 		when(build.getResult()).thenReturn(Result.NOT_BUILT);
-		check.doCheck(build, listener, launcher, report);
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.FAILURE, report.getResult());
 	}
 
 	@Test
 	public void testResultIsFailureIfBuildAborted() {
 		when(build.getResult()).thenReturn(Result.ABORTED);
-		check.doCheck(build, listener, launcher, report);
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.FAILURE, report.getResult());
 	}
 
@@ -102,7 +102,7 @@ public class DependencyCheckTest {
 		BuildLogFileParser parser = check.createLogFileParser();
 		doThrow(new IOException("xxxmessagexxx")).when(parser).parseLogFile(
 				any(File.class));
-		check.doCheck(build, listener, launcher, report);
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.FAILURE, report.getResult());
 		assertTrue(report.getReason().toLowerCase().contains("xxxmessagexxx"));
 	}
@@ -111,8 +111,8 @@ public class DependencyCheckTest {
 	public void testResultIsUnstableIfDependencySectionIsEmpty() {
 		setBuildResultToSuccess();
 		BuildLogFileParser parser = check.createLogFileParser();
-		letParserReturn(parser, ""); 
-		check.doCheck(build, listener, launcher, report);
+		letParserReturn(parser, "");
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.UNSTABLE, report.getResult());
 		assertTrue(report.getReason().toLowerCase()
 				.contains("dependency:analyze"));
@@ -123,47 +123,51 @@ public class DependencyCheckTest {
 		setBuildResultToSuccess();
 		BuildLogFileParser parser = check.createLogFileParser();
 		letParserReturn(parser, DEPENDENCY_SECTION);
-		letAnalysisReturn(check, 5, 10); 
-		check.doCheck(build, listener, launcher, report);
+		letAnalysisReturn(check, 5, 10);
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.UNSTABLE, report.getResult());
-		assertTrue(report.getReason().contains("5 undeclared")); 
-		assertTrue(report.getReason().contains("10 unused")); 
+		assertTrue(report.getReason().contains("5 undeclared"));
+		assertTrue(report.getReason().contains("10 unused"));
 	}
-	
+
 	@Test
-	public void testResultIsUnstableIfOnlyUnusedDepencendiesAreFound(){
+	public void testResultIsUnstableIfOnlyUnusedDepencendiesAreFound() {
 		setBuildResultToSuccess();
 		BuildLogFileParser parser = check.createLogFileParser();
 		letParserReturn(parser, DEPENDENCY_SECTION);
-		letAnalysisReturn(check, 0, 2); 
-		check.doCheck(build, listener, launcher, report);
+		letAnalysisReturn(check, 0, 2);
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.UNSTABLE, report.getResult());
-		assertTrue(report.getReason().contains("2 unused")); 
+		assertTrue(report.getReason().contains("2 unused"));
 	}
-	
+
 	@Test
-	public void testResultIsSuccessIfNoViolationsAreFound(){
+	public void testResultIsSuccessIfNoViolationsAreFound() {
 		setBuildResultToSuccess();
 		BuildLogFileParser parser = check.createLogFileParser();
 		letParserReturn(parser, DEPENDENCY_SECTION);
-		letAnalysisReturn(check, 0, 0); 
-		check.doCheck(build, listener, launcher, report);
-		assertEquals(Result.SUCCESS, report.getResult());
-	}
-	@Test
-	public void testResultIsSuccessIfNoViolationsAreFoundButBuildIsUnstable(){
-		when(build.getResult()).thenReturn(Result.UNSTABLE); 
-		BuildLogFileParser parser = check.createLogFileParser();
-		letParserReturn(parser, DEPENDENCY_SECTION);
-		letAnalysisReturn(check, 0, 0); 
-		check.doCheck(build, listener, launcher, report);
+		letAnalysisReturn(check, 0, 0);
+		check.doStep(build, listener, launcher, report);
 		assertEquals(Result.SUCCESS, report.getResult());
 	}
 
-	private void letAnalysisReturn(MockDependencyCheck check, int numberOfUndeclaredDependencies, int numberOfUnusedDependencies) {
+	@Test
+	public void testResultIsSuccessIfNoViolationsAreFoundButBuildIsUnstable() {
+		when(build.getResult()).thenReturn(Result.UNSTABLE);
+		BuildLogFileParser parser = check.createLogFileParser();
+		letParserReturn(parser, DEPENDENCY_SECTION);
+		letAnalysisReturn(check, 0, 0);
+		check.doStep(build, listener, launcher, report);
+		assertEquals(Result.SUCCESS, report.getResult());
+	}
+
+	private void letAnalysisReturn(MockDependencyCheck check,
+			int numberOfUndeclaredDependencies, int numberOfUnusedDependencies) {
 		AnalysisResult analysis = check.getMockAnalysis();
-		when(analysis.getNumberOfUndeclaredDependencies()).thenReturn(numberOfUndeclaredDependencies);
-		when(analysis.getNumberOfUnusedDependencies()).thenReturn(numberOfUnusedDependencies);
+		when(analysis.getNumberOfUndeclaredDependencies()).thenReturn(
+				numberOfUndeclaredDependencies);
+		when(analysis.getNumberOfUnusedDependencies()).thenReturn(
+				numberOfUnusedDependencies);
 	}
 
 	private void letParserReturn(BuildLogFileParser parser, String returnValue) {

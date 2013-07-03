@@ -8,17 +8,17 @@ import hudson.model.AbstractBuild;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
-public class FailingCheck extends Check {
+public class FailingCheck extends GateStep {
 
 	@DataBoundConstructor
 	public FailingCheck() {
 	}
 
 	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher, CheckReport checkReport) {
+	public void doStep(AbstractBuild build, BuildListener listener,
+			Launcher launcher, GateStepReport checkReport) {
 		checkReport.setResult(Result.FAILURE, "This check always fails.");
 	}
 
@@ -28,7 +28,7 @@ public class FailingCheck extends Check {
 	}
 
 	@Extension
-	public static class DescriptorImpl extends CheckDescriptor {
+	public static class DescriptorImpl extends GateStepDescriptor {
 
 		@Override
 		public String getDisplayName() {
@@ -39,7 +39,7 @@ public class FailingCheck extends Check {
 
 	@Override
 	public String getDescription() {
-		return "Always failing check"; 
+		return "Always failing check";
 	}
 
 }

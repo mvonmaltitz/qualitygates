@@ -13,9 +13,9 @@
     <f:textbox />
   </f:entry>
           <f:block>
-            <f:hetero-list name="checks" hasHeader="true"
+            <f:hetero-list name="steps" hasHeader="true"
                            descriptors="${descriptor.descriptors}"
-                           items="${instance.checks}"
+                           items="${instance.steps}"
                            addCaption="${%Add Check}"/>
           </f:block>
 </j:jelly>

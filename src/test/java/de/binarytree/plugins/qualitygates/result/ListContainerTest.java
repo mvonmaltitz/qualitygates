@@ -13,7 +13,7 @@ public class ListContainerTest {
 
 	class ListContainerImpl<T> extends ListContainer<T> {
 		public List<T> getList() {
-			return this.items;
+			return this.getItems();
 		}
 
 		public void addItem(T s) {
@@ -34,7 +34,8 @@ public class ListContainerTest {
 		container = new ListContainerImpl<String>() {
 			@Override
 			protected boolean isSameItem(String a, String b) {
-				// Using plain equality means we cannot test if a replacement as really occurred
+				// Using plain equality means we cannot test if a replacement as
+				// really occurred
 				return a.substring(0, 4).equals(b.substring(0, 4));
 			}
 		};

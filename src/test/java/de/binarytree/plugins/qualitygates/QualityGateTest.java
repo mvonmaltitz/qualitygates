@@ -11,17 +11,17 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.checks.GateStep;
+import de.binarytree.plugins.qualitygates.checks.GateStepDescriptor;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public class QualityGateTest {
 
 	private Gate gate;
-	private LinkedList<Check> checkList;
+	private LinkedList<GateStep> checkList;
 
-	class MockCheck extends Check {
+	class MockCheck extends GateStep {
 
 		private String name;
 
@@ -34,8 +34,8 @@ public class QualityGateTest {
 			return "Check Description";
 		}
 
-		public CheckDescriptor getDescriptor() {
-			return new CheckDescriptor() {
+		public GateStepDescriptor getDescriptor() {
+			return new GateStepDescriptor() {
 
 				@Override
 				public String getDisplayName() {
@@ -46,22 +46,22 @@ public class QualityGateTest {
 		}
 
 		@Override
-		public void doCheck(AbstractBuild build, BuildListener listener,
-				Launcher launcher, CheckReport checkReport) {
+		public void doStep(AbstractBuild build, BuildListener listener,
+				Launcher launcher, GateStepReport checkReport) {
 		}
 
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		Check check1 = new MockCheck("Check1");
-		Check check2 = new MockCheck("Check2");
-		checkList = new LinkedList<Check>();
+		GateStep check1 = new MockCheck("Check1");
+		GateStep check2 = new MockCheck("Check2");
+		checkList = new LinkedList<GateStep>();
 		checkList.add(check1);
 		checkList.add(check2);
 		gate = new Gate("Name") {
 			@Override
-			public void doCheck(AbstractBuild build, Launcher launcher,
+			public void doEvaluation(AbstractBuild build, Launcher launcher,
 					BuildListener listener, GateReport gateReport) {
 				// TODO Auto-generated method stub
 

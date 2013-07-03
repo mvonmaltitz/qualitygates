@@ -13,26 +13,28 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
+import de.binarytree.plugins.qualitygates.checks.GateStep;
+import de.binarytree.plugins.qualitygates.checks.GateStepDescriptor;
 
 public class CheckResultTest {
 
-	class MockCheck extends Check {
+	class MockCheck extends GateStep {
 		private String name;
 
 		public MockCheck(String name) {
 			this.name = name;
 		}
 
-		public CheckDescriptor getDescriptor() {
+		public GateStepDescriptor getDescriptor() {
 			return new DescriptorImpl();
 		}
 
-		public boolean equals(Object o){
-			return o instanceof MockCheck && ((MockCheck) o).name.equals(this.name); 
+		public boolean equals(Object o) {
+			return o instanceof MockCheck
+					&& ((MockCheck) o).name.equals(this.name);
 		}
-		class DescriptorImpl extends CheckDescriptor {
+
+		class DescriptorImpl extends GateStepDescriptor {
 
 			@Override
 			public String getDisplayName() {
@@ -42,8 +44,8 @@ public class CheckResultTest {
 		}
 
 		@Override
-		public void doCheck(AbstractBuild build, BuildListener listener,
-				Launcher launcher, CheckReport checkReport) {
+		public void doStep(AbstractBuild build, BuildListener listener,
+				Launcher launcher, GateStepReport checkReport) {
 		}
 
 		@Override
@@ -53,12 +55,12 @@ public class CheckResultTest {
 
 	};
 
-	private Check check = new MockCheck("MockCheck"); 
-	private CheckReport checkReport;
+	private GateStep check = new MockCheck("MockCheck");
+	private GateStepReport checkReport;
 
 	@Before
 	public void setUp() {
-		checkReport = new CheckReport(check);
+		checkReport = new GateStepReport(check);
 	}
 
 	@Test
@@ -97,35 +99,36 @@ public class CheckResultTest {
 
 	@Test
 	public void testGetCheckResultDocumentation() {
-		CheckReport checkReport = check.document();
+		GateStepReport checkReport = check.document();
 		assertEquals(Result.NOT_BUILT, checkReport.getResult());
 	}
 
 	@Test
 	public void testReferencesSameGate() {
-		CheckReport result1 = new CheckReport(check);
-		CheckReport result2 = new CheckReport(check);
-		assertTrue(result1.referencesSameCheckAs(result2));
+		GateStepReport result1 = new GateStepReport(check);
+		GateStepReport result2 = new GateStepReport(check);
+		assertTrue(result1.referencesSameStepAs(result2));
 	}
 
 	@Test
 	public void testReferencesSameCheck() {
-		CheckReport result1 = new CheckReport(check);
+		GateStepReport result1 = new GateStepReport(check);
 		assertTrue(result1.references(check));
 	}
 
 	@Test
 	public void testReferencesEqualCheckFalse() {
-		Check check1 = new MockCheck("Eins"); 
-		Check check2 = new MockCheck("Zwei"); 
-		CheckReport result1  = new CheckReport(check1); 
-		assertFalse(result1.references(check2)); 
+		GateStep check1 = new MockCheck("Eins");
+		GateStep check2 = new MockCheck("Zwei");
+		GateStepReport result1 = new GateStepReport(check1);
+		assertFalse(result1.references(check2));
 	}
+
 	@Test
 	public void testReferencesEqualCheckTrue() {
-		Check check1 = new MockCheck("Eins"); 
-		Check check2 = new MockCheck("Eins"); 
-		CheckReport result1  = new CheckReport(check1); 
-		assertTrue(result1.references(check2)); 
+		GateStep check1 = new MockCheck("Eins");
+		GateStep check2 = new MockCheck("Eins");
+		GateStepReport result1 = new GateStepReport(check1);
+		assertTrue(result1.references(check2));
 	}
 }

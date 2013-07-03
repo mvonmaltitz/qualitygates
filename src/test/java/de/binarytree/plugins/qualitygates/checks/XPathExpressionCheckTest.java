@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import de.binarytree.plugins.qualitygates.checks.XPathExpressionCheck.DescriptorImpl;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class XPathExpressionCheckTest {
 
@@ -29,13 +29,15 @@ public class XPathExpressionCheckTest {
 	private String expression = "/parent";
 	private String filePath = "aFile.xml";
 	private ByteArrayInputStream pomStream;
-	private String content = "contentCONTENTcontent"; 
+	private String content = "contentCONTENTcontent";
 	private String pomString = "<project xmlns='http://maven.apache.org/POM/4.0.0' "
 			+ "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' "
 			+ "xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd'>"
 			+ "<modelVersion>4.0.0</modelVersion> "
 			+ "<parent>  "
-			+ "<groupId>" + content + "</groupId> "
+			+ "<groupId>"
+			+ content
+			+ "</groupId> "
 			+ "<artifactId>plugin</artifactId> <version>1.480.3</version>"
 			+ "<!-- which version of Jenkins is this plugin built against? --> "
 			+ "</parent>" + "</project>";
@@ -44,7 +46,8 @@ public class XPathExpressionCheckTest {
 
 	class MockXMLCheck extends XPathExpressionCheck {
 
-		public MockXMLCheck(String targetFile, String expression, boolean reportContent) {
+		public MockXMLCheck(String targetFile, String expression,
+				boolean reportContent) {
 			super(targetFile, expression, reportContent);
 		}
 
@@ -57,7 +60,7 @@ public class XPathExpressionCheckTest {
 			return pomStream;
 		}
 
-		public CheckDescriptor getDescriptor() {
+		public GateStepDescriptor getDescriptor() {
 			return descriptor;
 		}
 	}
@@ -132,20 +135,19 @@ public class XPathExpressionCheckTest {
 	@Test
 	public void testCheckFindsPresentXMLTag() throws XPathExpressionException,
 			ParserConfigurationException, SAXException, IOException {
-		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId"); 
-		CheckReport result = xmlCheck.check(build, null, null);
-		assertEquals(Result.SUCCESS, result.getResult()); 
-		assertTrue(result .getReason().contains(content));
+		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId");
+		GateStepReport result = xmlCheck.step(build, null, null);
+		assertEquals(Result.SUCCESS, result.getResult());
+		assertTrue(result.getReason().contains(content));
 	}
 
 	@Test
 	public void testCheckDoesNotFindNonPresentXMLTag()
 			throws XPathExpressionException, ParserConfigurationException,
 			SAXException, IOException {
-		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere"); 
-		CheckReport checkReport = xmlCheck.check(build, null, null);
-		assertEquals(Result.FAILURE, checkReport
-				.getResult());
+		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere");
+		GateStepReport checkReport = xmlCheck.step(build, null, null);
+		assertEquals(Result.FAILURE, checkReport.getResult());
 		assertFalse(checkReport.getReason().contains("Exception"));
 	}
 
@@ -157,7 +159,7 @@ public class XPathExpressionCheckTest {
 				throw new RuntimeException();
 			}
 		};
-		CheckReport checkReport = xmlCheck.check(build, null, null);
+		GateStepReport checkReport = xmlCheck.step(build, null, null);
 		assertEquals(Result.FAILURE, checkReport.getResult());
 		assertTrue(checkReport.getReason().contains("Exception"));
 	}
@@ -175,10 +177,10 @@ public class XPathExpressionCheckTest {
 	}
 
 	@Test
-	public void testReasonIsEmptyWhenReportingIsOff(){
-		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId", false); 
-		CheckReport result = xmlCheck.check(build, null, null);
-		assertEquals(Result.SUCCESS, result.getResult()); 
-		assertEquals("", result .getReason());
+	public void testReasonIsEmptyWhenReportingIsOff() {
+		xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/groupId", false);
+		GateStepReport result = xmlCheck.step(build, null, null);
+		assertEquals(Result.SUCCESS, result.getResult());
+		assertEquals("", result.getReason());
 	}
 }

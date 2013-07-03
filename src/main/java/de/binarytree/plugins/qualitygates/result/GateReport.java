@@ -6,76 +6,77 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.binarytree.plugins.qualitygates.Gate;
-import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.checks.GateStep;
 
-public class GateReport extends ListContainer<CheckReport>{
+public class GateReport extends ListContainer<GateStepReport> {
 
 	private String gateName;
-	private Result result = Result.NOT_BUILT;  
-	private transient Gate gate; 
+	private Result result = Result.NOT_BUILT;
+	private transient Gate gate;
 
 	public GateReport(Gate gate) {
-		this.gateName = gate.getName(); 
-		this.gate = gate; 
+		this.gateName = gate.getName();
+		this.gate = gate;
 	}
 
-	private List<CheckReport> checks(){
-		return this.getItems(); 
+	private List<GateStepReport> steps() {
+		return this.getItems();
 	}
-	
-	public String getGateName(){
-		return this.gateName; 
+
+	public String getGateName() {
+		return this.gateName;
 	}
 
 	public Result getResult() {
-		return this.result; 
+		return this.result;
 	}
 
-	public int getNumberOfChecks() {
-		return this.checks().size(); 
+	public int getNumberOfSteps() {
+		return this.steps().size();
 	}
 
 	public void setResult(Result result) {
-		this.result = result; 
+		this.result = result;
 	}
 
-	public void addCheckResult(CheckReport checkReport) {
-		this.addOrReplaceItem(checkReport); 
-		
+	public void addStepReport(GateStepReport stepReport) {
+		this.addOrReplaceItem(stepReport);
+
 	}
 
-	public List<CheckReport> getCheckResults() {
-		return new LinkedList<CheckReport>(this.checks()); 
+	public List<GateStepReport> getStepReports() {
+		return new LinkedList<GateStepReport>(this.steps());
 	}
 
-	public boolean belongsTo(Gate gate){
-		return this.gate == gate; 
+	public boolean belongsTo(Gate gate) {
+		return this.gate == gate;
 	}
-	
-	public boolean referencesSameGateAs(GateReport gateReport){
-		return this.gate == gateReport.gate; 
+
+	public boolean referencesSameGateAs(GateReport gateReport) {
+		return this.gate == gateReport.gate;
 	}
+
 	@Override
-	protected boolean isSameItem(CheckReport a, CheckReport b) {
-		return a.referencesSameCheckAs(b); 
+	protected boolean isSameItem(GateStepReport a, GateStepReport b) {
+		return a.referencesSameStepAs(b);
 	}
 
-	public LinkedList<String> getReasonOfFailure() {
-		LinkedList<String> reasons = new LinkedList<String>(); 
-		for(CheckReport result : this.checks()){
-			if(result.getResult().isWorseOrEqualTo(Result.FAILURE)){
-				reasons.add(result.getReason()); 
+	public List<String> getReasonOfFailure() {
+		LinkedList<String> reasons = new LinkedList<String>();
+		for (GateStepReport report : this.steps()) {
+			if (report.getResult().isWorseOrEqualTo(Result.FAILURE)) {
+				reasons.add(report.getReason());
 			}
 		}
-		return reasons; 
+		return reasons;
 	}
 
-	public CheckReport getResultFor(Check check) {
-		for(CheckReport result : this.getCheckResults()){
-			if(result.references(check)){
-				return result; 
+	public GateStepReport getReportFor(GateStep step) {
+		for (GateStepReport report : this.getStepReports()) {
+			if (report.references(step)) {
+				return report;
 			}
 		}
-		return null; 
+		return null;
 	}
 }

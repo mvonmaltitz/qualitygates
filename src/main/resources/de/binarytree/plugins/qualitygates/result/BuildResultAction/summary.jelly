@@ -4,8 +4,8 @@
       
       <t:summary icon="${rootURL}/../plugin/qualitygates/images/48x48/qualitygate_icon.png">
         <a href="${it.urlName}">${it.displayName}</a>
-           <p>${it.gatesResult.numberOfSuccessfulGates}/${it.gatesResult.numberOfGates} Gates successful</p>
-  <j:set var="terminationReasons" value="${it.gatesResult.reasonsOfTermination}"/>
+           <p>${it.qualityLineReport.numberOfSuccessfulGates}/${it.qualityLineReport.numberOfGates} Gates successful</p>
+  <j:set var="terminationReasons" value="${it.qualityLineReport.reasonsOfTermination}"/>
   <j:if test="${size(terminationReasons) > 0}"  >
   Reasons for termination: 
   <ul>

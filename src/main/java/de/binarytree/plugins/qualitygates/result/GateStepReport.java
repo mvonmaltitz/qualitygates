@@ -1,19 +1,19 @@
 package de.binarytree.plugins.qualitygates.result;
 
 import hudson.model.Result;
-import de.binarytree.plugins.qualitygates.checks.Check;
+import de.binarytree.plugins.qualitygates.checks.GateStep;
 
-public class CheckReport {
+public class GateStepReport {
 
-	private String checkName;
+	private String stepName;
 	private String description;
 	private Result result = Result.NOT_BUILT;
 	private String reason;
-	private Check check;
+	private GateStep step;
 
-	public CheckReport(Check check) {
-		this.check = check; 
-		this.checkName = check.getDescriptor().getDisplayName();
+	public GateStepReport(GateStep check) {
+		this.step = check;
+		this.stepName = check.getDescriptor().getDisplayName();
 		this.description = check.getDescription();
 	}
 
@@ -21,8 +21,8 @@ public class CheckReport {
 		return this.description;
 	}
 
-	public String getCheckName() {
-		return this.checkName;
+	public String getStepName() {
+		return this.stepName;
 	}
 
 	public void setResult(Result result) {
@@ -44,17 +44,18 @@ public class CheckReport {
 	}
 
 	public String getReason() {
-		return this.reason; 
+		return this.reason;
 	}
 
-	public boolean referencesSameCheckAs(CheckReport b) {
-		return this.check == b.check; 
+	public boolean referencesSameStepAs(GateStepReport b) {
+		return this.step == b.step;
 	}
 
-	public boolean references(Check check) {
-		return this.check.equals(check); 
+	public boolean references(GateStep check) {
+		return this.step.equals(check);
 	}
-	public Check getCheck(){
-		return this.check; 
+
+	public GateStep getStep() {
+		return this.step;
 	}
 }

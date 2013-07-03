@@ -11,16 +11,17 @@ import java.util.List;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 
-public class GateEvaluator {
+public class QualityLineEvaluator {
 	private List<Gate> gates = new LinkedList<Gate>();
 	private boolean executeGates;
 	private QualityLineReport qualityLineReport;
 
-	public GateEvaluator(List<Gate> gates) {
+	public QualityLineEvaluator(List<Gate> gates) {
 		this(gates, new QualityLineReport());
 	}
 
-	public GateEvaluator(List<Gate> gates, QualityLineReport qualityLineReport) {
+	public QualityLineEvaluator(List<Gate> gates,
+			QualityLineReport qualityLineReport) {
 		if (gates != null) {
 			this.gates.addAll(gates);
 		}
@@ -68,18 +69,18 @@ public class GateEvaluator {
 
 	protected GateReport executeGateAndAddToReport(AbstractBuild build,
 			Launcher launcher, BuildListener listener, Gate gate) {
-		GateReport gateReport = gate.check(build, launcher, listener);
-		qualityLineReport.addGateResult(gateReport);
+		GateReport gateReport = gate.evaluate(build, launcher, listener);
+		qualityLineReport.addGateReport(gateReport);
 		return gateReport;
 	}
 
 	private GateReport getFormerGateResultFor(Gate gate) {
-		return this.qualityLineReport.getGateResultFor(gate);
+		return this.qualityLineReport.getGateReportFor(gate);
 	}
 
 	protected GateReport addNotBuiltGateDocumentationToReport(Gate gate) {
 		GateReport gateReport = gate.document();
-		qualityLineReport.addGateResult(gateReport);
+		qualityLineReport.addGateReport(gateReport);
 		return gateReport;
 	}
 

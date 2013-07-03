@@ -16,7 +16,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class XPathExpressionCountCheck extends XMLCheck {
 
@@ -35,8 +35,7 @@ public class XPathExpressionCountCheck extends XMLCheck {
 
 	public XPathExpressionCountCheck(String targetFile, String expression,
 			int successThreshold, int warningThreshold) {
-		this.expression = expression;
-		this.targetFile = targetFile;
+		super(expression, targetFile);
 		this.successThreshold = successThreshold;
 		this.warningThreshold = warningThreshold;
 	}
@@ -54,16 +53,16 @@ public class XPathExpressionCountCheck extends XMLCheck {
 	}
 
 	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher, CheckReport checkReport) {
+	public void doStep(AbstractBuild build, BuildListener listener,
+			Launcher launcher, GateStepReport checkReport) {
 		try {
 			matchExpression(build, checkReport);
 		} catch (Exception e) {
-			failCheckAndlogExceptionInCheckReport(checkReport, e);
+			failStepAndlogExceptionInCheckReport(checkReport, e);
 		}
 	}
 
-	private void matchExpression(AbstractBuild build, CheckReport checkReport)
+	private void matchExpression(AbstractBuild build, GateStepReport checkReport)
 			throws IOException, ParserConfigurationException, SAXException,
 			XPathExpressionException {
 		InputStream stream = this.obtainInputStream(build);
@@ -71,7 +70,7 @@ public class XPathExpressionCountCheck extends XMLCheck {
 		this.setCheckResult(checkReport, nodes);
 	}
 
-	private void setCheckResult(CheckReport checkReport, NodeList nodes) {
+	private void setCheckResult(GateStepReport checkReport, NodeList nodes) {
 		if (nodes != null) {
 			int length = nodes.getLength();
 
@@ -104,12 +103,6 @@ public class XPathExpressionCountCheck extends XMLCheck {
 
 	public boolean countIsWarning(int count) {
 		return count <= this.warningThreshold;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "[Occurence of " + this.getExpression()
-				+ " in " + this.getTargetFile() + "]";
 	}
 
 	@Override

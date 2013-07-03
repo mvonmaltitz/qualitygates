@@ -21,44 +21,52 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+public abstract class XMLCheck extends GateStep {
 
-public abstract class XMLCheck extends Check{
+	private String expression;
+	private String targetFile;
 
-	protected String expression;
-	protected String targetFile;
+	public XMLCheck(String expression, String targetFile) {
+		this.expression = expression;
+		this.targetFile = targetFile;
+	}
 
-	public String getExpression(){
+	public String getExpression() {
 		return this.expression;
 	}
 
-	public String getTargetFile(){
+	public String getTargetFile() {
 		return this.targetFile;
 	}
 
-	protected NodeList getMatchingNodes(InputStream stream) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException{
+	protected NodeList getMatchingNodes(InputStream stream)
+			throws ParserConfigurationException, SAXException, IOException,
+			XPathExpressionException {
 		DocumentBuilderFactory domFactory = DocumentBuilderFactory
 				.newInstance();
-		domFactory.setNamespaceAware(false); // never forget this!
+		domFactory.setNamespaceAware(false);
 		DocumentBuilder builder = domFactory.newDocumentBuilder();
 		Document doc = builder.parse(stream);
-	
+
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		XPathExpression expr = xpath.compile(this.getExpression());
-	
-		Object result = expr.evaluate(doc, XPathConstants.NODESET);
-		NodeList nodes = (NodeList) result;
-		return nodes;
+
+		return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 	}
 
-	protected InputStream obtainInputStream(AbstractBuild build) throws IOException{
+	protected InputStream obtainInputStream(AbstractBuild build)
+			throws IOException {
 		FilePath pom = build.getModuleRoot().child(this.targetFile);
-		InputStream stream = pom.read();
-		return stream;
+		return pom.read();
 	}
 
-	public static abstract class XMLCheckDescriptor extends CheckDescriptor {
+	@Override
+	public String toString() {
+		return super.toString() + "[" + this.getDescription() + "]";
+	}
 
+	public abstract static class XMLCheckDescriptor extends GateStepDescriptor {
 
 		public FormValidation doCheckExpression(@QueryParameter String value) {
 			if (value.length() == 0) {
@@ -89,6 +97,5 @@ public abstract class XMLCheck extends Check{
 			return FormValidation.ok();
 		}
 
-
-}
+	}
 }

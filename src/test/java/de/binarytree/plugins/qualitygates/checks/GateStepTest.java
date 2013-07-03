@@ -11,16 +11,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.TestHelper;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
-public class CheckTest {
+public class GateStepTest {
 	String exceptionMessage = "Exception message";
 
-	class MockCheck extends Check {
+	class MockCheck extends GateStep {
 
 		@Override
-		public void doCheck(AbstractBuild build, BuildListener listener,
-				Launcher launcher, CheckReport checkReport) {
+		public void doStep(AbstractBuild build, BuildListener listener,
+				Launcher launcher, GateStepReport checkReport) {
 			throw new IllegalArgumentException(exceptionMessage);
 		}
 
@@ -29,7 +29,7 @@ public class CheckTest {
 			return "This check throws an unchecked exception";
 		}
 
-		class DescriptorImpl extends CheckDescriptor {
+		class DescriptorImpl extends GateStepDescriptor {
 
 			@Override
 			public String getDisplayName() {
@@ -57,7 +57,7 @@ public class CheckTest {
 
 	@Test
 	public void testExceptionBecomesFailureReportResult() {
-		CheckReport report = check.check(build, listener, launcher);
+		GateStepReport report = check.step(build, listener, launcher);
 		assertEquals(Result.FAILURE, report.getResult());
 		assertTrue(report.getReason().contains(exceptionMessage));
 

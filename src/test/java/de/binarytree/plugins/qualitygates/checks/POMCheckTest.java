@@ -12,6 +12,7 @@ public class POMCheckTest {
 
 	private POMCheck pomCheck;
 	private AbstractBuild build;
+
 	@Test
 	public void testDescriptionContainsPOM() {
 		DescriptorImpl descriptor = new POMCheck.DescriptorImpl();
@@ -25,7 +26,7 @@ public class POMCheckTest {
 	}
 
 	@Test
-	public void testGettingFile(){
+	public void testGettingFile() {
 		pomCheck = new POMCheck("Expression", true);
 		assertEquals("pom.xml", pomCheck.getTargetFile());
 	}

@@ -17,9 +17,9 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.checks.Check;
-import de.binarytree.plugins.qualitygates.checks.CheckDescriptor;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.checks.GateStep;
+import de.binarytree.plugins.qualitygates.checks.GateStepDescriptor;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public class AndGateTest {
@@ -32,40 +32,40 @@ public class AndGateTest {
 
 	private AndGate gate;
 	private AbstractBuild build;
-	private LinkedList<Check> checkList;
+	private LinkedList<GateStep> checkList;
 	private BuildListener listener;
-	private CheckDescriptor descriptor;
+	private GateStepDescriptor descriptor;
 
 	@Before
 	public void setUp() throws Exception {
-		PrintStream stream = mock(PrintStream.class); 
-		
+		PrintStream stream = mock(PrintStream.class);
+
 		build = mock(AbstractBuild.class);
 		listener = mock(BuildListener.class);
-		when(listener.getLogger()).thenReturn(stream); 
-		checkList = new LinkedList<Check>();
-		descriptor = mock(CheckDescriptor.class);
+		when(listener.getLogger()).thenReturn(stream);
+		checkList = new LinkedList<GateStep>();
+		descriptor = mock(GateStepDescriptor.class);
 		when(descriptor.getDisplayName()).thenReturn("Mock Check");
 	}
 
-	@Test 
-	public void testGetDisplayName(){
-		QualityGateDescriptor  descriptor = new AndGate.DescriptorImpl(); 
-		assertTrue(descriptor.getDisplayName().contains("Gate")); 
-		assertTrue(descriptor.getDisplayName().contains("AND")); 
+	@Test
+	public void testGetDisplayName() {
+		QualityGateDescriptor descriptor = new AndGate.DescriptorImpl();
+		assertTrue(descriptor.getDisplayName().contains("Gate"));
+		assertTrue(descriptor.getDisplayName().contains("AND"));
 	}
-	
+
 	@Test
 	public void testAddCheck() {
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
 		gate = new AndGate("Eins", checkList);
-		assertEquals(1, gate.getNumberOfChecks());
+		assertEquals(1, gate.getNumberOfSteps());
 	}
 
 	@Test
 	public void testAddTwoChecks() {
 		buildGateWithTwoSuccessfullChecks();
-		assertEquals(2, gate.getNumberOfChecks());
+		assertEquals(2, gate.getNumberOfSteps());
 	}
 
 	@Test
@@ -101,35 +101,38 @@ public class AndGateTest {
 	@Test
 	public void testInitializeGateWithNullCollection() {
 		AndGate gate = new AndGate("NullGate", null);
-		assertEquals(0, gate.getNumberOfChecks());
+		assertEquals(0, gate.getNumberOfSteps());
 	}
 
 	@Test
-	public void testEmptyGateIsUnstable(){
+	public void testEmptyGateIsUnstable() {
 		gate = new AndGate("NullGate", null);
-		this.performGateCheckAndExpect(UNSTABLE); 
-		
+		this.performGateCheckAndExpect(UNSTABLE);
+
 	}
+
 	public void performGateCheckAndExpect(Result expectedResult) {
-		GateReport result = gate.check(build, null, listener);
+		GateReport result = gate.evaluate(build, null, listener);
 		assertEquals(expectedResult, result.getResult());
 	}
 
-	public Check getCheckMockWithResult(Result result) {
-		Check check = mock(Check.class);
-		when(check.getDescriptor()).thenReturn(descriptor); 
-		CheckReport checkReport = new CheckReport(check); 
-		checkReport.setResult(result, "Mock Result"); 
-		when(check.check(any(AbstractBuild.class), any(BuildListener.class), any(Launcher.class))).thenReturn(checkReport);
-		when(check.document()).thenReturn(checkReport); 
+	public GateStep getCheckMockWithResult(Result result) {
+		GateStep check = mock(GateStep.class);
+		when(check.getDescriptor()).thenReturn(descriptor);
+		GateStepReport checkReport = new GateStepReport(check);
+		checkReport.setResult(result, "Mock Result");
+		when(
+				check.step(any(AbstractBuild.class), any(BuildListener.class),
+						any(Launcher.class))).thenReturn(checkReport);
+		when(check.document()).thenReturn(checkReport);
 		return check;
 	}
 
 	@Test
 	public void testGivenCollectionIsNotDirectlySet() {
 		buildGateWithTwoSuccessfullChecks();
-		assertNotSame(gate.getChecks(), checkList);
-		assertEquals(gate.getChecks(), checkList);
+		assertNotSame(gate.getSteps(), checkList);
+		assertEquals(gate.getSteps(), checkList);
 	}
 
 	@Test
@@ -137,14 +140,13 @@ public class AndGateTest {
 		buildGateWithTwoSuccessfullChecks();
 		GateReport gateReport = gate.document();
 		assertEquals(Result.NOT_BUILT, gateReport.getResult());
-		assertEquals(2, gateReport.getCheckResults().size());
+		assertEquals(2, gateReport.getStepReports().size());
 	}
 
-	private void buildGateWithTwoSuccessfullChecks(){
+	private void buildGateWithTwoSuccessfullChecks() {
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
 		checkList.add(this.getCheckMockWithResult(SUCCESS));
 		gate = new AndGate("Eins", checkList);
 	}
 
-	
 }

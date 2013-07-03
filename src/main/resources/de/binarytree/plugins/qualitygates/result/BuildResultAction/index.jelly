@@ -113,18 +113,18 @@
         <l:main-panel>
         <div id="gatereport">
             <h1>${it.displayName}</h1>
-            <h2>${it.gatesResult.numberOfGates} Gates</h2>
+            <h2>${it.qualityLineReport.numberOfGates} Gates</h2>
             <ul class="gates">
-                <j:forEach var="gateResult" items="${it.gatesResult.gateResults}" >
-				    <li class="gate ${gateResult.result}">
-				    <p class="gatetitle ${gateResult.result}">Gate "${gateResult.gateName}"
-				    <span class="gateicon ${gateResult.result}" /></p>
+                <j:forEach var="gateReport" items="${it.qualityLineReport.gateReports}" >
+				    <li class="gate ${gateReport.result}">
+				    <p class="gatetitle ${gateReport.result}">Gate "${gateReport.gateName}"
+				    <span class="gateicon ${gateReport.result}" /></p>
 			    <ul class="checks">
-                <j:forEach var="checkResult" items="${gateResult.checkResults}" >
-                <li class="check ${checkResult.result}">
-                <p class="checktitle ${checkResult.result}">${checkResult.description}
-				    <span class="checkicon ${checkResult.result}" /></p>
-                <p class="reason"><j:out value="${checkResult.reason}" /></p>
+                <j:forEach var="stepReport" items="${gateReport.stepReports}" >
+                <li class="check ${stepReport.result}">
+                <p class="checktitle ${stepReport.result}">${stepReport.description}
+				    <span class="checkicon ${stepReport.result}" /></p>
+                <p class="reason"><j:out value="${stepReport.reason}" /></p>
                 </li>
 			    </j:forEach>
 			    </ul>

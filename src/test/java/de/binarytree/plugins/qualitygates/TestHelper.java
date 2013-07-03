@@ -8,11 +8,13 @@ import hudson.model.AbstractBuild;
 public class TestHelper {
 	public static AbstractBuild getBuildMock() {
 		return mock(AbstractBuild.class);
-	} 
-	public static Launcher getLauncherMock(){
-		return mock(Launcher.class); 
 	}
-	public static BuildListener getListenerMock(){
+
+	public static Launcher getLauncherMock() {
+		return mock(Launcher.class);
+	}
+
+	public static BuildListener getListenerMock() {
 		return mock(BuildListener.class);
 	}
 }

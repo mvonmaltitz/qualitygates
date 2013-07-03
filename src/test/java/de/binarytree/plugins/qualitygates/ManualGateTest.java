@@ -12,17 +12,19 @@ public class ManualGateTest {
 
 	@Before
 	public void setUp() throws Exception {
-		gate = new ManualGate("Gate");  
+		gate = new ManualGate("Gate");
 	}
-	
-    @Test	
-	public void testHasOneCheck(){
-		assertEquals(gate.getNumberOfChecks(), 1); 
+
+	@Test
+	public void testHasOneCheck() {
+		assertEquals(gate.getNumberOfSteps(), 1);
 	}
-    
-    @Test
-    public void testGetDisplayName(){
-    	assertTrue("Display Name contains 'manual'", new ManualGate.DescriptorImpl().getDisplayName().toLowerCase().contains("manual")); 
-    }
+
+	@Test
+	public void testGetDisplayName() {
+		assertTrue("Display Name contains 'manual'",
+				new ManualGate.DescriptorImpl().getDisplayName().toLowerCase()
+						.contains("manual"));
+	}
 
 }

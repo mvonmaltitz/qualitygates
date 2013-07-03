@@ -8,11 +8,12 @@ public class POMCheck extends XPathExpressionCheck {
 
 	@DataBoundConstructor
 	public POMCheck(String expression, boolean reportContent) {
-		super("pom.xml", expression, reportContent); 
+		super("pom.xml", expression, reportContent);
 	}
 
 	@Extension
-	public static class DescriptorImpl extends XPathExpressionCheck.DescriptorImpl {
+	public static class DescriptorImpl extends
+			XPathExpressionCheck.DescriptorImpl {
 
 		@Override
 		public String getDisplayName() {

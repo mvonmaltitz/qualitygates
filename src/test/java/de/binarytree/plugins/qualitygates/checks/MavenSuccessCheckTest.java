@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck.MavenSuccessCheckDescriptor;
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class MavenSuccessCheckTest {
 
@@ -24,9 +24,9 @@ public class MavenSuccessCheckTest {
 	public void setUp() {
 		descriptor = new MavenSuccessCheck.MavenSuccessCheckDescriptor();
 		build = mock(AbstractBuild.class, RETURNS_DEEP_STUBS);
-		check = new MavenSuccessCheck(){
-			public MavenSuccessCheckDescriptor getDescriptor(){
-				return descriptor; 
+		check = new MavenSuccessCheck() {
+			public MavenSuccessCheckDescriptor getDescriptor() {
+				return descriptor;
 			}
 		};
 	}
@@ -44,7 +44,7 @@ public class MavenSuccessCheckTest {
 	@Test
 	public void testBuildIsNull() {
 		build = null;
-		CheckReport result = check.check(build, null, null);
+		GateStepReport result = check.step(build, null, null);
 		assertEquals(Result.FAILURE, result.getResult());
 	}
 
@@ -60,7 +60,7 @@ public class MavenSuccessCheckTest {
 
 	public void testBuildResult(Result desiredResult) {
 		when(build.getResult()).thenReturn(desiredResult);
-		CheckReport result = check.check(build, null, null);
+		GateStepReport result = check.step(build, null, null);
 		assertEquals(desiredResult, result.getResult());
 	}
 

@@ -16,7 +16,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class XPathExpressionCheck extends XMLCheck {
 
@@ -25,8 +25,7 @@ public class XPathExpressionCheck extends XMLCheck {
 	@DataBoundConstructor
 	public XPathExpressionCheck(String targetFile, String expression,
 			boolean reportContent) {
-		this.expression = expression;
-		this.targetFile = targetFile;
+		super(expression, targetFile);
 		this.reportContent = reportContent;
 	}
 
@@ -35,16 +34,16 @@ public class XPathExpressionCheck extends XMLCheck {
 	}
 
 	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher, CheckReport checkReport) {
+	public void doStep(AbstractBuild build, BuildListener listener,
+			Launcher launcher, GateStepReport checkReport) {
 		try {
 			matchExpression(build, checkReport);
 		} catch (Exception e) {
-			failCheckAndlogExceptionInCheckReport(checkReport, e);
+			failStepAndlogExceptionInCheckReport(checkReport, e);
 		}
 	}
 
-	private void matchExpression(AbstractBuild build, CheckReport checkReport)
+	private void matchExpression(AbstractBuild build, GateStepReport checkReport)
 			throws IOException, ParserConfigurationException, SAXException,
 			XPathExpressionException {
 		InputStream stream = this.obtainInputStream(build);
@@ -52,7 +51,7 @@ public class XPathExpressionCheck extends XMLCheck {
 		this.setCheckResult(checkReport, content);
 	}
 
-	private void setCheckResult(CheckReport checkReport, String content) {
+	private void setCheckResult(GateStepReport checkReport, String content) {
 		if (content != null) {
 			if (reportContent) {
 				checkReport.setResult(Result.SUCCESS, "Content: " + content);
@@ -76,11 +75,6 @@ public class XPathExpressionCheck extends XMLCheck {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return super.toString() + "[Occurence of " + this.getExpression()
-				+ " in " + this.getTargetFile() + "]";
-	}
 
 	@Override
 	public String getDescription() {

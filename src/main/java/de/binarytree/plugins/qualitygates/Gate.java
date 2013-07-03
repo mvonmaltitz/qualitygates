@@ -11,36 +11,38 @@ import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public abstract class Gate implements Describable<Gate>, ExtensionPoint {
 
-    protected String name;
+	private String name;
 
+	public Gate(String name) {
+		this.name = name;
+	}
 
-    public Gate(String name) {
-        this.name = name;
-    }
+	public GateReport evaluate(AbstractBuild build, Launcher launcher,
+			BuildListener listener) {
+		GateReport gateReport = new GateReport(this);
+		this.doEvaluation(build, launcher, listener, gateReport);
+		return gateReport;
+	}
 
-    public GateReport check(AbstractBuild build, Launcher launcher, BuildListener listener) {
-        GateReport gateReport = new GateReport(this);
-        this.doCheck(build, launcher, listener, gateReport);
-        return gateReport;
-    }
+	public GateReport document() {
+		return new GateReport(this);
+	}
 
-    public GateReport document() {
-        GateReport gateReport = new GateReport(this);
-        return gateReport;
-    }
+	public abstract void doEvaluation(AbstractBuild build, Launcher launcher,
+			BuildListener listener, GateReport gateReport);
 
-    public abstract void doCheck(AbstractBuild build, Launcher launcher, BuildListener listener, GateReport gateReport);
+	public QualityGateDescriptor getDescriptor() {
+		return (QualityGateDescriptor) Hudson.getInstance().getDescriptor(
+				getClass());
+	}
 
-    public QualityGateDescriptor getDescriptor() {
-        return (QualityGateDescriptor) Hudson.getInstance().getDescriptor(getClass());
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public String getName() {
-        return this.name;
-    }
-
-    public static DescriptorExtensionList<Gate, QualityGateDescriptor> all() {
-        return Hudson.getInstance().<Gate, QualityGateDescriptor> getDescriptorList(Gate.class);
-    }
+	public static DescriptorExtensionList<Gate, QualityGateDescriptor> all() {
+		return Hudson.getInstance()
+				.<Gate, QualityGateDescriptor> getDescriptorList(Gate.class);
+	}
 
 }

@@ -11,16 +11,16 @@ import java.util.Random;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import de.binarytree.plugins.qualitygates.result.CheckReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
-public class ManualCheck extends Check {
+public class ManualCheck extends GateStep {
 
 	public static final String AWAITING_MANUAL_APPROVAL = "Awaiting manual approval.";
-	public static final Random rand = new Random();
+	public static final Random RAND = new Random();
 
-	public transient String hash;
+	private transient String hash;
 
-	public transient boolean approved;
+	private transient boolean approved;
 
 	@DataBoundConstructor
 	public ManualCheck() {
@@ -32,10 +32,10 @@ public class ManualCheck extends Check {
 	}
 
 	@Override
-	public void doCheck(AbstractBuild build, BuildListener listener,
-			Launcher launcher, CheckReport checkReport) {
+	public void doStep(AbstractBuild build, BuildListener listener,
+			Launcher launcher, GateStepReport checkReport) {
 		this.hash = Long.toString(System.currentTimeMillis())
-				+ Integer.toString(rand.nextInt());
+				+ Integer.toString(RAND.nextInt());
 		if (!approved) {
 			String approveLink = generateApproveLink();
 			checkReport.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL
@@ -45,6 +45,10 @@ public class ManualCheck extends Check {
 					+ this.getCurrentUserOrUnknown());
 			this.approved = false;
 		}
+	}
+
+	protected void setHash(String hash) {
+		this.hash = hash;
 	}
 
 	private String generateApproveLink() {
@@ -67,7 +71,8 @@ public class ManualCheck extends Check {
 
 	@Override
 	public boolean equals(Object o) {
-		return o instanceof ManualCheck && ((ManualCheck) o).hash.equals(this.hash);
+		return o instanceof ManualCheck
+				&& ((ManualCheck) o).hash.equals(this.hash);
 	}
 
 	@Override
@@ -76,7 +81,7 @@ public class ManualCheck extends Check {
 	}
 
 	@Extension
-	public static class DescriptorImpl extends CheckDescriptor {
+	public static class DescriptorImpl extends GateStepDescriptor {
 		@Override
 		public String getDisplayName() {
 			return "Manual Check";
