@@ -1,4 +1,4 @@
-package de.binarytree.plugins.qualitygates.checks;
+package de.binarytree.plugins.qualitygates.checks.manualcheck;
 
 import hudson.Extension;
 import hudson.Launcher;
@@ -11,6 +11,8 @@ import java.util.Random;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import de.binarytree.plugins.qualitygates.checks.GateStep;
+import de.binarytree.plugins.qualitygates.checks.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class ManualCheck extends GateStep {
@@ -31,6 +33,10 @@ public class ManualCheck extends GateStep {
         this.approved = true;
     }
 
+    public boolean isApproved(){
+        return this.approved; 
+    }
+    
     @Override
     public void doStep(AbstractBuild build, BuildListener listener,
             Launcher launcher, GateStepReport checkReport) {

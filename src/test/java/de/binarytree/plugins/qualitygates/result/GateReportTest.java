@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.checks.GateStep;
 
-public class GateResultTest {
+public class GateReportTest {
 
     private GateReport gateReport;
     private GateStep check;
@@ -36,14 +36,13 @@ public class GateResultTest {
     }
 
     private void setCheckMockName(GateStep check, String name) {
-        when(check.getDescriptor().getDisplayName()).thenReturn(name);
+        when(check.getDisplayName()).thenReturn(name);
         when(check.getDescription()).thenReturn("Check String Representation");
     }
 
     @Test
     public void testNewCheckResultHasCorrectCheckName() {
-        assertEquals(checkResult1.getStepName(), check.getDescriptor()
-                .getDisplayName());
+        assertEquals(checkResult1.getStepName(), check.getDisplayName());
         assertEquals(checkResult1.getDescription(), check.getDescription());
     }
 

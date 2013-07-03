@@ -13,7 +13,7 @@ public class GateStepReport {
 
     public GateStepReport(GateStep check) {
         this.step = check;
-        this.stepName = check.getDescriptor().getDisplayName();
+        this.stepName = check.getDisplayName();
         this.description = check.getDescription();
     }
 

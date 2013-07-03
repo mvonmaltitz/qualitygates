@@ -40,7 +40,11 @@ public abstract class GateStep implements Describable<GateStep>, ExtensionPoint 
             Launcher launcher, GateStepReport checkReport);
 
     public abstract String getDescription();
+    
 
+    public String getDisplayName(){
+        return this.getDescriptor().getDisplayName(); 
+    }
     @Override
     public String toString() {
         return "GateStep [" + this.getDescriptor().getDisplayName() + "]";

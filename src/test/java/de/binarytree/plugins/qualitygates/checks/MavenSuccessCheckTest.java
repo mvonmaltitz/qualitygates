@@ -11,6 +11,7 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck;
 import de.binarytree.plugins.qualitygates.checks.MavenSuccessCheck.MavenSuccessCheckDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 

@@ -19,13 +19,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
+import org.mockito.Mockito;
 
 import de.binarytree.plugins.qualitygates.AndGate;
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.QualityLineEvaluator;
 import de.binarytree.plugins.qualitygates.checks.GateStep;
 import de.binarytree.plugins.qualitygates.checks.FailingCheck;
-import de.binarytree.plugins.qualitygates.checks.ManualCheck;
+import de.binarytree.plugins.qualitygates.checks.manualcheck.ManualCheck;
 
 public class BuildResultActionTest {
 
@@ -46,7 +47,6 @@ public class BuildResultActionTest {
         public MockManualCheck(String hash) {
             this.setHash(hash);
         }
-
         public String getCurrentUser() {
             return "Current User";
         }
@@ -95,76 +95,6 @@ public class BuildResultActionTest {
         return gateEvaluator;
     }
 
-    @Test
-    public void testGetNextUnbuiltGateUnsuccessfullAsSecondGateFails() {
-        GateStep check = new FailingCheck() {
-            public DescriptorImpl getDescriptor() {
-                return new FailingCheck.DescriptorImpl();
-            }
-        };
-        List<GateStep> checks = new LinkedList<GateStep>();
-        checks.add(check);
-        gate2 = new AndGate("Gate 2", checks);
-        gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        gateEvaluator.evaluate(null, null, null);
-        GateReport gateReport = action.getNextUnbuiltGate(gateEvaluator
-                .getLatestResults());
-        assertNull(gateReport);
-    }
-
-    @Test
-    public void testGetNextUnbuiltGateUnsuccessfull() {
-        gate2 = new AndGate("Gate 2", null);
-        gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        GateReport gateReport = action.getNextUnbuiltGate(gateEvaluator
-                .getLatestResults());
-        assertNull(gateReport);
-    }
-
-    @Test
-    public void testGetNextUnbuiltGateSuccessfull() {
-        GateReport gateReport = action.getNextUnbuiltGate(gateEvaluator
-                .getLatestResults());
-        assertEquals("Gate 2", gateReport.getGateName());
-    }
-
-    @Test
-    public void testGetNextUnbuiltStepSuccessfull() {
-        QualityLineReport latestResults = gateEvaluator.getLatestResults();
-        GateStepReport checkReport = action.getNextUnbuiltStep(latestResults
-                .getGateReportFor(gate2));
-        GateStepReport manualCheckReport = latestResults
-                .getGateReportFor(gate2).getReportFor(mCheck1);
-        assertEquals(manualCheckReport, checkReport);
-        assertEquals(manualCheckReport.getStep(), mCheck1);
-    }
-
-    @Test
-    public void testGetNextUnbuiltStepUnsuccessfull() {
-        gate2 = new AndGate("Gate 2", null);
-        gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        gateEvaluator.evaluate(null, null, null);
-        QualityLineReport latestResults = gateEvaluator.getLatestResults();
-        GateStepReport checkReport = action.getNextUnbuiltStep(latestResults
-                .getGateReportFor(gate2));
-        assertNull(checkReport);
-    }
-
-    @Test
-    public void testManualApprovalViaGetRequest() throws IOException {
-
-        QualityLineReport latestResults = gateEvaluator.getLatestResults();
-        GateStepReport checkResultBefore = action
-                .getNextUnbuiltStep(latestResults.getGateReportFor(gate2));
-
-        fakeStaplerRequest();
-
-        GateStepReport checkResultAfter = action
-                .getNextUnbuiltStep(latestResults.getGateReportFor(gate2));
-        assertFalse(checkResultAfter.referencesSameStepAs(checkResultBefore));
-        assertFalse(checkResultAfter.references(mCheck1));
-        assertTrue(checkResultAfter.references(mCheck2));
-    }
 
     private void fakeStaplerRequest() throws IOException {
         StaplerRequest req = mock(StaplerRequest.class);
@@ -177,4 +107,11 @@ public class BuildResultActionTest {
         when(build.getLogFile()).thenReturn(new File("/tmp/logfile.log"));
         action.doApprove(req, res);
     }
+    @Test
+    public void testManualApprovalViaGetRequest() throws IOException {
+        assertFalse(mCheck1.isApproved()); 
+        fakeStaplerRequest();
+        assertFalse(mCheck1.isApproved()); // Check toggles after reevaluation back to false
+    }
+
 }

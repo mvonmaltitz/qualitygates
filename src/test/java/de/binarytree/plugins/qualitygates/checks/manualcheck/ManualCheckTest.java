@@ -1,4 +1,4 @@
-package de.binarytree.plugins.qualitygates.checks;
+package de.binarytree.plugins.qualitygates.checks.manualcheck;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -12,6 +12,7 @@ import hudson.model.AbstractBuild;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.binarytree.plugins.qualitygates.checks.manualcheck.ManualCheck.DescriptorImpl;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class ManualCheckTest {
