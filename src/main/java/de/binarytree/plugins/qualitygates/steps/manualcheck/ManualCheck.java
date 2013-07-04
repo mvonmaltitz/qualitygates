@@ -38,8 +38,8 @@ public class ManualCheck extends GateStep {
     }
     
     @Override
-    public void doStep(AbstractBuild build, BuildListener listener,
-            Launcher launcher, GateStepReport checkReport) {
+    public void doStep(AbstractBuild build, Launcher launcher,
+            BuildListener listener, GateStepReport checkReport) {
         this.hash = Long.toString(System.currentTimeMillis())
                 + Integer.toString(RAND.nextInt());
         if (!approved) {

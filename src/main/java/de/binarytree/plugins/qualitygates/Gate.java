@@ -7,7 +7,6 @@ import hudson.model.BuildListener;
 import hudson.model.Describable;
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
-import de.binarytree.plugins.qualitygates.result.BuildResultAction;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 
 public abstract class Gate implements Describable<Gate>, ExtensionPoint {

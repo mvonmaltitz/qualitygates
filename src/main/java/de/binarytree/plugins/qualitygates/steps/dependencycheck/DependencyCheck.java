@@ -30,8 +30,8 @@ public class DependencyCheck extends GateStep {
     }
 
     @Override
-    public void doStep(AbstractBuild build, BuildListener listener,
-            Launcher launcher, GateStepReport checkReport) {
+    public void doStep(AbstractBuild build, Launcher launcher,
+            BuildListener listener, GateStepReport checkReport) {
         if (!buildExists(build)) {
             checkReport.setResult(Result.FAILURE,
                     "Cannot proceed, build has not been successful");

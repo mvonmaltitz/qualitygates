@@ -42,6 +42,16 @@ public class QualityLineEvaluatorTest {
     }
 
     @Test
+    public void testManyGatesSuccessful() {
+        this.addGateSequence(new Result[] { Result.SUCCESS, Result.SUCCESS,
+                Result.SUCCESS, Result.SUCCESS });
+
+        QualityLineReport result = this.evaluate();
+
+        assertEquals(4, result.getGateReports().size());
+        this.assertSequence(result, new Result[] { Result.SUCCESS,Result.SUCCESS,Result.SUCCESS,Result.SUCCESS });
+    }
+    @Test
     public void testExecutionStopsAfterUnbuildableGate() {
         this.addGateSequence(new Result[] { Result.SUCCESS, Result.NOT_BUILT,
                 Result.SUCCESS, Result.SUCCESS });

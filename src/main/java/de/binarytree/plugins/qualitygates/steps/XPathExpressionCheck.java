@@ -34,8 +34,8 @@ public class XPathExpressionCheck extends XMLCheck {
     }
 
     @Override
-    public void doStep(AbstractBuild build, BuildListener listener,
-            Launcher launcher, GateStepReport checkReport) {
+    public void doStep(AbstractBuild build, Launcher launcher,
+            BuildListener listener, GateStepReport checkReport) {
         try {
             matchExpression(build, checkReport);
         } catch (Exception e) {

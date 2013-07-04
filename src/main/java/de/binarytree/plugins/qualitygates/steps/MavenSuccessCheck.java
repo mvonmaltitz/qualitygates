@@ -19,8 +19,8 @@ public class MavenSuccessCheck extends GateStep {
     }
 
     @Override
-    public void doStep(AbstractBuild build, BuildListener listener,
-            Launcher launcher, GateStepReport checkReport) {
+    public void doStep(AbstractBuild build, Launcher launcher,
+            BuildListener listener, GateStepReport checkReport) {
         if (build != null && build.getResult() != null) {
             checkReport.setResult(build.getResult(),
                     build.getBuildStatusSummary().message);

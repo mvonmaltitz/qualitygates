@@ -47,7 +47,7 @@ public class ManualCheckTest {
     @Test
     public void testCheckResult() {
         GateStepReport result = new GateStepReport(check);
-        check.doStep(build, listener, launcher, result);
+        check.doStep(build, launcher, listener, result);
         assertEquals(Result.NOT_BUILT, result.getResult());
         assertTrue(result.getReason().startsWith(
                 ManualCheck.AWAITING_MANUAL_APPROVAL));

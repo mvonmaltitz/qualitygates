@@ -21,8 +21,8 @@ public class GateStepTest {
     class MockCheck extends GateStep {
 
         @Override
-        public void doStep(AbstractBuild build, BuildListener listener,
-                Launcher launcher, GateStepReport checkReport) {
+        public void doStep(AbstractBuild build, Launcher launcher,
+                BuildListener listener, GateStepReport checkReport) {
             throw new IllegalArgumentException(exceptionMessage);
         }
 

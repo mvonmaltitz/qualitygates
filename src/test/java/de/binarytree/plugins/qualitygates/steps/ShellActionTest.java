@@ -1,7 +1,7 @@
 package de.binarytree.plugins.qualitygates.steps;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.ShellAction;
 
 public class ShellActionTest {
 
@@ -80,8 +79,7 @@ public class ShellActionTest {
         when(
                 shell.perform(any(AbstractBuild.class), any(Launcher.class),
                         any(BuildListener.class))).thenReturn(true);
-        check.doStep(build, null, launcher, checkReport);
-        String logOutput = new String(stream.toByteArray());
+        check.doStep(build, launcher, null, checkReport);
         assertEquals(Result.SUCCESS, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class),
                 any(Launcher.class), any(BuildListener.class));
@@ -94,8 +92,7 @@ public class ShellActionTest {
                         any(BuildListener.class))).thenReturn(false);
         String unknownCommand = "asdlkjfalsdfjaldfjald";
         check = new MockExecutionCheck(unknownCommand);
-        check.doStep(build, null, launcher, checkReport);
-        String logOutput = new String(stream.toByteArray());
+        check.doStep(build,launcher, null, checkReport);
         assertEquals(Result.FAILURE, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class),
                 any(Launcher.class), any(BuildListener.class));
@@ -108,8 +105,7 @@ public class ShellActionTest {
                         any(BuildListener.class))).thenReturn(false);
         String command = "cat /aljf/aljf/asdfj/asdfjkdfjdkfj.txt";
         check = new MockExecutionCheck(command);
-        check.doStep(build, null, launcher, checkReport);
-        String logOutput = new String(stream.toByteArray());
+        check.doStep(build, launcher, null, checkReport);
         assertEquals(Result.FAILURE, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class),
                 any(Launcher.class), any(BuildListener.class));
@@ -122,8 +118,7 @@ public class ShellActionTest {
                 shell.perform(any(AbstractBuild.class), any(Launcher.class),
                         any(BuildListener.class))).thenThrow(
                 new InterruptedException());
-        check.doStep(build, null, launcher, checkReport);
-        String logOutput = new String(stream.toByteArray());
+        check.doStep(build, launcher, null, checkReport);
         assertEquals(Result.FAILURE, checkReport.getResult());
         Mockito.verify(shell).perform(any(AbstractBuild.class),
                 any(Launcher.class), any(BuildListener.class));

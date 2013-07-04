@@ -79,21 +79,21 @@ public class DependencyCheckTest {
     @Test
     public void testResultIsFailureIfBuildFailed() {
         when(build.getResult()).thenReturn(Result.FAILURE);
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.FAILURE, report.getResult());
     }
 
     @Test
     public void testResultIsFailureIfBuildNotBuilt() {
         when(build.getResult()).thenReturn(Result.NOT_BUILT);
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.FAILURE, report.getResult());
     }
 
     @Test
     public void testResultIsFailureIfBuildAborted() {
         when(build.getResult()).thenReturn(Result.ABORTED);
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.FAILURE, report.getResult());
     }
 
@@ -103,7 +103,7 @@ public class DependencyCheckTest {
         BuildLogFileParser parser = check.createLogFileParser();
         doThrow(new IOException("xxxmessagexxx")).when(parser).parseLogFile(
                 any(File.class));
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.FAILURE, report.getResult());
         assertTrue(report.getReason().toLowerCase().contains("xxxmessagexxx"));
     }
@@ -113,7 +113,7 @@ public class DependencyCheckTest {
         setBuildResultToSuccess();
         BuildLogFileParser parser = check.createLogFileParser();
         letParserReturn(parser, "");
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.UNSTABLE, report.getResult());
         assertTrue(report.getReason().toLowerCase()
                 .contains("dependency:analyze"));
@@ -125,7 +125,7 @@ public class DependencyCheckTest {
         BuildLogFileParser parser = check.createLogFileParser();
         letParserReturn(parser, DEPENDENCY_SECTION);
         letAnalysisReturn(check, 5, 10);
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.UNSTABLE, report.getResult());
         assertTrue(report.getReason().contains("5 undeclared"));
         assertTrue(report.getReason().contains("10 unused"));
@@ -137,7 +137,7 @@ public class DependencyCheckTest {
         BuildLogFileParser parser = check.createLogFileParser();
         letParserReturn(parser, DEPENDENCY_SECTION);
         letAnalysisReturn(check, 0, 2);
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.UNSTABLE, report.getResult());
         assertTrue(report.getReason().contains("2 unused"));
     }
@@ -148,7 +148,7 @@ public class DependencyCheckTest {
         BuildLogFileParser parser = check.createLogFileParser();
         letParserReturn(parser, DEPENDENCY_SECTION);
         letAnalysisReturn(check, 0, 0);
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.SUCCESS, report.getResult());
     }
 
@@ -158,7 +158,7 @@ public class DependencyCheckTest {
         BuildLogFileParser parser = check.createLogFileParser();
         letParserReturn(parser, DEPENDENCY_SECTION);
         letAnalysisReturn(check, 0, 0);
-        check.doStep(build, listener, launcher, report);
+        check.doStep(build, launcher, listener, report);
         assertEquals(Result.SUCCESS, report.getResult());
     }
 

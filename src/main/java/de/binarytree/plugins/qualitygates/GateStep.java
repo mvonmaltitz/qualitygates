@@ -19,7 +19,7 @@ public abstract class GateStep implements Describable<GateStep>, ExtensionPoint 
             Launcher launcher) {
         GateStepReport stepReport = this.document();
         try {
-            this.doStep(build, listener, launcher, stepReport);
+            this.doStep(build, launcher, listener, stepReport);
         } catch (Exception e) {
             failStepAndlogExceptionInCheckReport(stepReport, e);
         }
@@ -36,8 +36,8 @@ public abstract class GateStep implements Describable<GateStep>, ExtensionPoint 
                 e.getMessage() + Arrays.toString(e.getStackTrace()));
     }
 
-    public abstract void doStep(AbstractBuild build, BuildListener listener,
-            Launcher launcher, GateStepReport checkReport);
+    public abstract void doStep(AbstractBuild build, Launcher launcher,
+            BuildListener listener, GateStepReport checkReport);
 
     public abstract String getDescription();
     
