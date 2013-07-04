@@ -7,3 +7,4 @@ work/fingerprints/
 work/jobs/*/workspace/target/
 */work/jobs/*/workspace
 */work/jobs/*/builds
+work
