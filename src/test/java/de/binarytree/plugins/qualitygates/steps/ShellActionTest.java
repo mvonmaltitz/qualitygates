@@ -71,6 +71,7 @@ public class ShellActionTest {
     public void testSettingAndGettingParameter() {
         assertEquals(command, check.getCommand());
         assertTrue(check.getDescription().startsWith("$ "));
+        assertTrue(check.getDescriptor().getDisplayName().toLowerCase().contains("shell")); 
     }
 
     @Test

@@ -58,7 +58,7 @@ public class XPathExpressionCountCheck extends XMLCheck {
         try {
             matchExpression(build, checkReport);
         } catch (Exception e) {
-            failStepAndlogExceptionInCheckReport(checkReport, e);
+            failStepWithExceptionAsReason(checkReport, e);
         }
     }
 
@@ -90,10 +90,10 @@ public class XPathExpressionCountCheck extends XMLCheck {
                         + length;
             }
 
-            checkReport.setResult(result, this.name + ": " + reason);
+            checkReport.setResult(result, reason);
         } else {
             checkReport
-                    .setResult(Result.SUCCESS, this.name + ": No occurrence");
+                    .setResult(Result.SUCCESS, "No occurrence");
         }
     }
 
@@ -107,7 +107,7 @@ public class XPathExpressionCountCheck extends XMLCheck {
 
     @Override
     public String getDescription() {
-        return "Count of " + this.getExpression() + " in "
+        return this.name + ": Count of " + this.getExpression() + " in "
                 + this.getTargetFile();
     }
 

@@ -66,9 +66,15 @@ public class AndGateTest {
         assertEquals(2, gate.getNumberOfSteps());
     }
 
+    
+
     @Test
     public void testGateIsSuccessfullWhenChecksSuccessfull() {
-        buildGateWithTwoSuccessfullChecks();
+        checkList.add(this.getCheckMockWithResult(SUCCESS));
+        checkList.add(this.getCheckMockWithResult(SUCCESS));
+        checkList.add(this.getCheckMockWithResult(SUCCESS));
+        checkList.add(this.getCheckMockWithResult(SUCCESS));
+        gate = new AndGate("Eins", checkList);
         this.performGateCheckAndExpect(SUCCESS);
     }
 
@@ -90,7 +96,7 @@ public class AndGateTest {
 
     @Test
     public void testGateFailsWhenOneChecksFails() {
-        checkList.add(this.getCheckMockWithResult(Result.SUCCESS));
+        checkList.add(this.getCheckMockWithResult(SUCCESS));
         checkList.add(this.getCheckMockWithResult(FAILURE));
         gate = new AndGate("Eins", checkList);
         this.performGateCheckAndExpect(FAILURE);
@@ -110,8 +116,8 @@ public class AndGateTest {
     }
 
     public void performGateCheckAndExpect(Result expectedResult) {
-        GateReport result = gate.evaluate(build, null, listener);
-        assertEquals(expectedResult, result.getResult());
+        GateReport report = gate.evaluate(build, null, listener);
+        assertEquals(expectedResult, report.getResult());
     }
 
     public GateStep getCheckMockWithResult(Result result) {
@@ -122,7 +128,7 @@ public class AndGateTest {
         when(
                 check.step(any(AbstractBuild.class), any(BuildListener.class),
                         any(Launcher.class))).thenReturn(checkReport);
-        when(check.document()).thenReturn(checkReport);
+        when(check.createEmptyGateStepReport()).thenReturn(checkReport);
         return check;
     }
 
@@ -136,7 +142,7 @@ public class AndGateTest {
     @Test
     public void testGetDocumentation() {
         buildGateWithTwoSuccessfullChecks();
-        GateReport gateReport = gate.document();
+        GateReport gateReport = gate.createEmptyGateReport();
         assertEquals(Result.NOT_BUILT, gateReport.getResult());
         assertEquals(2, gateReport.getStepReports().size());
     }

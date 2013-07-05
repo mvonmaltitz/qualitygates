@@ -35,7 +35,8 @@ public class FailingCheckTest {
 
     @Test
     public void testDescription() {
-        assertTrue(check.toString().contains("FAIL"));
+        assertTrue(check.toString().toLowerCase().contains("fail"));
+        assertTrue(check.getDescription().toLowerCase().contains("fail"));
     }
 
     @Test

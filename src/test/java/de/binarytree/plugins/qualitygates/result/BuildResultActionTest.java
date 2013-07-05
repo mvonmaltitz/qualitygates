@@ -1,11 +1,10 @@
 package de.binarytree.plugins.qualitygates.result;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
@@ -13,20 +12,18 @@ import hudson.model.AbstractBuild;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
-import org.mockito.Mockito;
 
 import de.binarytree.plugins.qualitygates.AndGate;
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.QualityLineEvaluator;
-import de.binarytree.plugins.qualitygates.steps.FailingCheck;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheck;
+
 
 public class BuildResultActionTest {
 
@@ -41,6 +38,8 @@ public class BuildResultActionTest {
     private BuildResultAction action;
 
     private QualityLineEvaluator gateEvaluator;
+
+    private QualityLineEvaluator fakeEvaluator;
 
     class MockManualCheck extends ManualCheck {
 
@@ -74,7 +73,10 @@ public class BuildResultActionTest {
 
         gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
         gateEvaluator.evaluate(null, null, null);
-        action = new BuildResultAction(gateEvaluator) {
+        fakeEvaluator = mock(QualityLineEvaluator.class); 
+        when(fakeEvaluator.getLatestResults()).thenReturn(gateEvaluator.getLatestResults()); 
+        when(fakeEvaluator.evaluate(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenReturn(gateEvaluator.getLatestResults()); 
+        action = new BuildResultAction(fakeEvaluator) {
 
             @Override
             public Launcher getLauncher(BuildListener listener) {
@@ -87,8 +89,7 @@ public class BuildResultActionTest {
     }
 
     private QualityLineEvaluator getGateEvaluatorFromGates(Gate... gates) {
-        LinkedList<Gate> gateList = new LinkedList<Gate>();
-        for (Gate gate : gates) {
+        LinkedList<Gate> gateList = new LinkedList<Gate>(); for (Gate gate : gates) {
             gateList.add(gate);
         }
         gateEvaluator = new QualityLineEvaluator(gateList);
@@ -96,22 +97,55 @@ public class BuildResultActionTest {
     }
 
 
-    private void fakeStaplerRequest() throws IOException {
+    private StaplerRequest prepareFakedStaplerRequest() throws IOException {
         StaplerRequest req = mock(StaplerRequest.class);
-        StaplerResponse res = mock(StaplerResponse.class);
         AbstractBuild build = mock(AbstractBuild.class);
-
         when(req.hasParameter("id")).thenReturn(true);
         when(req.getParameter("id")).thenReturn("Hash1");
         when(req.findAncestorObject(AbstractBuild.class)).thenReturn(build);
         when(build.getLogFile()).thenReturn(new File("/tmp/logfile.log"));
-        action.doApprove(req, res);
+        return req; 
     }
+    private StaplerResponse prepareFakedStaplerResponse() throws IOException {
+       return mock(StaplerResponse.class);
+    }
+    
     @Test
-    public void testManualApprovalViaGetRequest() throws IOException {
+    public void testManualApprovalViaGetRequestSuccessful() throws IOException {
         assertFalse(mCheck1.isApproved()); 
-        fakeStaplerRequest();
+        StaplerRequest req = prepareFakedStaplerRequest();
+        StaplerResponse res = prepareFakedStaplerResponse();
+        action.doApprove(req, res);
+        assertTrue(mCheck1.isApproved()); // Check toggles after reevaluation back to false
+    }
+    
+    @Test
+    public void testManualApprovalViaGetRequestWithoutIdParameterDoesNothing() throws IOException {
+        assertFalse(mCheck1.isApproved()); 
+        StaplerRequest req = prepareFakedStaplerRequest();
+        StaplerResponse res = prepareFakedStaplerResponse();
+        when(req.hasParameter("id")).thenReturn(false);
+        action.doApprove(req, res);
         assertFalse(mCheck1.isApproved()); // Check toggles after reevaluation back to false
+    }
+    
+    @Test
+    public void testManualApprovalViaGetRequestOnInexistentCheckDoesNothing() throws IOException {
+        assertFalse(mCheck1.isApproved()); 
+        StaplerRequest req = prepareFakedStaplerRequest();
+        StaplerResponse res = prepareFakedStaplerResponse();
+        when(req.getParameter("id")).thenReturn("WrongHash");
+        action.doApprove(req, res);
+        assertFalse(mCheck1.isApproved()); // Check toggles after reevaluation back to false
+    }
+    
+    @Test
+    public void testManualDisapprovalViaGetRequest() throws IOException {
+        assertFalse(mCheck1.isApproved()); 
+        StaplerRequest req = prepareFakedStaplerRequest();
+        StaplerResponse res = prepareFakedStaplerResponse();
+        action.doDisapprove(req, res);
+        assertTrue(mCheck1.isDisapproved()); // Check toggles after reevaluation back to false
     }
 
 }

@@ -33,32 +33,61 @@ public class DependencyCheck extends GateStep {
     public void doStep(AbstractBuild build, Launcher launcher,
             BuildListener listener, GateStepReport checkReport) {
         if (!buildExists(build)) {
-            checkReport.setResult(Result.FAILURE,
-                    "Cannot proceed, build has not been successful");
+            failCheckDueToInexistententBuild(checkReport);
         } else {
             try {
-                BuildLogFileParser logFileParser = parseBuildLogFile(build);
-                String dependencySection = logFileParser
-                        .getDependencyAnalyseBlock();
-
-                if (!dependencySectionWasFound(dependencySection)) {
-                    setCheckReportToUnstableDueToMissingDependencySection(checkReport);
-                } else {
-                    AnalysisResult dependencyProblems = analyseDependencySection(dependencySection);
-                    gatherViolationsAndSetCheckReport(checkReport,
-                            dependencyProblems);
-                }
+                processBuildLog(build, checkReport);
             } catch (IOException e) {
-                failStepAndlogExceptionInCheckReport(checkReport, e);
+                failStepWithExceptionAsReason(checkReport, e);
             }
         }
 
     }
+    private boolean buildExists(AbstractBuild build) {
+        Result result = build.getResult();
+        return Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result);
+    }
 
-    protected AnalysisResult analyseDependencySection(String dependencySection)
+    private void failCheckDueToInexistententBuild(GateStepReport checkReport) {
+        checkReport.setResult(Result.FAILURE,
+                "Cannot proceed, build has not been successful");
+    }
+
+    private void processBuildLog(AbstractBuild build, GateStepReport checkReport)
             throws IOException {
-        return DependencyAnalysisParser
-                .parseDependencyAnalyzeSection(dependencySection);
+        String dependencySection = obtainDependencySection(build);
+        if (!dependencySectionWasFound(dependencySection)) {
+            setCheckReportToUnstableDueToMissingDependencySection(checkReport);
+        } else {
+            AnalysisResult dependencyProblems = analyseDependencySection(dependencySection);
+            gatherViolationsAndSetCheckReport(checkReport,
+                    dependencyProblems);
+        }
+    }
+
+    private String obtainDependencySection(AbstractBuild build)
+            throws IOException {
+        BuildLogFileParser logFileParser = parseBuildLogFile(build);
+        String dependencySection = logFileParser
+                .getDependencyAnalyseBlock();
+        return dependencySection;
+    }
+
+
+    private BuildLogFileParser parseBuildLogFile(AbstractBuild build)
+            throws IOException {
+        File logFile = build.getLogFile();
+        BuildLogFileParser logFileParser = createLogFileParser();
+        logFileParser.parseLogFile(logFile);
+        return logFileParser;
+    }
+
+    protected BuildLogFileParser createLogFileParser() {
+        return new BuildLogFileParser();
+    }
+
+    private boolean dependencySectionWasFound(String dependencySection) {
+        return !StringUtils.isBlank(dependencySection);
     }
 
     /**
@@ -73,20 +102,10 @@ public class DependencyCheck extends GateStep {
                         "No dependency section found. Add dependency:analyze on your job configuration.");
     }
 
-    private boolean dependencySectionWasFound(String dependencySection) {
-        return !StringUtils.isBlank(dependencySection);
-    }
-
-    private BuildLogFileParser parseBuildLogFile(AbstractBuild build)
+    protected AnalysisResult analyseDependencySection(String dependencySection)
             throws IOException {
-        File logFile = build.getLogFile();
-        BuildLogFileParser logFileParser = createLogFileParser();
-        logFileParser.parseLogFile(logFile);
-        return logFileParser;
-    }
-
-    protected BuildLogFileParser createLogFileParser() {
-        return new BuildLogFileParser();
+        return DependencyAnalysisParser
+                .parseDependencyAnalyzeSection(dependencySection);
     }
 
     private void gatherViolationsAndSetCheckReport(GateStepReport checkReport,
@@ -97,11 +116,6 @@ public class DependencyCheck extends GateStep {
                 .getNumberOfUnusedDependencies();
         setCheckResultDependingOnNumberOfViolations(checkReport,
                 numberOfUndeclaredDependencies, numberOfUnusedDependencies);
-    }
-
-    private boolean buildExists(AbstractBuild build) {
-        Result result = build.getResult();
-        return Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result);
     }
 
     private void setCheckResultDependingOnNumberOfViolations(

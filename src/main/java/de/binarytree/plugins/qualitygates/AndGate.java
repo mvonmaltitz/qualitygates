@@ -32,7 +32,7 @@ public class AndGate extends Gate {
         return this.steps;
     }
 
-    protected void addStep(GateStep step) {
+   protected void addStep(GateStep step) {
         this.steps.add(step);
     }
 
@@ -40,10 +40,10 @@ public class AndGate extends Gate {
         return this.steps.size();
     }
 
-    public GateReport document() {
-        GateReport gateReport = super.document();
+    public GateReport createEmptyGateReport() {
+        GateReport gateReport = super.createEmptyGateReport();
         for (GateStep step : this.steps) {
-            gateReport.addStepReport(step.document());
+            gateReport.addStepReport(step.createEmptyGateStepReport());
         }
         return gateReport;
     }
@@ -52,25 +52,71 @@ public class AndGate extends Gate {
     public void doEvaluation(AbstractBuild build, Launcher launcher,
             BuildListener listener, GateReport gateReport) {
         if (stepsAreAvailable()) {
-            Result result = Result.SUCCESS;
-            for (GateStep step : this.steps) {
-                GateStepReport stepReport = step
-                        .step(build, listener, launcher);
-                result = result.combine(stepReport.getResult());
-                gateReport.addStepReport(stepReport);
-                gateReport.setResult(result);
-            }
+            initializeReportWithSuccessResult(gateReport);
+            evaluateSteps(build, launcher, listener, gateReport);
         } else {
-            gateReport.setResult(this.resultOfEmptyGate());
+            reportGateAsEmpty(gateReport);
         }
     }
 
-    private Result resultOfEmptyGate() {
+    private void initializeReportWithSuccessResult(GateReport gateReport) {
+        gateReport.setResult(Result.SUCCESS);
+    }
+
+    private void reportGateAsEmpty(GateReport gateReport) {
+        gateReport.setResult(resultOfEmptyGate());
+    }
+
+    private void evaluateSteps(AbstractBuild build, Launcher launcher,
+            BuildListener listener, GateReport gateReport) {
+        for (GateStep step : this.steps) {
+            GateStepReport stepReport = processStep(build, launcher, listener,
+                    step);
+            addStepReportToGateReport(gateReport, stepReport);
+        }
+    }
+
+    private void addStepReportToGateReport(GateReport gateReport,
+            GateStepReport stepReport) {
+        gateReport.addStepReport(stepReport);
+        Result gateResult = mergeStepResultIntoGateResult(
+                gateReport.getResult(), stepReport.getResult());
+        gateReport.setResult(gateResult);
+    }
+
+    /**
+     * Defines the function how a new step result shall be merged into the
+     * current result state of the gate.
+     * 
+     * @param gateResult
+     *            the current result of the gate based on the evaluation of all
+     *            former checks
+     * @param stepResult
+     *            the result of the currently evaluated check to be merged with
+     *            the current result
+     * @return the merged result of both parameters
+     */
+    protected Result mergeStepResultIntoGateResult(Result gateResult,
+            Result stepResult) {
+        return gateResult.combine(stepResult);
+    }
+
+    private GateStepReport processStep(AbstractBuild build, Launcher launcher,
+            BuildListener listener, GateStep step) {
+        return step.step(build, listener, launcher);
+    }
+
+    /**
+     * The result returned when the gate is empty.
+     * 
+     * @return the result an empty gate shall have.
+     */
+    protected Result resultOfEmptyGate() {
         return Result.UNSTABLE;
     }
 
     private boolean stepsAreAvailable() {
-        return this.steps.size() != 0;
+        return this.getNumberOfSteps() != 0;
     }
 
     @Extension

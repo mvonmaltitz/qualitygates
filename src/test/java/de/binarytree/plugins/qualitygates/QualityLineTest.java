@@ -2,10 +2,12 @@ package de.binarytree.plugins.qualitygates;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import hudson.Launcher;
 import hudson.XmlFile;
+import hudson.model.Action;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
 import hudson.tasks.BuildStepMonitor;
@@ -27,7 +29,6 @@ public class QualityLineTest {
     class MockQualityLine extends QualityLine {
 
         QualityLineEvaluator evaluatorMock;
-
         public MockQualityLine(String name, Collection<Gate> gates)
                 throws IOException {
             super(name, gates);
@@ -54,10 +55,11 @@ public class QualityLineTest {
     }
 
     private MockQualityLine line;
+    private List<Gate> gates;
 
     @Before
     public void setUp() throws Exception {
-        List<Gate> gates = new LinkedList<Gate>();
+        gates = new LinkedList<Gate>();
         AndGate gate = mock(AndGate.class);
         gates.add(gate);
         line = new MockQualityLine("Line", gates);
@@ -85,15 +87,19 @@ public class QualityLineTest {
     @Test
     public void testInitializeWithCollection() throws IOException {
         assertEquals(1, line.getNumberOfGates());
+        assertEquals(gates, line.getGates()); 
+        assertNotSame(gates, line.getGates()); 
     }
-
+    
     @Test
-    public void tesEvaluation() throws IOException {
+    public void testEvaluation() throws IOException {
         AbstractBuild build = mock(AbstractBuild.class);
         Launcher launcher = mock(Launcher.class);
         BuildListener listener = mock(BuildListener.class);
-        line.perform(build, launcher, listener);
+        boolean buildMayContinue = line.perform(build, launcher, listener);
         line.verifyEvaluatorMock();
+        Mockito.verify(build).addAction(any(Action.class)); 
+        assertTrue(buildMayContinue); 
     }
 
 }

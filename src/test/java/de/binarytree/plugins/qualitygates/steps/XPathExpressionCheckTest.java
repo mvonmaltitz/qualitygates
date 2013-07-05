@@ -21,8 +21,6 @@ import org.xml.sax.SAXException;
 
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.XMLCheck;
-import de.binarytree.plugins.qualitygates.steps.XPathExpressionCheck;
 import de.binarytree.plugins.qualitygates.steps.XPathExpressionCheck.DescriptorImpl;
 
 public class XPathExpressionCheckTest {
@@ -33,17 +31,19 @@ public class XPathExpressionCheckTest {
     private String filePath = "aFile.xml";
     private ByteArrayInputStream pomStream;
     private String content = "contentCONTENTcontent";
-    private String pomString = "<project xmlns='http://maven.apache.org/POM/4.0.0' "
-            + "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' "
-            + "xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd'>"
-            + "<modelVersion>4.0.0</modelVersion> "
+    private String pomString = "<project>"
             + "<parent>  "
             + "<groupId>"
             + content
             + "</groupId> "
             + "<artifactId>plugin</artifactId> <version>1.480.3</version>"
             + "<!-- which version of Jenkins is this plugin built against? --> "
-            + "</parent>" + "</project>";
+            + "</parent>"
+            + "<dependencies>"
+            + "<dependency><name>a</name><version>1.0</version></dependency>"  
+            + "<dependency><name>b</name><version>1.0-SNAPSHOT</version></dependency>"  
+            + "</dependencies>"
+            +"</project>";
     private XMLCheck xmlCheck;
     private AbstractBuild build;
 
@@ -128,11 +128,24 @@ public class XPathExpressionCheckTest {
                 descriptor.doCheckTargetFile("target/../../aFile.xml").kind);
     }
 
+    
+    @Test
+    public void testDisplayNameContainsXPath(){
+        assertTrue(descriptor.getDisplayName().contains("XPath")); 
+    }
     @Test
     public void testInvalidEmptyFilePath() {
         assertEquals(
                 FormValidation.error("Absolute File path disallowed").kind,
                 descriptor.doCheckTargetFile("").kind);
+    }
+    @Test
+    public void testCheckFindsPresentNonTextXMLTag() throws XPathExpressionException,
+            ParserConfigurationException, SAXException, IOException {
+        xmlCheck = new MockXMLCheck("pom.xml", "/project");
+        GateStepReport result = xmlCheck.step(build, null, null);
+        assertEquals(Result.SUCCESS, result.getResult());
+        assertTrue(result.getReason().contains(content));
     }
 
     @Test

@@ -12,20 +12,20 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.MavenSuccessCheck;
-import de.binarytree.plugins.qualitygates.steps.MavenSuccessCheck.MavenSuccessCheckDescriptor;
+import de.binarytree.plugins.qualitygates.steps.MavenBuildSuccessCheck;
+import de.binarytree.plugins.qualitygates.steps.MavenBuildSuccessCheck.MavenSuccessCheckDescriptor;
 
-public class MavenSuccessCheckTest {
+public class MavenBuildSuccessCheckTest {
 
-    private MavenSuccessCheck check;
+    private MavenBuildSuccessCheck check;
     private AbstractBuild build;
     private MavenSuccessCheckDescriptor descriptor;
 
     @Before
     public void setUp() {
-        descriptor = new MavenSuccessCheck.MavenSuccessCheckDescriptor();
+        descriptor = new MavenBuildSuccessCheck.MavenSuccessCheckDescriptor();
         build = mock(AbstractBuild.class, RETURNS_DEEP_STUBS);
-        check = new MavenSuccessCheck() {
+        check = new MavenBuildSuccessCheck() {
             public MavenSuccessCheckDescriptor getDescriptor() {
                 return descriptor;
             }
@@ -33,8 +33,10 @@ public class MavenSuccessCheckTest {
     }
 
     @Test
-    public void testDisplayName() {
+    public void testDescriptionsContainMavenAndBuild() {
         assertTrue(descriptor.getDisplayName().contains("Maven"));
+        assertTrue(check.getDescription().toLowerCase().contains("maven"));
+        assertTrue(check.getDescription().toLowerCase().contains("build"));
     }
 
     @Test

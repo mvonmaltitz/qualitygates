@@ -71,7 +71,7 @@ public class QualityGateTest {
 
     @Test
     public void testGetDocumentation() {
-        GateReport gateReport = gate.document();
+        GateReport gateReport = gate.createEmptyGateReport();
         assertEquals(Result.NOT_BUILT, gateReport.getResult());
     }
 

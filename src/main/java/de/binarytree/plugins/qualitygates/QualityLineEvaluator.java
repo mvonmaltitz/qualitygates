@@ -79,7 +79,7 @@ public class QualityLineEvaluator {
     }
 
     protected GateReport addNotBuiltGateDocumentationToReport(Gate gate) {
-        GateReport gateReport = gate.document();
+        GateReport gateReport = gate.createEmptyGateReport();
         qualityLineReport.addGateReport(gateReport);
         return gateReport;
     }

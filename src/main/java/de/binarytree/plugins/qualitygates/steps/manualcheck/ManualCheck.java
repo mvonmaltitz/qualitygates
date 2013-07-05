@@ -16,49 +16,76 @@ import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class ManualCheck extends GateStep {
+    private enum Approval {
+        APPROVED, DISAPPROVED, NOT_SET;
+    };
 
+    private static final String UNKNOWN_USER = "Unknown";
     public static final String AWAITING_MANUAL_APPROVAL = "Awaiting manual approval.";
     public static final Random RAND = new Random();
 
     private transient String hash;
 
-    private transient boolean approved;
+    private transient Approval approved;
+    private String unknownUser = UNKNOWN_USER;
 
     @DataBoundConstructor
     public ManualCheck() {
-        this.approved = false;
+        this.approved = Approval.NOT_SET;
+    }
+
+    public ManualCheck(String usernameIfUserUnknown) {
+        this();
+        this.unknownUser = usernameIfUserUnknown;
     }
 
     public void approve() {
-        this.approved = true;
+        this.approved = Approval.APPROVED;
     }
 
-    public boolean isApproved(){
-        return this.approved; 
+    public void disapprove() {
+        this.approved = Approval.DISAPPROVED;
     }
-    
+
+    public boolean isApproved() {
+        return this.approved == Approval.APPROVED;
+    }
+
+    public boolean isDisapproved() {
+        return this.approved == Approval.DISAPPROVED;
+    }
+
     @Override
     public void doStep(AbstractBuild build, Launcher launcher,
             BuildListener listener, GateStepReport checkReport) {
         this.hash = Long.toString(System.currentTimeMillis())
                 + Integer.toString(RAND.nextInt());
-        if (!approved) {
-            String approveLink = generateApproveLink();
-            checkReport.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL
-                    + approveLink);
-        } else {
+        if (this.isApproved()) {
             checkReport.setResult(Result.SUCCESS, "Manually approved by "
                     + this.getCurrentUserOrUnknown());
-            this.approved = false;
+        } else if (this.isDisapproved()) {
+            checkReport.setResult(Result.FAILURE, "Manually disapproved by "
+                    + this.getCurrentUserOrUnknown());
+        } else {
+            String links = generateLinks();
+            checkReport.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL
+                    + links);
         }
+        resetFlag();
+    }
+
+    private void resetFlag() {
+        this.approved = Approval.NOT_SET;
     }
 
     protected void setHash(String hash) {
         this.hash = hash;
     }
 
-    private String generateApproveLink() {
-        return " <a href='approve?id=" + this.hash + "'>Approve</a>";
+    private String generateLinks() {
+        return " <a href='approve?id=" + this.hash
+                + "'>Approve</a> <a href='disapprove?id=" + this.hash
+                + "'>Disapprove</a>";
     }
 
     public String getCurrentUserOrUnknown() {
@@ -66,7 +93,7 @@ public class ManualCheck extends GateStep {
         if (currentUser != null) {
             return currentUser.getFullName();
         } else {
-            return "Unknown";
+            return this.unknownUser;
         }
     }
 

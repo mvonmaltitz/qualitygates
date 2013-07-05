@@ -38,7 +38,7 @@ public class ShellAction extends GateStep {
                         + " could not be performed. Check log for details.");
             }
         } catch (InterruptedException e) {
-            failStepAndlogExceptionInCheckReport(actionReport, e);
+            failStepWithExceptionAsReason(actionReport, e);
         }
 
     }

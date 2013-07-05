@@ -99,7 +99,7 @@ public class CheckResultTest {
 
     @Test
     public void testGetCheckResultDocumentation() {
-        GateStepReport checkReport = check.document();
+        GateStepReport checkReport = check.createEmptyGateStepReport();
         assertEquals(Result.NOT_BUILT, checkReport.getResult());
     }
 

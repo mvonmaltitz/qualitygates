@@ -45,21 +45,33 @@ public class BuildResultAction implements ProminentProjectAction {
         return "qualitygates";
     }
 
-
     public void doApprove(StaplerRequest req, StaplerResponse res)
             throws IOException {
+        manipulateManualCheck(req, res, true);
+    }
+    public void doDisapprove(StaplerRequest req, StaplerResponse res)
+            throws IOException {
+        manipulateManualCheck(req, res, false);
+    }
+
+    private void manipulateManualCheck(StaplerRequest req, StaplerResponse res,
+            boolean manualCheckShallBeApproved) throws IOException {
         if (req.hasParameter("id")) {
             String hashIdOfCheck = req.getParameter("id");
             ManualCheckFinder finder = new ManualCheckFinder(
                     this.getQualityLineReport());
-            ManualCheckManipulator manipulator = finder.findCheckForGivenHash(hashIdOfCheck); 
-            if(manipulator.hasItem()){
-                manipulator.approve(); 
+            ManualCheckManipulator manipulator = finder
+                    .findCheckForGivenHash(hashIdOfCheck);
+            if (manipulator.hasItem()) {
+                if (manualCheckShallBeApproved) {
+                    manipulator.approve();
+                } else {
+                    manipulator.disapprove();
+                }
                 rerunQualityLineEvaluation(req);
             }
         }
         res.sendRedirect(".");
-
     }
 
     private void rerunQualityLineEvaluation(StaplerRequest req)

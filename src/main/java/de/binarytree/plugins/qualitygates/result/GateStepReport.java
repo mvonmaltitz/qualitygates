@@ -25,18 +25,48 @@ public class GateStepReport {
         return this.stepName;
     }
 
+    /**
+     * Documents the result of the corresponding step.
+     * 
+     * Note: Negative results also need a supplied reason of failure.
+     * 
+     * @param result
+     *            the result for the corresponding step
+     */
     public void setResult(Result result) {
-        if (Result.FAILURE.equals(result) || Result.UNSTABLE.equals(result)) {
-            throw new IllegalArgumentException("Negative results need a reason");
+        if (isNegative(result)) {
+            throwExceptionDueToMissingReason();
         }
         this.result = result;
     }
 
+    private boolean isNegative(Result result) {
+        return Result.FAILURE.equals(result) || Result.UNSTABLE.equals(result);
+    }
+
+    private void throwExceptionDueToMissingReason() {
+        throw new IllegalArgumentException("Negative results need a reason");
+    }
+
+    /**
+     * Documents the result of the corresponding step. Note: Negative results
+     * also need a supplied reason of failure.
+     * 
+     * @param result
+     *            the result for the corresponding step
+     */
     public void setResult(Result result, String reason) {
+        if (isNegative(result) && isEmpty(reason)) {
+            throwExceptionDueToMissingReason();
+        }
         // It's okay to have positive results and a reason, even if not
         // necessary
         this.result = result;
         this.reason = reason;
+    }
+
+    private boolean isEmpty(String reason) {
+        return reason == null || reason.isEmpty();
     }
 
     public Result getResult() {

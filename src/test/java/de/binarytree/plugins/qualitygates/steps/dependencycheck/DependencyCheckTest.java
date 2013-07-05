@@ -20,6 +20,7 @@ import org.junit.Test;
 import de.binarytree.plugins.qualitygates.TestHelper;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.DependencyCheck;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.DependencyCheck.DescriptorImpl;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.AnalysisResult;
 
@@ -162,6 +163,12 @@ public class DependencyCheckTest {
         assertEquals(Result.SUCCESS, report.getResult());
     }
 
+    @Test
+    public void testDescriptionContainsDependency(){
+        DescriptorImpl descriptor = new DependencyCheck.DescriptorImpl(); 
+        assertTrue(descriptor.getDisplayName().toLowerCase().contains("dependency")); 
+        assertTrue(check.getDescription().toLowerCase().contains("dependency")); 
+    }
     private void letAnalysisReturn(MockDependencyCheck check,
             int numberOfUndeclaredDependencies, int numberOfUnusedDependencies) {
         AnalysisResult analysis = check.getMockAnalysis();

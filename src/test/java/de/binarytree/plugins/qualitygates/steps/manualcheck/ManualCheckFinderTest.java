@@ -170,6 +170,8 @@ public class ManualCheckFinderTest {
         when(
                 step.step(any(AbstractBuild.class), any(BuildListener.class),
                         any(Launcher.class))).thenReturn(report);
+        
+        when(step.createEmptyGateStepReport()).thenReturn(report); 
         report.setResult(Result.NOT_BUILT);
         LinkedList<GateStep> steps = new LinkedList<GateStep>();
         steps.add(step);

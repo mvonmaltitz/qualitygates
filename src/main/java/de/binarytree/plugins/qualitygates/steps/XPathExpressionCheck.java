@@ -39,7 +39,7 @@ public class XPathExpressionCheck extends XMLCheck {
         try {
             matchExpression(build, checkReport);
         } catch (Exception e) {
-            failStepAndlogExceptionInCheckReport(checkReport, e);
+            failStepWithExceptionAsReason(checkReport, e);
         }
     }
 
@@ -47,12 +47,12 @@ public class XPathExpressionCheck extends XMLCheck {
             throws IOException, ParserConfigurationException, SAXException,
             XPathExpressionException {
         InputStream stream = this.obtainInputStream(build);
-        String content = this.getXMLContentForXPathExpression(stream);
+        String content = this.getTextContentForXPathExpression(stream);
         this.setCheckResult(checkReport, content);
     }
 
     private void setCheckResult(GateStepReport checkReport, String content) {
-        if (content != null) {
+        if (content != null && content.length() > 0) {
             if (reportContent) {
                 checkReport.setResult(Result.SUCCESS, "Content: " + content);
             } else {
@@ -64,14 +64,14 @@ public class XPathExpressionCheck extends XMLCheck {
         }
     }
 
-    private String getXMLContentForXPathExpression(InputStream stream)
+    private String getTextContentForXPathExpression(InputStream stream)
             throws XPathExpressionException, ParserConfigurationException,
             SAXException, IOException {
         NodeList nodes = getMatchingNodes(stream);
         if (nodes.getLength() > 0) {
             return nodes.item(0).getTextContent();
         } else {
-            return null;
+            return "";
         }
     }
 

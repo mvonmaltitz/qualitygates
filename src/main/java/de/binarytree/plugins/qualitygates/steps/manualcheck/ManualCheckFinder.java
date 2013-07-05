@@ -17,9 +17,9 @@ public class ManualCheckFinder {
         public void approve(){
             this.check.approve(); 
         }
-//       public void disapprove(){
-//           this.check.disapprove(); 
-//       } 
+       public void disapprove(){
+           this.check.disapprove(); 
+       } 
         public boolean hasItem(){
             return this.check != null; 
         }

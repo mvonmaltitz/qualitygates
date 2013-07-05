@@ -12,10 +12,10 @@ import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
-public class MavenSuccessCheck extends GateStep {
+public class MavenBuildSuccessCheck extends GateStep {
 
     @DataBoundConstructor
-    public MavenSuccessCheck() {
+    public MavenBuildSuccessCheck() {
     }
 
     @Override
@@ -23,12 +23,18 @@ public class MavenSuccessCheck extends GateStep {
             BuildListener listener, GateStepReport checkReport) {
         if (build != null && build.getResult() != null) {
             checkReport.setResult(build.getResult(),
-                    build.getBuildStatusSummary().message);
+                    "Summary: " + build.getBuildStatusSummary().message);
         } else {
             checkReport.setResult(Result.FAILURE,
                     "Build or build result was null");
         }
     }
+    
+    @Override
+    public String getDescription() {
+        return "The result of the maven build process";
+    }
+
 
     @Extension
     public static class MavenSuccessCheckDescriptor extends GateStepDescriptor {
@@ -38,11 +44,6 @@ public class MavenSuccessCheck extends GateStep {
             return "Result of Maven build";
         }
 
-    }
-
-    @Override
-    public String getDescription() {
-        return "The result of the maven build process";
     }
 
 }
