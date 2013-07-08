@@ -36,7 +36,7 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
      * object.
      * 
      * - SUCCESS means, that the result of the gate was positive and the
-     * following gates shall be evaluated afterwards. - UNSTALBE means, that the
+     * following gates shall be evaluated afterwards. - UNSTABLE means, that the
      * gate has generated warnings, but the following gates shall be evaluated
      * nevertheless. - FAILURE means, that the result of the gate was negative,
      * therefore the following gates shall NOT be evaluated. - NOT_BUILT means,
