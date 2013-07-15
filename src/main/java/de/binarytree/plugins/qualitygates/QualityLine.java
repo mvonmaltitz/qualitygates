@@ -136,7 +136,7 @@ public class QualityLine extends Recorder implements Saveable {
          */
         @Override
         public String getDisplayName() {
-            return "Quality Gates";
+            return "Quality Line";
         }
 
     }

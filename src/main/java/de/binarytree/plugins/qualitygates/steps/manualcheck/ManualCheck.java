@@ -21,7 +21,6 @@ public class ManualCheck extends GateStep {
     };
 
     private static final String UNKNOWN_USER = "Unknown";
-    public static final String AWAITING_MANUAL_APPROVAL = "Awaiting manual approval.";
     public static final Random RAND = new Random();
 
     private transient String hash;
@@ -68,8 +67,7 @@ public class ManualCheck extends GateStep {
                     + this.getCurrentUserOrUnknown());
         } else {
             String links = generateLinks();
-            checkReport.setResult(Result.NOT_BUILT, AWAITING_MANUAL_APPROVAL
-                    + links);
+            checkReport.setResult(Result.NOT_BUILT, links);
         }
         resetFlag();
     }
@@ -99,7 +97,7 @@ public class ManualCheck extends GateStep {
 
     @Override
     public String getDescription() {
-        return "Wait for manual approval (" + this.hash + ")";
+        return "Waiting for manual approval (Hash: " + this.hash + ")";
     }
 
     @Override

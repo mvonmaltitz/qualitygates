@@ -51,8 +51,6 @@ public class ManualCheckTest {
         GateStepReport report = new GateStepReport(check);
         check.doStep(build, launcher, listener, report);
         assertEquals(Result.NOT_BUILT, report.getResult());
-        assertTrue(report.getReason().startsWith(
-                ManualCheck.AWAITING_MANUAL_APPROVAL));
         assertTrue(report.getReason().contains("href"));
         assertApprovalReset(); 
     }
