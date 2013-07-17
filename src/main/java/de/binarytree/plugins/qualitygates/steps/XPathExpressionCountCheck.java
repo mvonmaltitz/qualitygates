@@ -27,14 +27,13 @@ public class XPathExpressionCountCheck extends XMLCheck {
     private String name;
 
     @DataBoundConstructor
-    public XPathExpressionCountCheck(String name, String targetFile,
-            String expression, int successThreshold, int warningThreshold) {
+    public XPathExpressionCountCheck(String name, String targetFile, String expression, int successThreshold,
+            int warningThreshold) {
         this(targetFile, expression, successThreshold, warningThreshold);
         this.name = name;
     }
 
-    public XPathExpressionCountCheck(String targetFile, String expression,
-            int successThreshold, int warningThreshold) {
+    public XPathExpressionCountCheck(String targetFile, String expression, int successThreshold, int warningThreshold) {
         super(expression, targetFile);
         this.successThreshold = successThreshold;
         this.warningThreshold = warningThreshold;
@@ -53,21 +52,28 @@ public class XPathExpressionCountCheck extends XMLCheck {
     }
 
     @Override
-    public void doStep(AbstractBuild build, Launcher launcher,
-            BuildListener listener, GateStepReport checkReport) {
+    public void doStep(AbstractBuild build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
         try {
-            matchExpression(build, checkReport);
+            processTargetFileIfExistent(build, checkReport);
         } catch (Exception e) {
             failStepWithExceptionAsReason(checkReport, e);
         }
     }
 
-    private void matchExpression(AbstractBuild build, GateStepReport checkReport)
-            throws IOException, ParserConfigurationException, SAXException,
-            XPathExpressionException {
-        InputStream stream = this.obtainInputStream(build);
-        NodeList nodes = getMatchingNodes(stream);
-        this.setCheckResult(checkReport, nodes);
+    private void processTargetFileIfExistent(AbstractBuild build, GateStepReport checkReport) throws IOException,
+            InterruptedException, ParserConfigurationException, SAXException, XPathExpressionException {
+        if (buildHasFileInWorkspace(build)) {
+            NodeList matchingNodes = matchExpression(build, checkReport);
+            setCheckResult(checkReport, matchingNodes);
+        } else {
+            failDueToNonexistentFile(checkReport);
+        }
+    }
+
+    private NodeList matchExpression(AbstractBuild build, GateStepReport checkReport) throws IOException,
+            ParserConfigurationException, SAXException, XPathExpressionException {
+        InputStream stream = this.obtainInputStreamOfTargetfileRelativeToBuild(build);
+        return getMatchingNodes(stream);
     }
 
     private void setCheckResult(GateStepReport checkReport, NodeList nodes) {
@@ -78,22 +84,18 @@ public class XPathExpressionCountCheck extends XMLCheck {
             String reason;
             if (this.countIsSuccess(length)) {
                 result = Result.SUCCESS;
-                reason = length + " <= success threshold("
-                        + this.successThreshold + ")";
+                reason = length + " <= success threshold(" + this.successThreshold + ")";
             } else if (this.countIsWarning(length)) {
                 result = Result.UNSTABLE;
-                reason = "success threshold(" + this.successThreshold + ") < "
-                        + length + " <= warning threshold("
+                reason = "success threshold(" + this.successThreshold + ") < " + length + " <= warning threshold("
                         + this.warningThreshold + ")";
             } else {
-                reason = "warning threshold(" + this.warningThreshold + ") < "
-                        + length;
+                reason = "warning threshold(" + this.warningThreshold + ") < " + length;
             }
 
             checkReport.setResult(result, reason);
         } else {
-            checkReport
-                    .setResult(Result.SUCCESS, "No occurrence");
+            checkReport.setResult(Result.SUCCESS, "No occurrence");
         }
     }
 
@@ -105,10 +107,14 @@ public class XPathExpressionCountCheck extends XMLCheck {
         return count <= this.warningThreshold;
     }
 
+    private void failDueToNonexistentFile(GateStepReport checkReport) {
+        checkReport.setResult(Result.FAILURE, this.getTargetFile() + " not found");
+
+    }
+
     @Override
     public String getDescription() {
-        return this.name + ": Count of " + this.getExpression() + " in "
-                + this.getTargetFile();
+        return this.name + ": Count of " + this.getExpression() + " in " + this.getTargetFile();
     }
 
     @Extension

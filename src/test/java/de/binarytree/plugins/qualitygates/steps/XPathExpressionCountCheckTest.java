@@ -34,18 +34,20 @@ public class XPathExpressionCountCheckTest {
     private ByteArrayInputStream xmlStream;
 
     private String xmlHeader = "<pmd>";
+
     private String snapshotExpression = "/project/dependencies/dependency/version[contains(.,'SNAPSHOT')]";
+
     private String xmlFileStart = "<file name='file.txt'>";
 
     private String xmlViolation = "<violation beginline='46' endline='46' class='User' method='setLastName' variable='asdf' externalInfoUrl='www' priority='3'>"
             + "Avoid unused local variables such as 'asdf'. </violation> ";
 
-    private String pomString = "<project>"
-            + "<dependencies>"
+    private String pomString = "<project>" + "<dependencies>"
             + "<dependency><name>a</name><version>1.0</version></dependency>"
             + "<dependency><name>b</name><version>1.0</version></dependency>"
-            + "<dependency><name>c</name><version>1.0-SNAPSHOT</version></dependency>"
-            + "</dependencies>" + "</project>";
+            + "<dependency><name>c</name><version>1.0-SNAPSHOT</version></dependency>" + "</dependencies>"
+            + "</project>";
+
     private String xmlFileEnd = "</file>";
 
     private String xmlFooter = " </pmd>";
@@ -60,15 +62,19 @@ public class XPathExpressionCountCheckTest {
 
     class MockXMLCheck extends XPathExpressionCountCheck {
 
-        public MockXMLCheck(String name, String targetFile, String expression,
-                int successThreshold, int warningThreshold) {
-            super(name, targetFile, expression, successThreshold,
-                    warningThreshold);
+        public MockXMLCheck(String name, String targetFile, String expression, int successThreshold,
+                int warningThreshold) {
+            super(name, targetFile, expression, successThreshold, warningThreshold);
         }
 
         @Override
-        protected InputStream obtainInputStream(AbstractBuild build) {
+        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
             return xmlStream;
+        }
+
+        @Override
+        protected boolean buildHasFileInWorkspace(AbstractBuild build) throws IOException, InterruptedException {
+            return true;
         }
 
         @Override
@@ -81,8 +87,7 @@ public class XPathExpressionCountCheckTest {
     public void setUp() throws Exception {
         build = mock(AbstractBuild.class);
         descriptor = new XPathExpressionCountCheck.DescriptorImpl();
-        check = new MockXMLCheck(name, this.filePath, this.expression,
-                this.successThreshold, this.warningThreshold);
+        check = new MockXMLCheck(name, this.filePath, this.expression, this.successThreshold, this.warningThreshold);
     }
 
     @Test
@@ -113,8 +118,7 @@ public class XPathExpressionCountCheckTest {
         this.xmlStream = byteStreamFromViolationCount(this.successThreshold);
         GateStepReport result = check.step(build, null, null);
         assertEquals(Result.SUCCESS, result.getResult());
-        assertTrue(result.getReason().contains(
-                Integer.toString(this.successThreshold)));
+        assertTrue(result.getReason().contains(Integer.toString(this.successThreshold)));
     }
 
     @Test
@@ -122,13 +126,11 @@ public class XPathExpressionCountCheckTest {
         this.xmlStream = byteStreamFromViolationCount(this.successThreshold + 1);
         GateStepReport result = check.step(build, null, null);
         assertEquals(Result.UNSTABLE, result.getResult());
-        assertTrue(result.getReason().contains(
-                Integer.toString(this.successThreshold + 1)));
+        assertTrue(result.getReason().contains(Integer.toString(this.successThreshold + 1)));
     }
 
     private ByteArrayInputStream byteStreamFromViolationCount(int violationCount) {
-        return new ByteArrayInputStream(this.getXMLforNumberOfViolations(
-                violationCount).getBytes());
+        return new ByteArrayInputStream(this.getXMLforNumberOfViolations(violationCount).getBytes());
     }
 
     @Test
@@ -136,8 +138,7 @@ public class XPathExpressionCountCheckTest {
         this.xmlStream = byteStreamFromViolationCount(this.warningThreshold);
         GateStepReport result = check.step(build, null, null);
         assertEquals(Result.UNSTABLE, result.getResult());
-        assertTrue(result.getReason().contains(
-                Integer.toString(this.warningThreshold)));
+        assertTrue(result.getReason().contains(Integer.toString(this.warningThreshold)));
     }
 
     @Test
@@ -145,8 +146,7 @@ public class XPathExpressionCountCheckTest {
         this.xmlStream = byteStreamFromViolationCount(this.warningThreshold + 1);
         GateStepReport result = check.step(build, null, null);
         assertEquals(Result.FAILURE, result.getResult());
-        assertTrue(result.getReason().contains(
-                Integer.toString(this.warningThreshold + 1)));
+        assertTrue(result.getReason().contains(Integer.toString(this.warningThreshold + 1)));
     }
 
     @Test
@@ -154,17 +154,15 @@ public class XPathExpressionCountCheckTest {
         this.xmlStream = byteStreamFromViolationCount(this.warningThreshold + 1);
         GateStepReport result = check.step(build, null, null);
         assertEquals(Result.FAILURE, result.getResult());
-        assertTrue(result.getReason().contains(
-                Integer.toString(this.warningThreshold + 1)));
+        assertTrue(result.getReason().contains(Integer.toString(this.warningThreshold + 1)));
     }
 
     @Test
     public void testExceptionCausesFailureResult() {
-        check = new MockXMLCheck(name, "pom.xml", "/project/parent/notHere",
-                successThreshold, warningThreshold) {
+        check = new MockXMLCheck(name, "pom.xml", "/project/parent/notHere", successThreshold, warningThreshold) {
 
             @Override
-            protected InputStream obtainInputStream(AbstractBuild build) {
+            protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
                 throw new RuntimeException();
             }
         };
@@ -174,9 +172,8 @@ public class XPathExpressionCountCheckTest {
     }
 
     @Test
-    public void testCheckFailsWhenFindingSNAPSHOTDependencies()
-            throws XPathExpressionException, ParserConfigurationException,
-            SAXException, IOException {
+    public void testCheckFailsWhenFindingSNAPSHOTDependencies() throws XPathExpressionException,
+            ParserConfigurationException, SAXException, IOException {
         this.xmlStream = new ByteArrayInputStream(this.pomString.getBytes());
         check = new MockXMLCheck(name, "pom.xml", snapshotExpression, 0, 0);
         GateStepReport report = check.step(build, null, null);
@@ -184,16 +181,13 @@ public class XPathExpressionCountCheckTest {
     }
 
     @Test
-    public void testCheckSucceedsWhenNotFindingSNAPSHOTDependencies()
-            throws XPathExpressionException, ParserConfigurationException,
-            SAXException, IOException {
+    public void testCheckSucceedsWhenNotFindingSNAPSHOTDependencies() throws XPathExpressionException,
+            ParserConfigurationException, SAXException, IOException {
         this.xmlStream = new ByteArrayInputStream(this.pomString.replace("SNAPSHOT", "").getBytes());
         check = new MockXMLCheck(name, "pom.xml", snapshotExpression, 0, 0);
         GateStepReport report = check.step(build, null, null);
         assertEquals(Result.SUCCESS, report.getResult());
     }
-
-
 
     public String getXMLforNumberOfViolations(int violations) {
         return this.getXMLforNumberOfViolationsInFiles(violations, 1);

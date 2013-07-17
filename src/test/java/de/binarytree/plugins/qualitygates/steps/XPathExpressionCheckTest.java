@@ -59,7 +59,7 @@ public class XPathExpressionCheckTest {
         }
 
         @Override
-        protected InputStream obtainInputStream(AbstractBuild build) {
+        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
             return pomStream;
         }
 
@@ -171,7 +171,7 @@ public class XPathExpressionCheckTest {
     public void testExceptionCausesFailureResult() {
         xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere") {
             @Override
-            protected InputStream obtainInputStream(AbstractBuild build) {
+            protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
                 throw new RuntimeException();
             }
         };

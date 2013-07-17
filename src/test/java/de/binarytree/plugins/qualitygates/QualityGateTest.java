@@ -11,12 +11,13 @@ import java.util.LinkedList;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.GateReport;
+import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 public class QualityGateTest {
 
     private Gate gate;
+
     private LinkedList<GateStep> checkList;
 
     class MockCheck extends GateStep {
@@ -32,6 +33,7 @@ public class QualityGateTest {
             return "Check Description";
         }
 
+        @Override
         public GateStepDescriptor getDescriptor() {
             return new GateStepDescriptor() {
 
@@ -44,8 +46,7 @@ public class QualityGateTest {
         }
 
         @Override
-        public void doStep(AbstractBuild build, Launcher launcher,
-                BuildListener listener, GateStepReport checkReport) {
+        public void doStep(AbstractBuild build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
         }
 
     }
@@ -59,10 +60,8 @@ public class QualityGateTest {
         checkList.add(check2);
         gate = new Gate("Name") {
             @Override
-            public void doEvaluation(AbstractBuild build, Launcher launcher,
-                    BuildListener listener, GateReport gateReport) {
-                // TODO Auto-generated method stub
-
+            public void doEvaluation(AbstractBuild build, Launcher launcher, BuildListener listener,
+                    GateReport gateReport) {
             }
 
         };

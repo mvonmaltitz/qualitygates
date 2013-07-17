@@ -46,7 +46,7 @@ public class XPathExpressionCheck extends XMLCheck {
     private void matchExpression(AbstractBuild build, GateStepReport checkReport)
             throws IOException, ParserConfigurationException, SAXException,
             XPathExpressionException {
-        InputStream stream = this.obtainInputStream(build);
+        InputStream stream = this.obtainInputStreamOfTargetfileRelativeToBuild(build);
         String content = this.getTextContentForXPathExpression(stream);
         this.setCheckResult(checkReport, content);
     }

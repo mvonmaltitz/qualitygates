@@ -27,6 +27,7 @@ import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 public abstract class XMLCheck extends GateStep {
 
     private String expression;
+
     private String targetFile;
 
     public XMLCheck(String expression, String targetFile) {
@@ -42,11 +43,9 @@ public abstract class XMLCheck extends GateStep {
         return this.targetFile;
     }
 
-    protected NodeList getMatchingNodes(InputStream stream)
-            throws ParserConfigurationException, SAXException, IOException,
-            XPathExpressionException {
-        DocumentBuilderFactory domFactory = DocumentBuilderFactory
-                .newInstance();
+    protected NodeList getMatchingNodes(InputStream stream) throws ParserConfigurationException, SAXException,
+            IOException, XPathExpressionException {
+        DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(false);
         DocumentBuilder builder = domFactory.newDocumentBuilder();
         Document doc = builder.parse(stream);
@@ -58,8 +57,16 @@ public abstract class XMLCheck extends GateStep {
         return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
     }
 
-    protected InputStream obtainInputStream(AbstractBuild build)
-            throws IOException {
+    protected boolean buildHasFileInWorkspace(AbstractBuild build) throws IOException, InterruptedException {
+        return generateFilePathFromPathStringRelativeToBuild(build).exists();
+    }
+
+    private FilePath generateFilePathFromPathStringRelativeToBuild(AbstractBuild build) {
+        FilePath pom = build.getModuleRoot().child(this.targetFile);
+        return pom;
+    }
+
+    protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) throws IOException {
         FilePath pom = build.getModuleRoot().child(this.targetFile);
         return pom.read();
     }
@@ -73,16 +80,14 @@ public abstract class XMLCheck extends GateStep {
 
         public FormValidation doCheckExpression(@QueryParameter String value) {
             if (value.length() == 0) {
-                return FormValidation
-                        .error("XPath expression must not be empty");
+                return FormValidation.error("XPath expression must not be empty");
             } else {
                 XPathFactory factory = XPathFactory.newInstance();
                 XPath xpath = factory.newXPath();
                 try {
                     XPathExpression expr = xpath.compile(value);
                 } catch (XPathExpressionException e) {
-                    return FormValidation
-                            .error("XPath expression is not valid.");
+                    return FormValidation.error("XPath expression is not valid.");
                 }
                 return FormValidation.ok();
             }
@@ -92,8 +97,7 @@ public abstract class XMLCheck extends GateStep {
             if (value.length() == 0) {
                 return FormValidation.error("Target file must not be empty");
             } else if (value.contains("..")) {
-                return FormValidation
-                        .error("Parent directory '..' may not be referenced");
+                return FormValidation.error("Parent directory '..' may not be referenced");
             } else if (value.startsWith("/")) {
                 return FormValidation.error("Path may not be absolute.");
             }
