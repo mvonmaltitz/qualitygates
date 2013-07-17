@@ -51,11 +51,12 @@ public class QualityLine extends Recorder implements Saveable {
     }
 
     @Override
-    public boolean perform(AbstractBuild build, Launcher launcher,
-            BuildListener listener) {
+    public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
+        listener.getLogger().println("Starting QualityLine");
         QualityLineEvaluator gateEvaluator = getGateEvaluatorForGates();
         gateEvaluator.evaluate(build, launcher, listener);
         build.addAction(new BuildResultAction(gateEvaluator));
+        listener.getLogger().println("Stopping QualityLine");
         return true;
     }
 
@@ -90,8 +91,7 @@ public class QualityLine extends Recorder implements Saveable {
     }
 
     protected XmlFile getConfigXml() {
-        return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance()
-                .getRootDir(), "qualitygates.xml"));
+        return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance().getRootDir(), "qualitygates.xml"));
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -99,22 +99,19 @@ public class QualityLine extends Recorder implements Saveable {
     }
 
     /**
-     * Descriptor for {@link QualityLine}. Used as a singleton. The class is
-     * marked as public so that it can be accessed from views.
+     * Descriptor for {@link QualityLine}. Used as a singleton. The class is marked as public so that it can be accessed
+     * from views.
      * 
      * <p>
-     * See
-     * <tt>src/main/resources/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly</tt>
-     * for the actual HTML fragment for the configuration screen.
+     * See <tt>src/main/resources/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly</tt> for the actual HTML fragment
+     * for the configuration screen.
      */
     @Extension
     // This indicates to Jenkins that this is an implementation of an extension
     // point
-    public static final class DescriptorImpl extends
-            BuildStepDescriptor<Publisher> {
+    public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
         /**
-         * To persist global configuration information, simply store it in a
-         * field and call save().
+         * To persist global configuration information, simply store it in a field and call save().
          * 
          * <p>
          * If you don't want fields to be persisted, use <tt>transient</tt>.
