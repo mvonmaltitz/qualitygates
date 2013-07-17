@@ -22,6 +22,7 @@ import de.binarytree.plugins.qualitygates.AndGate;
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.QualityLineEvaluator;
+import de.binarytree.plugins.qualitygates.TestHelper;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheck;
 
 
@@ -64,7 +65,8 @@ public class BuildResultActionTest {
     public void setUp() throws Exception {
         mCheck1 = new MockManualCheck("Hash1");
         mCheck2 = new MockManualCheck("Hash2");
-        final Launcher launcher = mock(Launcher.class);
+        final Launcher launcher = TestHelper.getLauncherMock(); 
+        final BuildListener listener = TestHelper.getListenerMock(); 
         LinkedList<GateStep> checks = new LinkedList<GateStep>();
         checks.add(mCheck1);
         checks.add(mCheck2);
@@ -72,7 +74,7 @@ public class BuildResultActionTest {
         gate2 = new AndGate("Gate 2", checks);
 
         gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        gateEvaluator.evaluate(null, null, null);
+        gateEvaluator.evaluate(null, launcher, listener);
         fakeEvaluator = mock(QualityLineEvaluator.class); 
         when(fakeEvaluator.getLatestResults()).thenReturn(gateEvaluator.getLatestResults()); 
         when(fakeEvaluator.evaluate(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenReturn(gateEvaluator.getLatestResults()); 

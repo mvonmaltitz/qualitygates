@@ -1,6 +1,9 @@
 package de.binarytree.plugins.qualitygates;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
+
+import java.io.PrintStream;
+
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
@@ -15,6 +18,9 @@ public class TestHelper {
     }
 
     public static BuildListener getListenerMock() {
-        return mock(BuildListener.class);
+        BuildListener listener = mock(BuildListener.class);
+        PrintStream logger = mock(PrintStream.class); 
+        when(listener.getLogger()).thenReturn(logger); 
+        return listener; 
     }
 }

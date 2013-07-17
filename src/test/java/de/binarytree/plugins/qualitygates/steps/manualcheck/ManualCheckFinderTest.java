@@ -22,6 +22,7 @@ import de.binarytree.plugins.qualitygates.AndGate;
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.QualityLineEvaluator;
+import de.binarytree.plugins.qualitygates.TestHelper;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.QualityLineReport;
@@ -100,7 +101,7 @@ public class ManualCheckFinderTest {
 
     private void reevaluateObjects() {
         gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
-        gateEvaluator.evaluate(null, null, null);
+        gateEvaluator.evaluate(TestHelper.getBuildMock(), TestHelper.getLauncherMock(), TestHelper.getListenerMock());
         finder = new ManualCheckFinder(gateEvaluator.getLatestResults());
     }
 

@@ -93,9 +93,9 @@ public class QualityLineTest {
     
     @Test
     public void testEvaluation() throws IOException {
-        AbstractBuild build = mock(AbstractBuild.class);
-        Launcher launcher = mock(Launcher.class);
-        BuildListener listener = mock(BuildListener.class);
+        AbstractBuild build = TestHelper.getBuildMock(); 
+        Launcher launcher = TestHelper.getLauncherMock(); 
+        BuildListener listener = TestHelper.getListenerMock(); 
         boolean buildMayContinue = line.perform(build, launcher, listener);
         line.verifyEvaluatorMock();
         Mockito.verify(build).addAction(any(Action.class)); 
