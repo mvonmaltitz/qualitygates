@@ -20,29 +20,30 @@ import org.apache.commons.io.IOUtils;
  * 
  */
 public class BuildLogFileParser {
-    public static final Logger LOGGER = Logger
-            .getLogger(BuildLogFileParser.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(BuildLogFileParser.class.getName());
 
     private static final String LOG_LEVEL_REGEX = "\\[(INFO|WARNING)\\] ";
 
-    private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX
-            + " ---.*");
+    private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX + "---.*");
 
-    private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX
-            + "[-]*$");
+    private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX + "[-]*$");
 
     // To limit selection to maven output (filtering [HUDSON] tags)
-    private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX
-            + ".*");
+    private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX + ".*");
+
+    private static final Pattern BANNED_OUTPUT = Pattern.compile("Found Banned Dependency:.*");
 
     public enum Goal {
-        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX
-                + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*");
+        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*", MAVEN_OUTPUT), BANNED_DEPENDENCY_ANALYSE(
+                LOG_LEVEL_REGEX + "--- maven-enforcer-plugin:[^:]+:enforce.*", BANNED_OUTPUT);
 
         private Pattern pattern;
 
-        private Goal(String regex) {
+        private Pattern linePattern;
+
+        private Goal(String regex, Pattern linePattern) {
             pattern = Pattern.compile(regex);
+            this.linePattern = linePattern;
         }
 
         public Pattern getPattern() {
@@ -89,16 +90,14 @@ public class BuildLogFileParser {
                 }
 
                 // Pass the search section to only keep content of the section
-
-                while (lineIterator.hasNext() && !parsed) {
+                boolean inSection = true;
+                while (lineIterator.hasNext() && inSection) {
                     line = lineIterator.next();
-                    line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m",
-                            "");
-                    if (GOAL_START.matcher(line).matches()
-                            || END_OF_BUILD.matcher(line).matches()) {
-                        parsed = true;
+                    line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
+                    if (GOAL_START.matcher(line).matches() || END_OF_BUILD.matcher(line).matches()) {
+                        inSection = false;
                     } else {
-                        if (MAVEN_OUTPUT.matcher(line).matches()) {
+                        if (goal.linePattern.matcher(line).matches()) {
                             section.append(line).append("\n");
                         }
                     }
@@ -118,6 +117,10 @@ public class BuildLogFileParser {
         }
 
         return goalsLog.get(goal);
+    }
+
+    public String getBannedDependencyAnalyseBlock() {
+        return getContent(Goal.BANNED_DEPENDENCY_ANALYSE);
     }
 
     public String getDependencyAnalyseBlock() {

@@ -1,0 +1,198 @@
+Gestartet durch Benutzer anonymous
+Building in workspace /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace
+FSSCM.checkout /home/mvm/git/Masterarbeit/code/projectone/ to /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace
+FSSCM.clearWorkspace...
+New file: src/test/java/model/UserTest.java
+New file: src/main/java/model/Address.java
+New file: src/main/java/model/User.java
+New file: parent-pom.xml
+New file: pom.xml
+New file: release.properties
+New file: target/projectone-0.0.1-SNAPSHOT.jar
+New file: target/jacoco.exec
+New file: target/surefire-reports/TEST-model.UserTest.xml
+New file: target/surefire-reports/model.UserTest.txt
+New file: target/classes/model/Address.class
+New file: target/classes/model/User.class
+New file: target/maven-archiver/pom.properties
+New file: target/findbugsXml.xml
+New file: target/test-classes/model/UserTest.class
+New file: target/site/jacoco/jacoco.xml
+New file: target/site/jacoco/jacoco.csv
+New file: target/site/jacoco/model/User.html
+New file: target/site/jacoco/model/Address.java.html
+New file: target/site/jacoco/model/Address.html
+New file: target/site/jacoco/model/User.java.html
+New file: target/site/jacoco/model/index.html
+New file: target/site/jacoco/index.html
+
+FSSCM.check completed in 206 milliseconds
+Parsing POMs
+[workspace] $ /usr/lib/jvm/java-7-openjdk-amd64/bin/java -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8002,suspend=n -cp /home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-agent-1.2.jar:/usr/share/maven3/boot/plexus-classworlds-2.4.jar org.jvnet.hudson.maven3.agent.Maven3Main /usr/share/maven3/ /home/mvm/git/Masterarbeit/code/qualitygates/target/work/webapp/WEB-INF/lib/remoting-2.23.jar /home/mvm/git/Masterarbeit/code/qualitygates/./work/plugins/maven-plugin/WEB-INF/lib/maven3-interceptor-1.2.jar 44736
+Listening for transport dt_socket at address: 8002
+<===[JENKINS REMOTING CAPACITY]===>channel started
+log4j:WARN No appenders could be found for logger (org.apache.commons.beanutils.converters.BooleanConverter).
+log4j:WARN Please initialize the log4j system properly.
+Executing Maven:  -B -f /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/pom.xml install
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building projectone 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.6.2.201302030002:prepare-agent (default) @ projectone ---
+[INFO] argLine set to "-javaagent:/home/mvm/.m2/repository/org/jacoco/org.jacoco.agent/0.6.2.201302030002/org.jacoco.agent-0.6.2.201302030002-runtime.jar=destfile=/home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/jacoco.exec"
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:resources (default-resources) @ projectone ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ projectone ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- findbugs-maven-plugin:2.3.2:findbugs (default) @ projectone ---
+[INFO] ****** FindBugsMojo execute *******
+[INFO] canGenerate is true
+[INFO] ****** FindBugsMojo executeFindbugs *******
+[INFO] Temp File is /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/findbugsTemp.xml
+[INFO] Fork Value is true
+[INFO] xmlOutput is false
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:testResources (default-testResources) @ projectone ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ projectone ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.10:test (default-test) @ projectone ---
+[INFO] Surefire report directory: /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running model.UserTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.338 sec
+
+Results :
+
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
+
+[JENKINS] Zeichne Testergebnisse auf
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.6.2.201302030002:report (report) @ projectone ---
+[INFO] 
+[INFO] --- maven-jar-plugin:2.3.2:jar (default-jar) @ projectone ---
+[INFO] Building jar: /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/projectone-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- maven-pmd-plugin:3.0.1:pmd (pmd) @ projectone ---
+[WARNING] Unable to locate Source XRef to link to - DISABLED
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] 
+[INFO] --- maven-pmd-plugin:3.0.1:check (default) @ projectone ---
+[INFO] You have 3 PMD violations. For more details see:/home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/pmd.xml
+[INFO] 
+[INFO] --- maven-pmd-plugin:3.0.1:cpd (cpd) @ projectone ---
+[WARNING] Unable to locate Source XRef to link to - DISABLED
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] 
+[INFO] --- maven-pmd-plugin:3.0.1:cpd-check (default) @ projectone ---
+[INFO] 
+[INFO] 
+[INFO] --- maven-install-plugin:2.3.1:install (default-install) @ projectone ---
+[INFO] Installing /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/projectone-0.0.1-SNAPSHOT.jar to /home/mvm/.m2/repository/simpleproject/projectone/0.0.1-SNAPSHOT/projectone-0.0.1-SNAPSHOT.jar
+[INFO] Installing /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/pom.xml to /home/mvm/.m2/repository/simpleproject/projectone/0.0.1-SNAPSHOT/projectone-0.0.1-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 32.184s
+[INFO] Finished at: Tue Jun 25 17:10:18 CEST 2013
+[INFO] Final Memory: 33M/276M
+[INFO] ------------------------------------------------------------------------
+[JENKINS] Archiving /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/pom.xml to /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/modules/simpleproject$projectone/builds/2013-06-25_17-09-37/archive/simpleproject/projectone/0.0.1-SNAPSHOT/projectone-0.0.1-SNAPSHOT.pom
+[JENKINS] Archiving /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/projectone-0.0.1-SNAPSHOT.jar to /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/modules/simpleproject$projectone/builds/2013-06-25_17-09-37/archive/simpleproject/projectone/0.0.1-SNAPSHOT/projectone-0.0.1-SNAPSHOT.jar
+Warte bis Jenkins die Datensammlung abgeschlossen hat
+channel stopped
+[workspace] $ mvn dependency:analyze
+Listening for transport dt_socket at address: 8002
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building projectone 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] >>> maven-dependency-plugin:2.1:analyze (default-cli) @ projectone >>>
+[INFO] 
+[INFO] --- jacoco-maven-plugin:0.6.2.201302030002:prepare-agent (default) @ projectone ---
+[INFO] argLine set to "-javaagent:/home/mvm/.m2/repository/org/jacoco/org.jacoco.agent/0.6.2.201302030002/org.jacoco.agent-0.6.2.201302030002-runtime.jar=destfile=/home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/jacoco.exec"
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:resources (default-resources) @ projectone ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ projectone ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- findbugs-maven-plugin:2.3.2:findbugs (default) @ projectone ---
+[INFO] ****** FindBugsMojo execute *******
+[INFO] canGenerate is true
+[INFO] ****** FindBugsMojo executeFindbugs *******
+[INFO] Temp File is /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/target/findbugsTemp.xml
+[INFO] Fork Value is true
+[INFO] xmlOutput is false
+[INFO] 
+[INFO] --- maven-enforcer-plugin:1.2:enforce (default) @ customerselfcare ---
+[WARNING] Rule 0: org.apache.maven.plugins.enforcer.BannedDependencies failed with message:
+See http://wiki.intranet.1and1.com/bin/view/DEVPortal/MavenEnforcerRules#bannedDependencies
+Found Banned Dependency: org.springframework:spring-support:jar:2.0.8
+Found Banned Dependency: org.springframework:spring-tx:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-context-support:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-core:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-mock:jar:2.0.8
+Found Banned Dependency: org.springframework:spring-webmvc:jar:2.5.6
+Found Banned Dependency: com.unitedinternet.portal.commons.http-utils:http-utils:jar:1.2
+Found Banned Dependency: org.springframework:spring-context:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-web:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-aspects:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-aop:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-jdbc:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-test:jar:2.5.6
+Found Banned Dependency: org.springframework:spring:jar:2.5.6
+Found Banned Dependency: org.springframework:spring-beans:jar:2.5.6
+Use 'mvn dependency:tree' to locate the source of the banned dependencies.
+[WARNING] Rule 12: org.apache.maven.plugins.enforcer.RequirePropertyDiverges failed with message:
+Property 'maven-release-plugin.tagBase' evaluates to 'https://svn.1and1.org/svn/portal_common0/tools/java/maven2/portalpom/releases/'. This does match the regular expression 'https://svn.1and1.org/svn/portal_common0/tools/java/maven2/portalpom/releases/'
+[WARNING] Rule 13: org.apache.maven.plugins.enforcer.RequirePropertyDiverges failed with message:
+Property 'mamdevqaTelephone' evaluates to '4622'. This does match the regular expression '4622'
+[WARNING] Rule 14: org.apache.maven.plugins.enforcer.RequirePropertyDiverges failed with message:
+Property 'mamdevqaYpUrl' evaluates to 'http://go.1and1.org/yp/YP-LI.16976'. This does match the regular expression 'http://go.1and1.org/yp/YP-LI.16976'
+[WARNING] Rule 16: org.apache.maven.plugins.enforcer.RequirePropertyDiverges failed with message:
+Property 'mamdevqaTimsato' evaluates to 'p.tpq1.is'. This does match the regular expression 'p\.tpq1\.is'
+[INFO] 
+[INFO] --- build-helper-maven-plugin:1.8:parse-version (parse-version) @ customerselfcare ---
+[INFO] 
+[INFO] --- maven-resources-plugin:2.5:testResources (default-testResources) @ projectone ---
+[debug] execute contextualize
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/mvm/git/Masterarbeit/code/qualitygates/work/jobs/Project One/workspace/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ projectone ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< maven-dependency-plugin:2.1:analyze (default-cli) @ projectone <<<
+[INFO] 
+[INFO] --- maven-dependency-plugin:2.1:analyze (default-cli) @ projectone ---
+[WARNING] Unused declared dependencies found:
+[WARNING]    org.mockito:mockito-all:jar:1.8.4:compile
+[WARNING]    org.jacoco:jacoco-maven-plugin:jar:0.6.2.201302030002:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 18.350s
+[INFO] Finished at: Tue Jun 25 17:10:41 CEST 2013
+[INFO] Final Memory: 22M/209M
+[INFO] ------------------------------------------------------------------------
+Finished: SUCCESS
