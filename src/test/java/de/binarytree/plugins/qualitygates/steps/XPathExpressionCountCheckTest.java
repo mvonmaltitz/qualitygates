@@ -74,7 +74,7 @@ public class XPathExpressionCountCheckTest {
 
         @Override
         protected boolean buildHasFileInWorkspace(AbstractBuild build) throws IOException, InterruptedException {
-            return true;
+            return build != null;
         }
 
         @Override
@@ -104,6 +104,7 @@ public class XPathExpressionCountCheckTest {
         assertEquals(this.warningThreshold, check.getWarningThreshold());
         assertEquals(this.name, check.getName());
     }
+
 
     @Test
     public void testNoMatchIsSuccess() {
@@ -152,9 +153,9 @@ public class XPathExpressionCountCheckTest {
     @Test
     public void testOverWarningThresholdInMultipleFilesIsFailure() {
         this.xmlStream = byteStreamFromViolationCount(this.warningThreshold + 1);
-        GateStepReport result = check.step(build, null, null);
-        assertEquals(Result.FAILURE, result.getResult());
-        assertTrue(result.getReason().contains(Integer.toString(this.warningThreshold + 1)));
+        GateStepReport report = check.step(build, null, null);
+        assertEquals(Result.FAILURE, report.getResult());
+        assertTrue(report.getReason().contains(Integer.toString(this.warningThreshold + 1)));
     }
 
     @Test
@@ -165,14 +166,21 @@ public class XPathExpressionCountCheckTest {
             protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
                 throw new RuntimeException();
             }
-        };
-        GateStepReport checkReport = check.step(build, null, null);
-        assertEquals(Result.FAILURE, checkReport.getResult());
-        assertTrue(checkReport.getReason().contains("Exception"));
-    }
+		};
+		GateStepReport checkReport = check.step(build, null, null);
+		assertEquals(Result.FAILURE, checkReport.getResult());
+		assertTrue(checkReport.getReason().contains("Exception"));
+	}
 
-    @Test
-    public void testCheckFailsWhenFindingSNAPSHOTDependencies() throws XPathExpressionException,
+	@Test
+	public void testCheckFailsWhenFileDoesNotExist(){
+		GateStepReport report = check.step(null, null, null);
+		assertEquals(Result.FAILURE, report.getResult());
+		assertTrue(report.getReason().contains("not found"));
+	}
+
+	@Test
+	public void testCheckFailsWhenFindingSNAPSHOTDependencies() throws XPathExpressionException,
             ParserConfigurationException, SAXException, IOException {
         this.xmlStream = new ByteArrayInputStream(this.pomString.getBytes());
         check = new MockXMLCheck(name, "pom.xml", snapshotExpression, 0, 0);
@@ -193,16 +201,16 @@ public class XPathExpressionCountCheckTest {
         return this.getXMLforNumberOfViolationsInFiles(violations, 1);
     }
 
-    public String getXMLforNumberOfViolationsInFiles(int violations, int files) {
-        String xml = this.xmlHeader;
-        for (int f = 0; f < files; f++) {
-            xml += this.xmlFileStart;
-            for (int i = 0; i < violations; i++) {
-                xml += this.xmlViolation;
-            }
-            xml += this.xmlFileEnd;
-        }
-        xml += this.xmlFooter;
-        return xml;
-    }
+	public String getXMLforNumberOfViolationsInFiles(int violations, int files){
+		String xml = this.xmlHeader;
+		for(int f = 0; f < files; f++){
+			xml += this.xmlFileStart;
+			for(int i = 0; i < violations; i++){
+				xml += this.xmlViolation;
+			}
+			xml += this.xmlFileEnd;
+		}
+		xml += this.xmlFooter;
+		return xml;
+	}
 }

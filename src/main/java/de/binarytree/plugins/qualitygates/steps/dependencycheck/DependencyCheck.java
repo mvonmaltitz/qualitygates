@@ -17,8 +17,9 @@ import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser.Goal;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.DependencyAnalysisParser;
-import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.AnalysisResult;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.MavenDependencyAnalysisResult;
 
 public class DependencyCheck extends GateStep {
 
@@ -59,7 +60,7 @@ public class DependencyCheck extends GateStep {
         if (!dependencySectionWasFound(dependencySection)) {
             setCheckReportToUnstableDueToMissingDependencySection(checkReport);
         } else {
-            AnalysisResult dependencyProblems = analyseDependencySection(dependencySection);
+            MavenDependencyAnalysisResult dependencyProblems = analyseDependencySection(dependencySection);
             gatherViolationsAndSetCheckReport(checkReport,
                     dependencyProblems);
         }
@@ -68,8 +69,7 @@ public class DependencyCheck extends GateStep {
     private String obtainDependencySection(AbstractBuild build)
             throws IOException {
         BuildLogFileParser logFileParser = parseBuildLogFile(build);
-        String dependencySection = logFileParser
-                .getDependencyAnalyseBlock();
+        String dependencySection = logFileParser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE); 
         return dependencySection;
     }
 
@@ -102,14 +102,14 @@ public class DependencyCheck extends GateStep {
                         "No dependency section found. Add dependency:analyze on your job configuration.");
     }
 
-    protected AnalysisResult analyseDependencySection(String dependencySection)
+    protected MavenDependencyAnalysisResult analyseDependencySection(String dependencySection)
             throws IOException {
         return DependencyAnalysisParser
                 .parseDependencyAnalyzeSection(dependencySection);
     }
 
     private void gatherViolationsAndSetCheckReport(GateStepReport checkReport,
-            AnalysisResult analysis) {
+            MavenDependencyAnalysisResult analysis) {
         int numberOfUndeclaredDependencies = analysis
                 .getNumberOfUndeclaredDependencies();
         int numberOfUnusedDependencies = analysis

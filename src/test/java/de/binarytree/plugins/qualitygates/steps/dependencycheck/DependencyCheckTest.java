@@ -19,10 +19,10 @@ import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.TestHelper;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.dependencycheck.DependencyCheck;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.DependencyCheck.DescriptorImpl;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser;
-import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.AnalysisResult;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser.Goal;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.MavenDependencyAnalysisResult;
 
 public class DependencyCheckTest {
 
@@ -36,11 +36,11 @@ public class DependencyCheckTest {
 
     class MockDependencyCheck extends DependencyCheck {
         private BuildLogFileParser logFileParser;
-        private AnalysisResult analysis;
+        private MavenDependencyAnalysisResult analysis;
 
         public MockDependencyCheck() {
             logFileParser = mock(BuildLogFileParser.class);
-            analysis = mock(AnalysisResult.class);
+            analysis = mock(MavenDependencyAnalysisResult.class);
         }
 
         @Override
@@ -53,11 +53,11 @@ public class DependencyCheckTest {
         }
 
         @Override
-        protected AnalysisResult analyseDependencySection(String depencySection) {
+        protected MavenDependencyAnalysisResult analyseDependencySection(String depencySection) {
             return analysis;
         }
 
-        public AnalysisResult getMockAnalysis() {
+        public MavenDependencyAnalysisResult getMockAnalysis() {
             return analysis;
         }
     }
@@ -171,7 +171,7 @@ public class DependencyCheckTest {
     }
     private void letAnalysisReturn(MockDependencyCheck check,
             int numberOfUndeclaredDependencies, int numberOfUnusedDependencies) {
-        AnalysisResult analysis = check.getMockAnalysis();
+        MavenDependencyAnalysisResult analysis = check.getMockAnalysis();
         when(analysis.getNumberOfUndeclaredDependencies()).thenReturn(
                 numberOfUndeclaredDependencies);
         when(analysis.getNumberOfUnusedDependencies()).thenReturn(
@@ -179,7 +179,7 @@ public class DependencyCheckTest {
     }
 
     private void letParserReturn(BuildLogFileParser parser, String returnValue) {
-        when(parser.getDependencyAnalyseBlock()).thenReturn(returnValue);
+        when(parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE)).thenReturn(returnValue);
     }
 
     private void setBuildResultToSuccess() {

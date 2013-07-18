@@ -5,18 +5,18 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.AnalysisResult;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.MavenDependencyAnalysisResult;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.DependencyProblemType;
 
-public class AnalysisResultTest {
+public class MavenDependencyAnalysisResultTest {
 
     private String violation;
-    private AnalysisResult analysis;
+    private MavenDependencyAnalysisResult analysis;
     private String violation2;
 
     @Before
     public void setUp() {
-        analysis = new AnalysisResult();
+        analysis = new MavenDependencyAnalysisResult();
         violation = "Violation";
         violation2 = "Violation2";
     }
@@ -31,7 +31,7 @@ public class AnalysisResultTest {
 
     @Test
     public void testCountOfUnusedIsCorrect() {
-        AnalysisResult analysis = new AnalysisResult();
+        MavenDependencyAnalysisResult analysis = new MavenDependencyAnalysisResult();
         String violation = "Violation";
         String violation2 = "Violation2";
         analysis.addViolation(DependencyProblemType.UNUSED, violation);
@@ -42,7 +42,7 @@ public class AnalysisResultTest {
 
     @Test
     public void testDuplicatesGetEliminated() {
-        AnalysisResult analysis = new AnalysisResult();
+        MavenDependencyAnalysisResult analysis = new MavenDependencyAnalysisResult();
         String violation = "Violation";
         String violation2 = "Violation";
         analysis.addViolation(DependencyProblemType.UNUSED, violation);

@@ -17,6 +17,7 @@ public class PMDCheckTest {
     @Test
     public void testDescription() {
         assertTrue(check.getDescription().toLowerCase().contains("pmd"));
+        assertTrue(new PMDCheck.DescriptorImpl().getDisplayName().toLowerCase().contains("pmd"));
     }
 
     @Test

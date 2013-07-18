@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
-import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.AnalysisResult;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.MavenDependencyAnalysisResult;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.DependencyProblemType;
 
 /**
@@ -53,10 +53,10 @@ public final class DependencyAnalysisParser {
         }
     };
 
-    public static AnalysisResult parseDependencyAnalyzeSection(String content)
+    public static MavenDependencyAnalysisResult parseDependencyAnalyzeSection(String content)
             throws IOException {
 
-        AnalysisResult result = new AnalysisResult();
+        MavenDependencyAnalysisResult result = new MavenDependencyAnalysisResult();
         List<String> lines = IOUtils.readLines(new StringReader(content));
 
         DependencyProblemType currentProblemType = null;

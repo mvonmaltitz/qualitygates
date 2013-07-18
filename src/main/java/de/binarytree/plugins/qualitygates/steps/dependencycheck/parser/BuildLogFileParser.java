@@ -46,10 +46,6 @@ public class BuildLogFileParser {
             this.linePattern = linePattern;
         }
 
-        public Pattern getPattern() {
-            return pattern;
-        }
-
         public static Goal getMatchingGoal(String line) {
             Goal[] goals = Goal.values();
 
@@ -78,40 +74,53 @@ public class BuildLogFileParser {
 
         while (lineIterator.hasNext()) {
             String line = lineIterator.next();
-            line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
+            line = eliminateColorEscapeCodes(line);
 
             Goal goal = Goal.getMatchingGoal(line);
             if (goal != null) {
-                StringBuilder section = new StringBuilder();
-
-                String formerSection = goalsLog.get(goal);
-                if (formerSection != null) {
-                    section.append(formerSection);
-                }
-
-                // Pass the search section to only keep content of the section
-                boolean inSection = true;
-                while (lineIterator.hasNext() && inSection) {
-                    line = lineIterator.next();
-                    line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
-                    if (GOAL_START.matcher(line).matches() || END_OF_BUILD.matcher(line).matches()) {
-                        inSection = false;
-                    } else {
-                        if (goal.linePattern.matcher(line).matches()) {
-                            section.append(line).append("\n");
-                        }
-                    }
-
-                }
-
-                goalsLog.put(goal, section.toString());
+                processSectionOfGoal(lineIterator, goal);
             }
         }
 
         parsed = true;
     }
 
-    private String getContent(Goal goal) {
+	private void processSectionOfGoal(Iterator<String> lineIterator, Goal goal){
+		StringBuilder section = new StringBuilder();
+
+		String formerSection = goalsLog.get(goal);
+		if (formerSection != null) {
+		    section.append(formerSection);
+		}
+
+		extractSection(lineIterator, goal, section);
+		goalsLog.put(goal, section.toString());
+	}
+
+	private String eliminateColorEscapeCodes(String line){
+		line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
+		return line;
+	}
+
+	private void extractSection(Iterator<String> lineIterator, Goal goal, StringBuilder section){
+		String line;
+		// Pass the search section to only keep content of the section
+		boolean inSection = true;
+		while (lineIterator.hasNext() && inSection) {
+		    line = lineIterator.next();
+		    line = eliminateColorEscapeCodes(line);
+		    if (GOAL_START.matcher(line).matches() || END_OF_BUILD.matcher(line).matches()) {
+		        inSection = false;
+		    } else {
+		        if (goal.linePattern.matcher(line).matches()) {
+		            section.append(line).append("\n");
+		        }
+		    }
+
+		}
+	}
+
+    public String getContentOfSectionFor(Goal goal) {
         if (!parsed) {
             throw new IllegalStateException("No log file was parsed");
         }
@@ -119,12 +128,5 @@ public class BuildLogFileParser {
         return goalsLog.get(goal);
     }
 
-    public String getBannedDependencyAnalyseBlock() {
-        return getContent(Goal.BANNED_DEPENDENCY_ANALYSE);
-    }
-
-    public String getDependencyAnalyseBlock() {
-        return getContent(Goal.DEPENDENCY_ANALYSE);
-    }
 
 }

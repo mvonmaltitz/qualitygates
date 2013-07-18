@@ -5,14 +5,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class AnalysisResult {
+public class MavenDependencyAnalysisResult {
     private Map<DependencyProblemType, List<String>> violationsByType;
 
-    public AnalysisResult(Map<DependencyProblemType, List<String>> result) {
+    public MavenDependencyAnalysisResult(Map<DependencyProblemType, List<String>> result) {
         this.violationsByType = result;
     }
 
-    public AnalysisResult() {
+    public MavenDependencyAnalysisResult() {
         this(new HashMap<DependencyProblemType, List<String>>());
     }
 
