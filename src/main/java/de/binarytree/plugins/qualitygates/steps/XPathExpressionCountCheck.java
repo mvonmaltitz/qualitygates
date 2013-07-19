@@ -63,14 +63,14 @@ public class XPathExpressionCountCheck extends XMLCheck {
     private void processTargetFileIfExistent(AbstractBuild build, GateStepReport checkReport) throws IOException,
             InterruptedException, ParserConfigurationException, SAXException, XPathExpressionException {
         if (buildHasFileInWorkspace(build)) {
-            NodeList matchingNodes = matchExpression(build, checkReport);
+            NodeList matchingNodes = matchExpression(build);
             setCheckResult(checkReport, matchingNodes);
         } else {
             failDueToNonexistentFile(checkReport);
         }
     }
 
-    private NodeList matchExpression(AbstractBuild build, GateStepReport checkReport) throws IOException,
+    private NodeList matchExpression(AbstractBuild build) throws IOException,
             ParserConfigurationException, SAXException, XPathExpressionException {
         InputStream stream = this.obtainInputStreamOfTargetfileRelativeToBuild(build);
         return getMatchingNodes(stream);
