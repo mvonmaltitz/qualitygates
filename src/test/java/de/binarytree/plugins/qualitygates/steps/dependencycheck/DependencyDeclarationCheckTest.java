@@ -19,12 +19,12 @@ import org.junit.Test;
 
 import de.binarytree.plugins.qualitygates.TestHelper;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-import de.binarytree.plugins.qualitygates.steps.dependencycheck.DependencyCheck.DescriptorImpl;
+import de.binarytree.plugins.qualitygates.steps.dependencycheck.DependencyDeclarationCheck.DescriptorImpl;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.parser.BuildLogFileParser.Goal;
 import de.binarytree.plugins.qualitygates.steps.dependencycheck.result.MavenDependencyAnalysisResult;
 
-public class DependencyCheckTest {
+public class DependencyDeclarationCheckTest {
 
     private static final String DEPENDENCY_SECTION = ""
             + "[WARNING] Used undeclared dependencies found:"
@@ -34,7 +34,7 @@ public class DependencyCheckTest {
             + "[WARNING]    org.apache.maven:maven-artifact-manager:jar:2.0:compile"
             + "[WARNING]    org.apache.maven:maven-artifact:jar:2.0:compile";
 
-    class MockDependencyCheck extends DependencyCheck {
+    class MockDependencyCheck extends DependencyDeclarationCheck {
         private BuildLogFileParser logFileParser;
         private MavenDependencyAnalysisResult analysis;
 
@@ -49,7 +49,7 @@ public class DependencyCheckTest {
         }
 
         public DescriptorImpl getDescriptor() {
-            return new DependencyCheck.DescriptorImpl();
+            return new DependencyDeclarationCheck.DescriptorImpl();
         }
 
         @Override
@@ -165,7 +165,7 @@ public class DependencyCheckTest {
 
     @Test
     public void testDescriptionContainsDependency(){
-        DescriptorImpl descriptor = new DependencyCheck.DescriptorImpl(); 
+        DescriptorImpl descriptor = new DependencyDeclarationCheck.DescriptorImpl(); 
         assertTrue(descriptor.getDisplayName().toLowerCase().contains("dependency")); 
         assertTrue(check.getDescription().toLowerCase().contains("dependency")); 
     }
