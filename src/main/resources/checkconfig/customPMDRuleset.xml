@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ruleset>
+	name="custom_ruleset"
+	<description> Custom pmd ruleset.
+	</description>
+	<!-- the 3 default pmd rulesets + empty ruleset -->
+	
+		
+	<rule ref="rulesets/java/basic.xml">
+		<!--
+			rule excluded because of: http://issue.tool.1and1.com/browse/PORTMVNPLG-123
+		-->			
+		<exclude name="UselessParentheses" />
+	</rule>
+	<rule ref="rulesets/java/imports.xml">
+	</rule>
+	<rule ref="rulesets/java/unusedcode.xml">
+		<!--
+			rule excluded because of: http://issue.tool.1and1.com/browse/PORTMVNPLG-123
+		-->		
+		<exclude name="UnusedModifier" />
+	</rule>
+	<rule ref="rulesets/java/empty.xml">
+	</rule>
+</ruleset>

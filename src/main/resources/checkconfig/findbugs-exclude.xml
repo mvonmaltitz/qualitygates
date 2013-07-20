@@ -1,0 +1,9 @@
+<FindBugsFilter>
+    <Match>
+        <Bug code="SnVI" />
+    </Match>
+    <!--Match>
+        <Bug code="UwF" />
+    </Match-->
+</FindBugsFilter>
+
