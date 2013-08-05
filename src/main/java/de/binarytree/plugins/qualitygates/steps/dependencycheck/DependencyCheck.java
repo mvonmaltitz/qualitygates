@@ -19,11 +19,11 @@ public abstract class DependencyCheck extends GateStep {
     }
 
 
-    protected abstract void processBuildLog(AbstractBuild build, GateStepReport checkReport)
+    protected abstract void processBuildLog(AbstractBuild<?, ?> build, GateStepReport checkReport)
             throws IOException;
 
     @Override
-    public void doStep(AbstractBuild build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
+    public void doStep(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
         if (!buildExists(build)) {
             failCheckDueToInexistententBuild(checkReport);
         } else {
@@ -36,7 +36,7 @@ public abstract class DependencyCheck extends GateStep {
     
     }
 
-    private boolean buildExists(AbstractBuild build) {
+    private boolean buildExists(AbstractBuild<?, ?> build) {
         Result result = build.getResult();
         return Result.SUCCESS.equals(result) || Result.UNSTABLE.equals(result);
     }
@@ -46,7 +46,7 @@ public abstract class DependencyCheck extends GateStep {
                 "Cannot proceed, build has not been successful");
     }
 
-    protected BuildLogFileParser parseBuildLogFile(AbstractBuild build) throws IOException {
+    protected BuildLogFileParser parseBuildLogFile(AbstractBuild<?, ?> build) throws IOException {
         File logFile = build.getLogFile();
         BuildLogFileParser logFileParser = createLogFileParser();
         logFileParser.parseLogFile(logFile);

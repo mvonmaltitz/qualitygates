@@ -101,7 +101,7 @@ public class BuildResultActionTest {
 
     private StaplerRequest prepareFakedStaplerRequest() throws IOException {
         StaplerRequest req = mock(StaplerRequest.class);
-        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class);
         when(req.hasParameter("id")).thenReturn(true);
         when(req.getParameter("id")).thenReturn("Hash1");
         when(req.findAncestorObject(AbstractBuild.class)).thenReturn(build);

@@ -93,7 +93,7 @@ public class QualityLineTest {
     
     @Test
     public void testEvaluation() throws IOException {
-        AbstractBuild build = TestHelper.getBuildMock(); 
+        AbstractBuild<?, ?> build = TestHelper.getBuildMock(); 
         Launcher launcher = TestHelper.getLauncherMock(); 
         BuildListener listener = TestHelper.getListenerMock(); 
         boolean buildMayContinue = line.perform(build, launcher, listener);

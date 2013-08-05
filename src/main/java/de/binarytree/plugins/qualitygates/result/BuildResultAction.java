@@ -76,7 +76,7 @@ public class BuildResultAction implements ProminentProjectAction {
 
     private void rerunQualityLineEvaluation(StaplerRequest req)
             throws IOException {
-        AbstractBuild build = getFormerBuild(req);
+        AbstractBuild<?, ?> build = getFormerBuild(req);
         BuildListener listener = new StreamBuildListener(
                 getLogfileAppender(build));
         Launcher launcher = this.getLauncher(listener);
@@ -84,11 +84,11 @@ public class BuildResultAction implements ProminentProjectAction {
         build.save();
     }
 
-    private AbstractBuild getFormerBuild(StaplerRequest req) {
+    private AbstractBuild<?, ?> getFormerBuild(StaplerRequest req) {
         return req.findAncestorObject(AbstractBuild.class);
     }
 
-    private FileOutputStream getLogfileAppender(AbstractBuild build)
+    private FileOutputStream getLogfileAppender(AbstractBuild<?, ?> build)
             throws FileNotFoundException {
         return new FileOutputStream(build.getLogFile(), true);
     }

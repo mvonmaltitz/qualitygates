@@ -62,7 +62,7 @@ public class DependencyDeclarationCheckTest {
         }
     }
 
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
     private BuildListener listener;
     private Launcher launcher;
     private MockDependencyCheck check;

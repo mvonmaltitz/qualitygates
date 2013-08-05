@@ -57,16 +57,16 @@ public abstract class XMLCheck extends GateStep {
         return (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
     }
 
-    protected boolean buildHasFileInWorkspace(AbstractBuild build) throws IOException, InterruptedException {
+    protected boolean buildHasFileInWorkspace(AbstractBuild<?, ?> build) throws IOException, InterruptedException {
         return generateFilePathFromPathStringRelativeToBuild(build).exists();
     }
 
-    private FilePath generateFilePathFromPathStringRelativeToBuild(AbstractBuild build) {
+    private FilePath generateFilePathFromPathStringRelativeToBuild(AbstractBuild<?, ?> build) {
         FilePath pom = build.getModuleRoot().child(this.targetFile);
         return pom;
     }
 
-    protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) throws IOException {
+    protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) throws IOException {
         FilePath pom = build.getModuleRoot().child(this.targetFile);
         return pom.read();
     }

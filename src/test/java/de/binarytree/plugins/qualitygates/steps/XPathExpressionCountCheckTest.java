@@ -52,7 +52,7 @@ public class XPathExpressionCountCheckTest {
 
     private String xmlFooter = " </pmd>";
 
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     private int successThreshold = 1;
 
@@ -68,12 +68,12 @@ public class XPathExpressionCountCheckTest {
         }
 
         @Override
-        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
+        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) {
             return xmlStream;
         }
 
         @Override
-        protected boolean buildHasFileInWorkspace(AbstractBuild build) throws IOException, InterruptedException {
+        protected boolean buildHasFileInWorkspace(AbstractBuild<?, ?> build) throws IOException, InterruptedException {
             return build != null;
         }
 
@@ -163,7 +163,7 @@ public class XPathExpressionCountCheckTest {
         check = new MockXMLCheck(name, "pom.xml", "/project/parent/notHere", successThreshold, warningThreshold) {
 
             @Override
-            protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
+            protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) {
                 throw new RuntimeException();
             }
 		};

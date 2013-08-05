@@ -51,7 +51,7 @@ public class QualityLine extends Recorder implements Saveable {
     }
 
     @Override
-    public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
+    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
         listener.getLogger().println("Starting QualityLine");
         QualityLineEvaluator gateEvaluator = getGateEvaluatorForGates();
         gateEvaluator.evaluate(build, launcher, listener);

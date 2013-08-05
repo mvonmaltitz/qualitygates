@@ -19,7 +19,7 @@ public class FailingCheck extends GateStep {
     }
 
     @Override
-    public void doStep(AbstractBuild build, Launcher launcher,
+    public void doStep(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener, GateStepReport checkReport) {
         checkReport.setResult(Result.FAILURE, "This check always fails.");
     }

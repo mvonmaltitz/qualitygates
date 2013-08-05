@@ -41,13 +41,13 @@ public class FailingCheckTest {
 
     @Test
     public void testFailingWithValidBuild() {
-        AbstractBuild build = mock(AbstractBuild.class);
+        AbstractBuild<?, ?> build = mock(AbstractBuild.class);
         assertEquals(Result.FAILURE, check.step(build, null, null).getResult());
     }
 
     @Test
     public void testFailingWithNullBuild() {
-        AbstractBuild build = null;
+        AbstractBuild<?, ?> build = null;
         assertEquals(Result.FAILURE, check.step(build, null, null).getResult());
     }
 

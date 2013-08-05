@@ -34,7 +34,7 @@ public class XPathExpressionCheck extends XMLCheck {
     }
 
     @Override
-    public void doStep(AbstractBuild build, Launcher launcher,
+    public void doStep(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener, GateStepReport checkReport) {
         try {
             matchExpression(build, checkReport);
@@ -43,7 +43,7 @@ public class XPathExpressionCheck extends XMLCheck {
         }
     }
 
-    private void matchExpression(AbstractBuild build, GateStepReport checkReport)
+    private void matchExpression(AbstractBuild<?, ?> build, GateStepReport checkReport)
             throws IOException, ParserConfigurationException, SAXException,
             XPathExpressionException {
         InputStream stream = this.obtainInputStreamOfTargetfileRelativeToBuild(build);

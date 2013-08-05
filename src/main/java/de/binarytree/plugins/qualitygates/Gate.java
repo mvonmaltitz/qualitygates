@@ -35,7 +35,7 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
         this.name = name;
     }
 
-    public GateReport evaluate(AbstractBuild build, Launcher launcher,
+    public GateReport evaluate(AbstractBuild<?,?> build, Launcher launcher,
             BuildListener listener) {
         GateReport gateReport = this.createEmptyGateReport();
         this.doEvaluation(build, launcher, listener, gateReport);
@@ -74,7 +74,7 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
      *            the report where the gate has to document, whether its
      *            evaluation has been successful
      */
-    abstract void doEvaluation(AbstractBuild build, Launcher launcher,
+    abstract void doEvaluation(AbstractBuild<?,?> build, Launcher launcher,
             BuildListener listener, GateReport gateReport);
 
     public QualityGateDescriptor getDescriptor() {

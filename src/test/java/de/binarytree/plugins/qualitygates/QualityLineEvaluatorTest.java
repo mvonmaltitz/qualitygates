@@ -22,7 +22,7 @@ public class QualityLineEvaluatorTest {
     private LinkedList<Gate> gateList;
     private BuildListener listener;
     private Launcher launcher;
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     @Before
     public void setUp() throws Exception {
@@ -121,7 +121,7 @@ public class QualityLineEvaluatorTest {
         LinkedList<GateStep> checkList = new LinkedList<GateStep>();
         return new Gate(name) {
             @Override
-            public void doEvaluation(AbstractBuild build, Launcher launcher,
+            public void doEvaluation(AbstractBuild<?, ?> build, Launcher launcher,
                     BuildListener listener, GateReport gateReport) {
                 gateReport.setResult(result);
             }

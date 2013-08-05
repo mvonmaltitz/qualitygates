@@ -33,7 +33,7 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  */
 public abstract class GateStep implements Describable<GateStep>, ExtensionPoint {
 
-    public GateStepReport step(AbstractBuild build, BuildListener listener,
+    public GateStepReport step(AbstractBuild<?, ?> build, BuildListener listener,
             Launcher launcher) {
         GateStepReport stepReport = this.createEmptyGateStepReport();
         try {
@@ -78,7 +78,7 @@ public abstract class GateStep implements Describable<GateStep>, ExtensionPoint 
      *            the report where the step has to document, whether its
      *            evaluation has been successful
      */
-    public abstract void doStep(AbstractBuild build, Launcher launcher,
+    public abstract void doStep(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener, GateStepReport stepReport);
 
     /**

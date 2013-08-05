@@ -37,7 +37,7 @@ public class ShellActionTest {
 
     private Shell shell = mock(Shell.class);
 
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     class MockExecutionCheck extends ShellAction {
 

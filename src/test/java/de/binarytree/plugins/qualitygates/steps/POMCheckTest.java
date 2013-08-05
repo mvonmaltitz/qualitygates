@@ -12,7 +12,7 @@ import de.binarytree.plugins.qualitygates.steps.POMCheck.DescriptorImpl;
 public class POMCheckTest {
 
     private POMCheck pomCheck;
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     @Test
     public void testDescriptionContainsPOM() {

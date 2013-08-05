@@ -44,7 +44,7 @@ public class CheckResultTest {
         }
 
         @Override
-        public void doStep(AbstractBuild build, Launcher launcher,
+        public void doStep(AbstractBuild<?, ?> build, Launcher launcher,
                 BuildListener listener, GateStepReport checkReport) {
         }
 

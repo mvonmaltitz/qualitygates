@@ -46,7 +46,7 @@ public class QualityGateTest {
         }
 
         @Override
-        public void doStep(AbstractBuild build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
+        public void doStep(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
         }
 
     }
@@ -60,7 +60,7 @@ public class QualityGateTest {
         checkList.add(check2);
         gate = new Gate("Name") {
             @Override
-            public void doEvaluation(AbstractBuild build, Launcher launcher, BuildListener listener,
+            public void doEvaluation(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener,
                     GateReport gateReport) {
             }
 

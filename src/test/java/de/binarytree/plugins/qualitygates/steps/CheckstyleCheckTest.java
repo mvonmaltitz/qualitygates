@@ -35,7 +35,7 @@ public class CheckstyleCheckTest {
 
     private MockCheckstyleCheck check;
 
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     class MockCheckstyleCheck extends CheckstyleCheck {
 
@@ -44,12 +44,12 @@ public class CheckstyleCheckTest {
         }
 
         @Override
-        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
+        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) {
             return xmlStream;
         }
 
         @Override
-        protected boolean buildHasFileInWorkspace(AbstractBuild build) throws java.io.IOException, InterruptedException {
+        protected boolean buildHasFileInWorkspace(AbstractBuild<?, ?> build) throws java.io.IOException, InterruptedException {
             return true;
         }
 

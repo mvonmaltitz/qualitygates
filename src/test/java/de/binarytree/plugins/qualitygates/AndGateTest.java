@@ -29,7 +29,7 @@ public class AndGateTest {
     private Result NOT_BUILT = Result.NOT_BUILT;
 
     private AndGate gate;
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
     private LinkedList<GateStep> checkList;
     private BuildListener listener;
     private GateStepDescriptor descriptor;

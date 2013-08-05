@@ -18,7 +18,7 @@ import de.binarytree.plugins.qualitygates.steps.MavenBuildSuccessCheck.MavenSucc
 public class MavenBuildSuccessCheckTest {
 
     private MavenBuildSuccessCheck check;
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
     private MavenSuccessCheckDescriptor descriptor;
 
     @Before

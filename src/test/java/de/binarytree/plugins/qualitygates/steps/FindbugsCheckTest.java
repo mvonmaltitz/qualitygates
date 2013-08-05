@@ -38,12 +38,12 @@ public class FindbugsCheckTest {
         }
 
         @Override
-        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
+        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) {
             return xmlStream;
         }
 
         @Override
-        protected boolean buildHasFileInWorkspace(AbstractBuild build) throws java.io.IOException, InterruptedException {
+        protected boolean buildHasFileInWorkspace(AbstractBuild<?, ?> build) throws java.io.IOException, InterruptedException {
             return true;
         }
 
@@ -55,7 +55,7 @@ public class FindbugsCheckTest {
 
     private FindbugsCheck check;
 
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     @Before
     public void setUp() {

@@ -28,7 +28,7 @@ public class QualityLineEvaluator {
         this.qualityLineReport = qualityLineReport;
     }
 
-    public QualityLineReport evaluate(AbstractBuild build, Launcher launcher,
+    public QualityLineReport evaluate(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener) {
         executeGates = true;
         for (Gate gate : this.gates) {
@@ -37,7 +37,7 @@ public class QualityLineEvaluator {
         return qualityLineReport;
     }
 
-    protected void evaluateGate(AbstractBuild build, Launcher launcher,
+    protected void evaluateGate(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener, Gate gate) {
         GateReport gateReport;
         if (hasNotFullyBeenExecuted(gate)) {
@@ -55,7 +55,7 @@ public class QualityLineEvaluator {
         return result.equals(Result.NOT_BUILT);
     }
 
-    private GateReport processGateAndReport(AbstractBuild build,
+    private GateReport processGateAndReport(AbstractBuild<?, ?> build,
             Launcher launcher, BuildListener listener, Gate gate) {
         GateReport gateReport;
         if (executeGates) {
@@ -67,7 +67,7 @@ public class QualityLineEvaluator {
         return gateReport;
     }
 
-    protected GateReport executeGateAndAddToReport(AbstractBuild build,
+    protected GateReport executeGateAndAddToReport(AbstractBuild<?, ?> build,
             Launcher launcher, BuildListener listener, Gate gate) {
         GateReport gateReport = gate.evaluate(build, launcher, listener);
         qualityLineReport.addGateReport(gateReport);

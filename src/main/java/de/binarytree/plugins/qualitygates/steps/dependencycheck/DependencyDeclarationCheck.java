@@ -27,7 +27,7 @@ public class DependencyDeclarationCheck extends DependencyCheck {
     }
 
     @Override
-    protected void processBuildLog(AbstractBuild build, GateStepReport checkReport)
+    protected void processBuildLog(AbstractBuild<?, ?> build, GateStepReport checkReport)
             throws IOException {
         String dependencySection = obtainDependencySection(build);
         if (!dependencySectionWasFound(dependencySection)) {
@@ -39,7 +39,7 @@ public class DependencyDeclarationCheck extends DependencyCheck {
         }
     }
 
-    private String obtainDependencySection(AbstractBuild build)
+    private String obtainDependencySection(AbstractBuild<?, ?> build)
             throws IOException {
         BuildLogFileParser logFileParser = parseBuildLogFile(build);
         String dependencySection = logFileParser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE); 

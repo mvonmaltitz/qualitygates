@@ -35,7 +35,7 @@ public class ManualCheckTest {
 
     private ManualCheck check;
 
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     private BuildListener listener;
 

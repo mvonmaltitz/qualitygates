@@ -45,7 +45,7 @@ public class XPathExpressionCheckTest {
             + "</dependencies>"
             +"</project>";
     private XMLCheck xmlCheck;
-    private AbstractBuild build;
+    private AbstractBuild<?, ?> build;
 
     class MockXMLCheck extends XPathExpressionCheck {
 
@@ -59,7 +59,7 @@ public class XPathExpressionCheckTest {
         }
 
         @Override
-        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
+        protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) {
             return pomStream;
         }
 
@@ -171,7 +171,7 @@ public class XPathExpressionCheckTest {
     public void testExceptionCausesFailureResult() {
         xmlCheck = new MockXMLCheck("pom.xml", "/project/parent/notHere") {
             @Override
-            protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild build) {
+            protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) {
                 throw new RuntimeException();
             }
         };

@@ -26,7 +26,7 @@ public class ShellAction extends GateStep {
     }
 
     @Override
-    public void doStep(AbstractBuild build, Launcher launcher,
+    public void doStep(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener, GateStepReport actionReport) {
         Shell shell = this.getShell();
         try {

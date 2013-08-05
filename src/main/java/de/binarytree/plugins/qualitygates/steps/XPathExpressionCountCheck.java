@@ -52,7 +52,7 @@ public class XPathExpressionCountCheck extends XMLCheck {
     }
 
     @Override
-    public void doStep(AbstractBuild build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
+    public void doStep(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
         try {
             processTargetFileIfExistent(build, checkReport);
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class XPathExpressionCountCheck extends XMLCheck {
         }
     }
 
-    private void processTargetFileIfExistent(AbstractBuild build, GateStepReport checkReport) throws IOException,
+    private void processTargetFileIfExistent(AbstractBuild<?, ?> build, GateStepReport checkReport) throws IOException,
             InterruptedException, ParserConfigurationException, SAXException, XPathExpressionException {
         if (buildHasFileInWorkspace(build)) {
             NodeList matchingNodes = matchExpression(build);
@@ -70,7 +70,7 @@ public class XPathExpressionCountCheck extends XMLCheck {
         }
     }
 
-    private NodeList matchExpression(AbstractBuild build) throws IOException,
+    private NodeList matchExpression(AbstractBuild<?, ?> build) throws IOException,
             ParserConfigurationException, SAXException, XPathExpressionException {
         InputStream stream = this.obtainInputStreamOfTargetfileRelativeToBuild(build);
         return getMatchingNodes(stream);
