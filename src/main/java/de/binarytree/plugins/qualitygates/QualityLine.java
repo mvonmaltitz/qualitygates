@@ -25,6 +25,11 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import de.binarytree.plugins.qualitygates.result.BuildResultAction;
 
 /**
+ * This class is the main entry point for this plugin.
+ * 
+ * It holds a list of gate which can then be used to evaluate the current build
+ * via {@link #perform(AbstractBuild, Launcher, BuildListener)}.
+ * 
  * @author Marcel von Maltitz
  */
 public class QualityLine extends Recorder implements Saveable {

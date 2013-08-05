@@ -6,7 +6,21 @@ import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 
+/**
+ * This class holds the algorithm to find the next unapproved manual check which
+ * can then be approved or disapproved.
+ * 
+ * @author mvm
+ * 
+ */
 public class ManualCheckFinder {
+    /**
+     * This class holds the found manual check. This check can then be approved
+     * or disapproved with the help of this class.
+     * 
+     * @author mvm
+     * 
+     */
     public static class ManualCheckManipulator{
         private ManualCheck check;
         ManualCheckManipulator(ManualCheck check){

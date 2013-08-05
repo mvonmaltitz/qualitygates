@@ -12,6 +12,11 @@ import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
+/**
+ * This check returns the result of the performed build process by Jenkins.
+ * @author mvm
+ *
+ */
 public class MavenBuildSuccessCheck extends GateStep {
 
     @DataBoundConstructor

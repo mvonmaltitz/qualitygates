@@ -11,6 +11,15 @@ import java.util.List;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.QualityLineReport;
 
+/**
+ * This class holds the evaluation algorithm of the quality line. Each gate is
+ * evaluated and the report built is saved. When a gate fails, the evaluation
+ * normally happening after this gate is skipped. Nevertheless these gates,
+ * which have not been executed are saved in the reported. 
+ * 
+ * @author mvm
+ * 
+ */
 public class QualityLineEvaluator {
     private List<Gate> gates = new LinkedList<Gate>();
     private boolean executeGates;

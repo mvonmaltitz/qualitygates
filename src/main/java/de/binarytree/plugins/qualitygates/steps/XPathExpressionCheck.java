@@ -18,6 +18,15 @@ import org.xml.sax.SAXException;
 
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
+/**
+ * This check tests, whether a given expression is contained in a given file. If
+ * a match is found, the check is successful. It can be configured, whether the
+ * content of the match shall be reported in the corresponding report as a
+ * reason of the result.
+ * 
+ * @author mvm
+ * 
+ */
 public class XPathExpressionCheck extends XMLCheck {
 
     private boolean reportContent;

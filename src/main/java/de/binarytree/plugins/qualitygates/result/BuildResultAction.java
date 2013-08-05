@@ -19,6 +19,11 @@ import de.binarytree.plugins.qualitygates.QualityLineEvaluator;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.*;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheckFinder.ManualCheckManipulator;
 
+/**
+ * This class realizes publishing the gate report via a dedicated URL-subspace /qualitygates/
+ * @author mvm
+ *
+ */
 public class BuildResultAction implements ProminentProjectAction {
 
     private static final String ICONS_PREFIX = "/plugin/qualitygates/images/24x24/";

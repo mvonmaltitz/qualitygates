@@ -7,6 +7,11 @@ import java.util.List;
 
 import de.binarytree.plugins.qualitygates.Gate;
 
+/**
+ * This class represents a report about the execution of a quality line. It holds all reports of the gates contained in the quality line. 
+ * @author mvm
+ *
+ */
 public class QualityLineReport extends ListContainer<GateReport> {
 
     private List<GateReport> gates() {

@@ -4,6 +4,12 @@ import hudson.Extension;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+/**
+ * This check evaluatates whether a given expression is contained in the pom.xml. 
+ * It is a success to find the expression.
+ * @author mvm
+ *
+ */
 public class POMCheck extends XPathExpressionCheck {
 
     @DataBoundConstructor

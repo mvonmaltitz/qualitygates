@@ -9,27 +9,36 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
-public final class BannedDependencyParser{
+/**
+ * This class parses the given string and extracts information about found
+ * banned dependencies.
+ * 
+ * @author mvm
+ * 
+ */
+public final class BannedDependencyParser {
 
-	private BannedDependencyParser(){
-	}
+    private BannedDependencyParser() {
+    }
 
-	private static final Pattern ARTIFACT_PATTERN = Pattern.compile("Found Banned Dependency: (.*:.*:.*:.*)");
+    private static final Pattern ARTIFACT_PATTERN = Pattern
+            .compile("Found Banned Dependency: (.*:.*:.*:.*)");
 
-	public static BannedDependencyAnalysisResult parseDependencyAnalyzeSection(String content) throws IOException{
+    public static BannedDependencyAnalysisResult parseDependencyAnalyzeSection(
+            String content) throws IOException {
 
-		BannedDependencyAnalysisResult result = new BannedDependencyAnalysisResult();
-		List<String> lines = IOUtils.readLines(new StringReader(content));
-		for(String line: lines){
-			if(!StringUtils.isBlank(line)){
-				Matcher matcher = ARTIFACT_PATTERN.matcher(line);
-				if(matcher.matches()){
-					String bannedDependency = matcher.group(1);
-					result.addBannedDependency(bannedDependency);
-				}
-			}
-		}
+        BannedDependencyAnalysisResult result = new BannedDependencyAnalysisResult();
+        List<String> lines = IOUtils.readLines(new StringReader(content));
+        for (String line : lines) {
+            if (!StringUtils.isBlank(line)) {
+                Matcher matcher = ARTIFACT_PATTERN.matcher(line);
+                if (matcher.matches()) {
+                    String bannedDependency = matcher.group(1);
+                    result.addBannedDependency(bannedDependency);
+                }
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

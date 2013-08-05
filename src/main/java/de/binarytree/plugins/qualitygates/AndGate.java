@@ -15,6 +15,15 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
+/**
+ * This class represents a gate consisting of multiple steps, which can be set
+ * at instantiation. Every step is performed and evaluated. Evaluation returns a
+ * gate report which holds all performed checks and the result of the gate
+ * itself. The gate always has the worst result of all of its checks.
+ * 
+ * @author mvm
+ * 
+ */
 public class AndGate extends Gate {
 
     private List<GateStep> steps = new LinkedList<GateStep>();
@@ -50,7 +59,7 @@ public class AndGate extends Gate {
     }
 
     @Override
-    public void doEvaluation(AbstractBuild build, Launcher launcher, BuildListener listener, GateReport gateReport) {
+    public void doEvaluation(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateReport gateReport) {
         listener.getLogger().println("Processing gate " + this.getName());
         if (stepsAreAvailable()) {
             initializeReportWithSuccessResult(gateReport);
@@ -68,7 +77,7 @@ public class AndGate extends Gate {
         gateReport.setResult(resultOfEmptyGate());
     }
 
-    private void evaluateSteps(AbstractBuild build, Launcher launcher, BuildListener listener, GateReport gateReport) {
+    private void evaluateSteps(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateReport gateReport) {
         for (GateStep step : this.steps) {
             GateStepReport stepReport = processStep(build, launcher, listener, step);
             addStepReportToGateReport(gateReport, stepReport);
@@ -94,7 +103,7 @@ public class AndGate extends Gate {
         return gateResult.combine(stepResult);
     }
 
-    private GateStepReport processStep(AbstractBuild build, Launcher launcher, BuildListener listener, GateStep step) {
+    private GateStepReport processStep(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateStep step) {
         return step.step(build, listener, launcher);
     }
 

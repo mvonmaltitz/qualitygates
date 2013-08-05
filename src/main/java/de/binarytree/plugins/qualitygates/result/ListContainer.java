@@ -2,7 +2,12 @@ package de.binarytree.plugins.qualitygates.result;
 
 import java.util.LinkedList;
 import java.util.List;
-
+/**
+ * This class implements the functionality to hold a list of unique items. 
+ * @author mvm
+ *
+ * @param <T> the type of the items to be held
+ */
 abstract class ListContainer<T> {
 
     private List<T> items = new LinkedList<T>();
@@ -35,6 +40,14 @@ abstract class ListContainer<T> {
         this.items.add(index, item);
     }
 
+    /**
+     * Whether or not the objects are the same. 
+     * 
+     * When adding an element, which is, defined by this method, the same as an already added element, the old element is replaced
+     * @param a the one element
+     * @param b the other element
+     * @return whether they are the same
+     */
     protected abstract boolean isSameItem(T a, T b);
 
 }

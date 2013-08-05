@@ -4,6 +4,13 @@ import hudson.Extension;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+/**
+ * This check is an adapter for PMD reports. The number of violations is
+ * evaluated against the thresholds given at construction time.
+ * 
+ * @author mvm
+ * 
+ */
 public class PMDCheck extends XPathExpressionCountCheck {
 
     public static final String VIOLATION_EXPRESSION = "/pmd/file/violation";

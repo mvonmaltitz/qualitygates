@@ -12,6 +12,13 @@ import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
+/**
+ * This check always fails. It can be used to deactivate parts of an active
+ * quality line as long as the quality line stops at failing gates.
+ * 
+ * @author mvm
+ * 
+ */
 public class FailingCheck extends GateStep {
 
     @DataBoundConstructor

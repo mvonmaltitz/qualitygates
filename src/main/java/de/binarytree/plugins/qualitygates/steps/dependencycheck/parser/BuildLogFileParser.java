@@ -14,28 +14,35 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 
 /**
- * Cut the log file in sections for each maven goals.
+ * Cut the log file in sections for each maven goal.
  * 
  * @author Vincent Sellier
  * 
  */
 public class BuildLogFileParser {
-    public static final Logger LOGGER = Logger.getLogger(BuildLogFileParser.class.getName());
+    public static final Logger LOGGER = Logger
+            .getLogger(BuildLogFileParser.class.getName());
 
     private static final String LOG_LEVEL_REGEX = "\\[(INFO|WARNING)\\] ";
 
-    private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX + "---.*");
+    private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX
+            + "---.*");
 
-    private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX + "[-]*$");
+    private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX
+            + "[-]*$");
 
     // To limit selection to maven output (filtering [HUDSON] tags)
-    private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX + ".*");
+    private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX
+            + ".*");
 
-    private static final Pattern BANNED_OUTPUT = Pattern.compile("Found Banned Dependency:.*");
+    private static final Pattern BANNED_OUTPUT = Pattern
+            .compile("Found Banned Dependency:.*");
 
     public enum Goal {
-        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*", MAVEN_OUTPUT), BANNED_DEPENDENCY_ANALYSE(
-                LOG_LEVEL_REGEX + "--- maven-enforcer-plugin:[^:]+:enforce.*", BANNED_OUTPUT);
+        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX
+                + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*",
+                MAVEN_OUTPUT), BANNED_DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX
+                + "--- maven-enforcer-plugin:[^:]+:enforce.*", BANNED_OUTPUT);
 
         private Pattern pattern;
 
@@ -85,40 +92,41 @@ public class BuildLogFileParser {
         parsed = true;
     }
 
-	private void processSectionOfGoal(Iterator<String> lineIterator, Goal goal){
-		StringBuilder section = new StringBuilder();
+    private void processSectionOfGoal(Iterator<String> lineIterator, Goal goal) {
+        StringBuilder section = new StringBuilder();
 
-		String formerSection = goalsLog.get(goal);
-		if (formerSection != null) {
-		    section.append(formerSection);
-		}
+        String formerSection = goalsLog.get(goal);
+        if (formerSection != null) {
+            section.append(formerSection);
+        }
 
-		extractSection(lineIterator, goal, section);
-		goalsLog.put(goal, section.toString());
-	}
+        extractSection(lineIterator, goal, section);
+        goalsLog.put(goal, section.toString());
+    }
 
-	private String eliminateColorEscapeCodes(String line){
-		line = line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
-		return line;
-	}
+    private String eliminateColorEscapeCodes(String line) {
+        return line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
+    }
 
-	private void extractSection(Iterator<String> lineIterator, Goal goal, StringBuilder section){
-		String line;
-		// Pass the search section to only keep content of the section
-		boolean inSection = true;
-		while (lineIterator.hasNext() && inSection) {
-		    line = lineIterator.next();
-		    line = eliminateColorEscapeCodes(line);
-		    if (GOAL_START.matcher(line).matches() || END_OF_BUILD.matcher(line).matches()) {
-		        inSection = false;
-		    } else {
-		        if (goal.linePattern.matcher(line).matches()) {
-		            section.append(line).append("\n");
-		        }
-		    }
+    private void extractSection(Iterator<String> lineIterator, Goal goal,
+            StringBuilder section) {
+        String line;
+        // Pass the search section to only keep content of the section
+        boolean inSection = true;
+        while (lineIterator.hasNext() && inSection) {
+            line = lineIterator.next();
+            line = eliminateColorEscapeCodes(line);
+            if (GOAL_START.matcher(line).matches()
+                    || END_OF_BUILD.matcher(line).matches()) {
+                inSection = false;
+            } else {
+                if (goal.linePattern.matcher(line).matches()) {
+                    section.append(line).append("\n");
+                }
+            }
 
-		}
-	}
+        }
+    }
 
     public String getContentOfSectionFor(Goal goal) {
         if (!parsed) {
@@ -127,6 +135,5 @@ public class BuildLogFileParser {
 
         return goalsLog.get(goal);
     }
-
 
 }

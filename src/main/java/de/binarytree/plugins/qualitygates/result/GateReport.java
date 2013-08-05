@@ -8,6 +8,10 @@ import java.util.List;
 import de.binarytree.plugins.qualitygates.Gate;
 import de.binarytree.plugins.qualitygates.GateStep;
 
+/**
+ * This class is a report about the execution of a gate. It holds the reports of
+ * the executed steps and the result of the gate itself.
+ */
 public class GateReport extends ListContainer<GateStepReport> {
 
     private String gateName;

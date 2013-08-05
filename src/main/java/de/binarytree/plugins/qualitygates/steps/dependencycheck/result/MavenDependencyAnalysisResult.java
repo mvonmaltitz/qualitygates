@@ -5,6 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represents the analysis results of a maven dependency check. It
+ * contains the found errors.
+ * 
+ * @author mvm
+ * 
+ */
 public class MavenDependencyAnalysisResult {
     private Map<DependencyProblemType, List<String>> violationsByType;
 

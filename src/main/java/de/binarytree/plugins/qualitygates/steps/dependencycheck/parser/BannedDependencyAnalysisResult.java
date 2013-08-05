@@ -5,19 +5,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class BannedDependencyAnalysisResult{
+/**
+ * This class groups a set of information about banned dependencies.
+ * 
+ * @author mvm
+ * 
+ */
+public class BannedDependencyAnalysisResult {
+    private Set<String> bannedDependencies = new HashSet<String>();
 
-	private Set<String> bannedDependencies = new HashSet<String>();
+    public void addBannedDependency(String bannedDependency) {
+        this.bannedDependencies.add(bannedDependency);
+    }
 
-	public void addBannedDependency(String bannedDependency){
-		this.bannedDependencies.add(bannedDependency); 
-	}
+    public int getNumberOfBannedDependencies() {
+        return this.bannedDependencies.size();
+    }
 
-	public int getNumberOfBannedDependencies(){
-		return this.bannedDependencies.size();
-	}
-	public List<String> getBannedDependencies(){
-		return new LinkedList<String>(this.bannedDependencies); 
-	}
-
+    public List<String> getBannedDependencies() {
+        return new LinkedList<String>(this.bannedDependencies);
+    }
 }

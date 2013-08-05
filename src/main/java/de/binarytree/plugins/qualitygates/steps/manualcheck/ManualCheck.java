@@ -14,7 +14,12 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
-
+/**
+ * This check is a manual check. That means, it has to be (dis)approved manually. 
+ * At the next evaluation it then gives the desired result. 
+ * @author mvm
+ *
+ */
 public class ManualCheck extends GateStep {
     private enum Approval {
         APPROVED, DISAPPROVED, NOT_SET;

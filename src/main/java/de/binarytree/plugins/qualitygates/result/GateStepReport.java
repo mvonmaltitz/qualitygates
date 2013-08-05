@@ -3,6 +3,12 @@ package de.binarytree.plugins.qualitygates.result;
 import hudson.model.Result;
 import de.binarytree.plugins.qualitygates.GateStep;
 
+/**
+ * This class represents the report of performed gate step. The result is reported as well a (optional) reason of the result.
+ * The reason is not optional, when the step was not successfull. 
+ * @author mvm
+ *
+ */
 public class GateStepReport {
 
     private String stepName;

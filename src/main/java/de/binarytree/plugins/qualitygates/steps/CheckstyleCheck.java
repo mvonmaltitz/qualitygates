@@ -4,6 +4,13 @@ import hudson.Extension;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+/**
+ * This check is an adapter for checkstyle reports. The number of violations and
+ * errors is evaluated against the thresholds given at construction time.
+ * 
+ * @author mvm
+ * 
+ */
 public class CheckstyleCheck extends XPathExpressionCountCheck {
     public static final String VIOLATION_EXPRESSION = "/checkstyle/file/violation | checkstyle/file/error";
 

@@ -24,6 +24,14 @@ import org.xml.sax.SAXException;
 import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 
+/**
+ * This check relates a given expression to a given target file. Nevertheless,
+ * it does not implement logic to determine the result of the check based an
+ * matching or not matching the expression in the given file.
+ * 
+ * @author mvm
+ * 
+ */
 public abstract class XMLCheck extends GateStep {
 
     private String expression;
@@ -62,8 +70,7 @@ public abstract class XMLCheck extends GateStep {
     }
 
     private FilePath generateFilePathFromPathStringRelativeToBuild(AbstractBuild<?, ?> build) {
-        FilePath pom = build.getModuleRoot().child(this.targetFile);
-        return pom;
+        return build.getModuleRoot().child(this.targetFile);
     }
 
     protected InputStream obtainInputStreamOfTargetfileRelativeToBuild(AbstractBuild<?, ?> build) throws IOException {

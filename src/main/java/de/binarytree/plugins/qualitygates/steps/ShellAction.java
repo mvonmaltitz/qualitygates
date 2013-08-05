@@ -13,6 +13,13 @@ import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
+/**
+ * This action gets a shell command in form of a string and instantiates a shell
+ * when being executed which itself executes the given command.
+ * 
+ * @author mvm
+ * 
+ */
 public class ShellAction extends GateStep {
     private String command;
 
