@@ -31,17 +31,41 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
 
     private String name;
 
+    /**
+     * Creates a new gate with the given name.
+     * 
+     * @param name
+     *            the name of the gate
+     */
     public Gate(String name) {
         this.name = name;
     }
 
-    public GateReport evaluate(AbstractBuild<?,?> build, Launcher launcher,
+    /**
+     * Performs the evaluation implemented by
+     * {@link #doEvaluation(AbstractBuild, Launcher, BuildListener, GateReport)}
+     * and returns a report about it.
+     * 
+     * @param build
+     *            the build as given by Jenkins
+     * @param launcher
+     *            the launcher as given by Jenkins
+     * @param listener
+     *            the listener as given by Jenkins
+     * @return the gate report about the performed evaluation
+     */
+    public GateReport evaluate(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener) {
         GateReport gateReport = this.createEmptyGateReport();
         this.doEvaluation(build, launcher, listener, gateReport);
         return gateReport;
     }
 
+    /**
+     * Returns a new empty gate report.
+     * 
+     * @return a new empty gate report
+     */
     public GateReport createEmptyGateReport() {
         return new GateReport(this);
     }
@@ -74,7 +98,7 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
      *            the report where the gate has to document, whether its
      *            evaluation has been successful
      */
-    abstract void doEvaluation(AbstractBuild<?,?> build, Launcher launcher,
+    abstract void doEvaluation(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener, GateReport gateReport);
 
     public QualityGateDescriptor getDescriptor() {

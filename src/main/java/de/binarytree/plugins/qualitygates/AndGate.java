@@ -28,6 +28,15 @@ public class AndGate extends Gate {
 
     private List<GateStep> steps = new LinkedList<GateStep>();
 
+    /**
+     * Creates a new AndGate containing the given steps and having the given
+     * name
+     * 
+     * @param name
+     *            the name of the gate
+     * @param steps
+     *            the steps the gate shall perform
+     */
     @DataBoundConstructor
     public AndGate(String name, Collection<GateStep> steps) {
         super(name);
@@ -41,10 +50,21 @@ public class AndGate extends Gate {
         return this.steps;
     }
 
+    /**
+     * Adds the given step at the end of the sequence of already existing steps
+     * 
+     * @param step
+     *            the step to be added
+     */
     protected void addStep(GateStep step) {
         this.steps.add(step);
     }
 
+    /**
+     * Returns the number of steps contained in this gate
+     * 
+     * @return the number of steps contained in this gate
+     */
     public int getNumberOfSteps() {
         return this.steps.size();
     }
@@ -59,7 +79,8 @@ public class AndGate extends Gate {
     }
 
     @Override
-    public void doEvaluation(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateReport gateReport) {
+    public void doEvaluation(AbstractBuild<?, ?> build, Launcher launcher,
+            BuildListener listener, GateReport gateReport) {
         listener.getLogger().println("Processing gate " + this.getName());
         if (stepsAreAvailable()) {
             initializeReportWithSuccessResult(gateReport);
@@ -77,33 +98,42 @@ public class AndGate extends Gate {
         gateReport.setResult(resultOfEmptyGate());
     }
 
-    private void evaluateSteps(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateReport gateReport) {
+    private void evaluateSteps(AbstractBuild<?, ?> build, Launcher launcher,
+            BuildListener listener, GateReport gateReport) {
         for (GateStep step : this.steps) {
-            GateStepReport stepReport = processStep(build, launcher, listener, step);
+            GateStepReport stepReport = processStep(build, launcher, listener,
+                    step);
             addStepReportToGateReport(gateReport, stepReport);
         }
     }
 
-    private void addStepReportToGateReport(GateReport gateReport, GateStepReport stepReport) {
+    private void addStepReportToGateReport(GateReport gateReport,
+            GateStepReport stepReport) {
         gateReport.addStepReport(stepReport);
-        Result gateResult = mergeStepResultIntoGateResult(gateReport.getResult(), stepReport.getResult());
+        Result gateResult = mergeStepResultIntoGateResult(
+                gateReport.getResult(), stepReport.getResult());
         gateReport.setResult(gateResult);
     }
 
     /**
-     * Defines the function how a new step result shall be merged into the current result state of the gate.
+     * Defines the function how a new step result shall be merged into the
+     * current result state of the gate.
      * 
      * @param gateResult
-     *            the current result of the gate based on the evaluation of all former checks
+     *            the current result of the gate based on the evaluation of all
+     *            former checks
      * @param stepResult
-     *            the result of the currently evaluated check to be merged with the current result
+     *            the result of the currently evaluated check to be merged with
+     *            the current result
      * @return the merged result of both parameters
      */
-    protected Result mergeStepResultIntoGateResult(Result gateResult, Result stepResult) {
+    protected Result mergeStepResultIntoGateResult(Result gateResult,
+            Result stepResult) {
         return gateResult.combine(stepResult);
     }
 
-    private GateStepReport processStep(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateStep step) {
+    private GateStepReport processStep(AbstractBuild<?, ?> build,
+            Launcher launcher, BuildListener listener, GateStep step) {
         return step.step(build, listener, launcher);
     }
 

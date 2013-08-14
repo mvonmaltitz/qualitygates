@@ -4,10 +4,12 @@ import hudson.model.Result;
 import de.binarytree.plugins.qualitygates.GateStep;
 
 /**
- * This class represents the report of performed gate step. The result is reported as well a (optional) reason of the result.
- * The reason is not optional, when the step was not successfull. 
+ * This class represents the report of performed gate step. The result is
+ * reported as well a (optional) reason of the result. The reason is not
+ * optional, when the step was not successful.
+ * 
  * @author mvm
- *
+ * 
  */
 public class GateStepReport {
 
@@ -17,10 +19,20 @@ public class GateStepReport {
     private String reason;
     private GateStep step;
 
+    /**
+     * Creates a new GateStepReport for the given {@link Check}.
+     * 
+     * @param check
+     *            the check for which this report shall be created
+     */
     public GateStepReport(GateStep check) {
         this.step = check;
         this.stepName = check.getDisplayName();
         this.description = check.getDescription();
+    }
+
+    public GateStep getStep() {
+        return this.step;
     }
 
     public String getDescription() {
@@ -29,6 +41,25 @@ public class GateStepReport {
 
     public String getStepName() {
         return this.stepName;
+    }
+
+    /**
+     * Returns the {@link Result} of this report.
+     * 
+     * @return the result of this report
+     */
+    public Result getResult() {
+        return this.result;
+    }
+
+    /**
+     * Returns the reason for the result of this report. When the result is
+     * positive, the reason may be empty.
+     * 
+     * @return the reason for the result of this report
+     */
+    public String getReason() {
+        return this.reason;
     }
 
     /**
@@ -44,14 +75,6 @@ public class GateStepReport {
             throwExceptionDueToMissingReason();
         }
         this.result = result;
-    }
-
-    private boolean isNegative(Result result) {
-        return Result.FAILURE.equals(result) || Result.UNSTABLE.equals(result);
-    }
-
-    private void throwExceptionDueToMissingReason() {
-        throw new IllegalArgumentException("Negative results need a reason");
     }
 
     /**
@@ -71,27 +94,37 @@ public class GateStepReport {
         this.reason = reason;
     }
 
+    private boolean isNegative(Result result) {
+        return Result.FAILURE.equals(result) || Result.UNSTABLE.equals(result);
+    }
+
     private boolean isEmpty(String reason) {
         return reason == null || reason.isEmpty();
     }
 
-    public Result getResult() {
-        return this.result;
+    private void throwExceptionDueToMissingReason() {
+        throw new IllegalArgumentException("Negative results need a reason");
     }
 
-    public String getReason() {
-        return this.reason;
+    /**
+     * Whether or not this report references the same step as the given report
+     * 
+     * @param other
+     *            the other report
+     * @return whether or not both reports reference the same step
+     */
+    public boolean referencesSameStepAs(GateStepReport other) {
+        return this.step == other.step;
     }
 
-    public boolean referencesSameStepAs(GateStepReport b) {
-        return this.step == b.step;
-    }
-
+    /**
+     * Whether or not this report references the given check.
+     * 
+     * @param check
+     *            the check to be tested
+     * @return whether or not this report references the given check
+     */
     public boolean references(GateStep check) {
         return this.step.equals(check);
-    }
-
-    public GateStep getStep() {
-        return this.step;
     }
 }

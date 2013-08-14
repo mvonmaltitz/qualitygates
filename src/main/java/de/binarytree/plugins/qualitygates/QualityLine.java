@@ -38,6 +38,16 @@ public class QualityLine extends Recorder implements Saveable {
 
     private List<Gate> gates = new LinkedList<Gate>();
 
+    /**
+     * Creates a new quality line.
+     * 
+     * @param name
+     *            the name of the line
+     * @param gates
+     *            the gate sequence to be used
+     * @throws IOException
+     *             when persisting the line via XML fails
+     */
     @DataBoundConstructor
     public QualityLine(String name, Collection<Gate> gates) throws IOException {
         this.name = name;
@@ -56,7 +66,8 @@ public class QualityLine extends Recorder implements Saveable {
     }
 
     @Override
-    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
+    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
+            BuildListener listener) {
         listener.getLogger().println("Starting QualityLine");
         QualityLineEvaluator gateEvaluator = getGateEvaluatorForGates();
         gateEvaluator.evaluate(build, launcher, listener);
@@ -65,6 +76,12 @@ public class QualityLine extends Recorder implements Saveable {
         return true;
     }
 
+    /**
+     * Returns the object which does the actual evaluation of the gates and
+     * collection of reports.
+     * 
+     * @return the evaluator as mentioned above
+     */
     protected QualityLineEvaluator getGateEvaluatorForGates() {
         return new QualityLineEvaluator(this.gates);
     }
@@ -81,6 +98,12 @@ public class QualityLine extends Recorder implements Saveable {
         return (DescriptorImpl) super.getDescriptor();
     }
 
+    /**
+     * Loads a persisted quality line from disk
+     * 
+     * @throws IOException
+     *             when opening the file or reading the XML fails
+     */
     protected void load() throws IOException {
         XmlFile xml = getConfigXml();
         if (xml.exists()) {
@@ -88,6 +111,12 @@ public class QualityLine extends Recorder implements Saveable {
         }
     }
 
+    /**
+     * Saves this quality line to disk.
+     * 
+     * @throws IOException
+     *             when writing the XML file fails
+     */
     public final void save() throws IOException {
         if (BulkChange.contains(this)) {
             return;
@@ -95,8 +124,14 @@ public class QualityLine extends Recorder implements Saveable {
         getConfigXml().write(this);
     }
 
+    /**
+     * Returns the XML file to be used for persisting this object.
+     * 
+     * @return the XML file to be used for persisting this object.
+     */
     protected XmlFile getConfigXml() {
-        return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance().getRootDir(), "qualitygates.xml"));
+        return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance()
+                .getRootDir(), "qualitygates.xml"));
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -104,19 +139,22 @@ public class QualityLine extends Recorder implements Saveable {
     }
 
     /**
-     * Descriptor for {@link QualityLine}. Used as a singleton. The class is marked as public so that it can be accessed
-     * from views.
+     * Descriptor for {@link QualityLine}. Used as a singleton. The class is
+     * marked as public so that it can be accessed from views.
      * 
      * <p>
-     * See <tt>src/main/resources/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly</tt> for the actual HTML fragment
-     * for the configuration screen.
+     * See
+     * <tt>src/main/resources/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly</tt>
+     * for the actual HTML fragment for the configuration screen.
      */
     @Extension
     // This indicates to Jenkins that this is an implementation of an extension
     // point
-    public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
+    public static final class DescriptorImpl extends
+            BuildStepDescriptor<Publisher> {
         /**
-         * To persist global configuration information, simply store it in a field and call save().
+         * To persist global configuration information, simply store it in a
+         * field and call save().
          * 
          * <p>
          * If you don't want fields to be persisted, use <tt>transient</tt>.

@@ -32,9 +32,18 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * 
  */
 public abstract class GateStep implements Describable<GateStep>, ExtensionPoint {
-
-    public GateStepReport step(AbstractBuild<?, ?> build, BuildListener listener,
-            Launcher launcher) {
+    /**
+     * Performs the evaluation of this step
+     * 
+     * @param build the build provided by Jenkins
+     * @param listener the listener provided by Jenkins
+     * @param launcher the launche provided by Jenkins
+     * @return a
+     *         {@link de.binarytree.plugins.qualitygates.result.GateStepReport}
+     *         about the evaluation of this GateStep
+     */
+    public GateStepReport step(AbstractBuild<?, ?> build,
+            BuildListener listener, Launcher launcher) {
         GateStepReport stepReport = this.createEmptyGateStepReport();
         try {
             this.doStep(build, launcher, listener, stepReport);
@@ -44,10 +53,25 @@ public abstract class GateStep implements Describable<GateStep>, ExtensionPoint 
         return stepReport;
     }
 
+    /**
+     * Creates a new empty GateStepReport
+     * 
+     * @return a new empty GateStepReport
+     */
     public GateStepReport createEmptyGateStepReport() {
         return new GateStepReport(this);
     }
 
+    /**
+     * When a exception is thrown by
+     * {@link #doStep(AbstractBuild, Launcher, BuildListener, GateStepReport)}
+     * the exception is caught and handled by this method. Based on the
+     * exception information it can adjust the {@link GateStepReport}
+     * accordingly.
+     * 
+     * @param stepReport the stepReport for this step 
+     * @param e the exception which has been thrown by {@link #doStep(AbstractBuild, Launcher, BuildListener, GateStepReport)}
+     */
     protected void failStepWithExceptionAsReason(GateStepReport stepReport,
             Exception e) {
         stepReport.setResult(Result.FAILURE,

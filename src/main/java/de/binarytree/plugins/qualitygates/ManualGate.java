@@ -15,7 +15,13 @@ import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheck;
  * 
  */
 public class ManualGate extends AndGate {
-
+    /**
+     * Creates a new ManualGate with the given name. No steps have to be added
+     * as the ManualGate consists of only one {@link ManualCheck}. 
+     * 
+     * @param name the name of the gate
+     * 
+     */
     @DataBoundConstructor
     public ManualGate(String name) {
         super(name, null);

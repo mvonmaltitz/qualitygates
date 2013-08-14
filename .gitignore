@@ -8,5 +8,6 @@ work/jobs/*/workspace/target/
 */work/jobs/*/workspace
 */work/jobs/*/builds
 work
-.classpath
-.settings/org.eclipse.core.resources.prefs
+*/.classpath
+*/*.sw?
+*/.settings/org.eclipse.core.resources.prefs

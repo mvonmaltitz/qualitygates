@@ -18,6 +18,12 @@ public class GateReport extends ListContainer<GateStepReport> {
     private Result result = Result.NOT_BUILT;
     private transient Gate gate;
 
+    /**
+     * Creates a new gate report for the given gate.
+     * 
+     * @param gate
+     *            the gate for which a report shall be created
+     */
     public GateReport(Gate gate) {
         this.gateName = gate.getName();
         this.gate = gate;
@@ -27,14 +33,29 @@ public class GateReport extends ListContainer<GateStepReport> {
         return this.getItems();
     }
 
+    /**
+     * Returns the name of the corresponding gate.
+     * 
+     * @return the name of the corresponding gate
+     */
     public String getGateName() {
         return this.gateName;
     }
 
+    /**
+     * Returns the result of this report.
+     * 
+     * @return the reusult of this report
+     */
     public Result getResult() {
         return this.result;
     }
 
+    /**
+     * Returns the number of {@link GateStepReport}s in this gate report.
+     * 
+     * @return the number of gate step reports
+     */
     public int getNumberOfSteps() {
         return this.steps().size();
     }
@@ -43,15 +64,31 @@ public class GateReport extends ListContainer<GateStepReport> {
         this.result = result;
     }
 
+    /**
+     * Adds the given step report to this report. If there is already a step
+     * report referencing the same gate, it is replaced.
+     * 
+     * @param stepReport
+     *            the stepReport to be added
+     */
     public void addStepReport(GateStepReport stepReport) {
         this.addOrReplaceItem(stepReport);
 
     }
 
+    /**
+     * Returns a list of the {@link GateStepReport} of this gate report.
+     * 
+     * @return a list of the contained gate step reports.
+     */
     public List<GateStepReport> getStepReports() {
         return new LinkedList<GateStepReport>(this.steps());
     }
-
+/**
+ * Whether or not this report belongs to the given gate. 
+ * @param gate the gate to be tested
+ * @return whether of 
+ */
     public boolean belongsTo(Gate gate) {
         return this.gate == gate;
     }
