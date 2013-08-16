@@ -20,9 +20,11 @@ import de.binarytree.plugins.qualitygates.steps.manualcheck.*;
 import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheckFinder.ManualCheckManipulator;
 
 /**
- * This class realizes publishing the gate report via a dedicated URL-subspace /qualitygates/
+ * This class realizes publishing the gate report via a dedicated URL-subspace
+ * /qualitygates/
+ * 
  * @author mvm
- *
+ * 
  */
 public class BuildResultAction implements ProminentProjectAction {
 
@@ -50,10 +52,35 @@ public class BuildResultAction implements ProminentProjectAction {
         return "qualitygates";
     }
 
+    /**
+     * Approves the next not_build manual check as long as it has the id
+     * provided by the request parameter "id".
+     * 
+     * @param req
+     *            the stapler request provided by Jenkins
+     * @param res
+     *            the stapler response provided by Jenkins
+     * @throws IOException
+     *             when saving the build fails or the redirection by stapler is
+     *             not possible
+     */
     public void doApprove(StaplerRequest req, StaplerResponse res)
             throws IOException {
         manipulateManualCheck(req, res, true);
     }
+    /**
+     * Disapproves the next not_build manual check as long as it has the id
+     * provided by the request parameter "id".
+     * 
+     * @param req
+     *            the stapler request provided by Jenkins
+     * @param res
+     *            the stapler response provided by Jenkins
+     * @throws IOException
+     *             when saving the build fails or the redirection by stapler is
+     *             not possible
+     */
+
     public void doDisapprove(StaplerRequest req, StaplerResponse res)
             throws IOException {
         manipulateManualCheck(req, res, false);

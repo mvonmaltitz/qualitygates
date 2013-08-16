@@ -84,15 +84,25 @@ public class GateReport extends ListContainer<GateStepReport> {
     public List<GateStepReport> getStepReports() {
         return new LinkedList<GateStepReport>(this.steps());
     }
-/**
- * Whether or not this report belongs to the given gate. 
- * @param gate the gate to be tested
- * @return whether of 
- */
+
+    /**
+     * Whether or not this report belongs to the given gate.
+     * 
+     * @param gate
+     *            the gate to be tested
+     * @return whether of
+     */
     public boolean belongsTo(Gate gate) {
         return this.gate == gate;
     }
 
+    /**
+     * Whether or not this report references the same gate as the given report.
+     * 
+     * @param gateReport
+     *            the report to be compared
+     * @return whether or not both reports reference the same gate
+     */
     public boolean referencesSameGateAs(GateReport gateReport) {
         return this.gate == gateReport.gate;
     }
@@ -102,6 +112,12 @@ public class GateReport extends ListContainer<GateStepReport> {
         return a.referencesSameStepAs(b);
     }
 
+    /**
+     * Returns the reasons why the corresponding gate has failed. Returns an
+     * empty list when the gate has not failed at all.
+     * 
+     * @return the reasons for failure
+     */
     public List<String> getReasonOfFailure() {
         LinkedList<String> reasons = new LinkedList<String>();
         for (GateStepReport report : this.steps()) {
@@ -112,6 +128,13 @@ public class GateReport extends ListContainer<GateStepReport> {
         return reasons;
     }
 
+    /**
+     * Returns the {@link GateStepReport} for the given {@link GateStep}
+     * 
+     * @param step
+     *            the step for which the report shall be returned
+     * @return the corresponding report
+     */
     public GateStepReport getReportFor(GateStep step) {
         for (GateStepReport report : this.getStepReports()) {
             if (report.references(step)) {

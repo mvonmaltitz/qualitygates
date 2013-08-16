@@ -24,7 +24,7 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * successful, if it is under {@link #warningThreshold} it is a warning.
  * Otherwise the check fails.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class XPathExpressionCountCheck extends XMLCheck {
@@ -35,6 +35,22 @@ public class XPathExpressionCountCheck extends XMLCheck {
 
     private String name;
 
+    /**
+     * Creates a new check of this type.
+     * 
+     * @param name
+     *            the name of the check
+     * @param targetFile
+     *            the file to be evaluated
+     * @param expression
+     *            the expression to be used for evaluation
+     * @param successThreshold
+     *            the number of matches which may not be exceeded to be a
+     *            success
+     * @param warningThreshold
+     *            the number of matches which may not be exceeded to be a
+     *            warning
+     */
     @DataBoundConstructor
     public XPathExpressionCountCheck(String name, String targetFile,
             String expression, int successThreshold, int warningThreshold) {
@@ -117,9 +133,23 @@ public class XPathExpressionCountCheck extends XMLCheck {
         }
     }
 
+    /**
+     * Whether the given count is under the threshold for success.
+     * 
+     * @param count
+     *            the count to be measured
+     * @return whether or not the count is under the success threshold
+     */
     public boolean countIsSuccess(int count) {
         return count <= this.successThreshold;
     }
+    /**
+     * Whether the given count is under the threshold for warning.
+     * 
+     * @param count
+     *            the count to be measured
+     * @return whether or not the count is under the warning threshold
+     */
 
     public boolean countIsWarning(int count) {
         return count <= this.warningThreshold;
