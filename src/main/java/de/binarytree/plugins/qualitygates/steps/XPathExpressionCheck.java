@@ -31,6 +31,19 @@ public class XPathExpressionCheck extends XMLCheck {
 
     private boolean reportContent;
 
+    /**
+     * Constructs a new check analyzing the given targetFile using the given
+     * expression. When reportContent is true, the content of the matched
+     * expression is returned as result reason.
+     * 
+     * @param targetFile
+     *            the file to be examined
+     * @param expression
+     *            the XPath expression to match
+     * @param reportContent
+     *            whether or not the content of the matched expression shall be
+     *            reported using the result reason
+     */
     @DataBoundConstructor
     public XPathExpressionCheck(String targetFile, String expression,
             boolean reportContent) {
@@ -52,10 +65,12 @@ public class XPathExpressionCheck extends XMLCheck {
         }
     }
 
-    private void matchExpression(AbstractBuild<?, ?> build, GateStepReport checkReport)
-            throws IOException, ParserConfigurationException, SAXException,
+    private void matchExpression(AbstractBuild<?, ?> build,
+            GateStepReport checkReport) throws IOException,
+            ParserConfigurationException, SAXException,
             XPathExpressionException {
-        InputStream stream = this.obtainInputStreamOfTargetfileRelativeToBuild(build);
+        InputStream stream = this
+                .obtainInputStreamOfTargetfileRelativeToBuild(build);
         String content = this.getTextContentForXPathExpression(stream);
         this.setCheckResult(checkReport, content);
     }

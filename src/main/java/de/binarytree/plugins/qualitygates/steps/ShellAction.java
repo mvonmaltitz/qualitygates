@@ -14,7 +14,7 @@ import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 /**
- * This action gets a shell command in form of a string and instantiates a shell
+ * This action gets a shell command in form of a string and instantiates a {@link Shell}
  * when being executed which itself executes the given command.
  * 
  * @author mvm
@@ -23,6 +23,10 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
 public class ShellAction extends GateStep {
     private String command;
 
+    /**
+     * Constructs a new action
+     * @param command the command to be executed
+     */
     @DataBoundConstructor
     public ShellAction(String command) {
         this.command = command;

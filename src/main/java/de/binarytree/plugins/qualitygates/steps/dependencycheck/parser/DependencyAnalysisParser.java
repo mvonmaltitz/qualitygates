@@ -24,6 +24,12 @@ public final class DependencyAnalysisParser {
     private static final Pattern ARTIFACT_PATTERN = Pattern
             .compile(".*:.*:.*:.*:.*");
 
+    /**
+     * Types of possible dependency problems.
+     * 
+     * @author mvm
+     * 
+     */
     public static enum DependencyProblemTypesDetection {
         UNUSED(DependencyProblemType.UNUSED, ".*Unused declared.*"), UNDECLARED(
                 DependencyProblemType.UNDECLARED, ".*Used undeclared.*");
@@ -42,6 +48,14 @@ public final class DependencyAnalysisParser {
             return problemType;
         }
 
+        /**
+         * Returns the problem type of which the regex pattern matches the given
+         * string
+         * 
+         * @param line
+         *            the string to be analysed
+         * @return the type which of problem found in the given string
+         */
         public static DependencyProblemType matchAny(String line) {
             for (DependencyProblemTypesDetection problem : DependencyProblemTypesDetection
                     .values()) {
@@ -53,8 +67,16 @@ public final class DependencyAnalysisParser {
         }
     };
 
-    public static MavenDependencyAnalysisResult parseDependencyAnalyzeSection(String content)
-            throws IOException {
+    /**
+     * Analyzes the given content of the dependency section and transforms into
+     * a structured analysis result.
+     * 
+     * @param content the log section content to be analyzed 
+     * @return a structured result of the analysis
+     * @throws IOException  when reading the log failed
+     */
+    public static MavenDependencyAnalysisResult parseDependencyAnalyzeSection(
+            String content) throws IOException {
 
         MavenDependencyAnalysisResult result = new MavenDependencyAnalysisResult();
         List<String> lines = IOUtils.readLines(new StringReader(content));

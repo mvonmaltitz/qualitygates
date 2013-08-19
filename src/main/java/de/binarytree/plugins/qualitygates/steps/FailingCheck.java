@@ -20,7 +20,9 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * 
  */
 public class FailingCheck extends GateStep {
-
+    /**
+     * Constructs a new failing check.
+     */
     @DataBoundConstructor
     public FailingCheck() {
     }

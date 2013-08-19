@@ -19,6 +19,9 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  */
 public class MavenBuildSuccessCheck extends GateStep {
 
+    /**
+     * Constructs a new check.
+     */
     @DataBoundConstructor
     public MavenBuildSuccessCheck() {
     }

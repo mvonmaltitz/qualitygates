@@ -5,13 +5,23 @@ import hudson.Extension;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
- * This check evaluatates whether a given expression is contained in the pom.xml. 
+ * This check evaluates whether a given expression is contained in the pom.xml.
  * It is a success to find the expression.
+ * 
  * @author mvm
- *
+ * 
  */
 public class POMCheck extends XPathExpressionCheck {
 
+    /**
+     * Constructs a new pom check.
+     * 
+     * @param expression
+     *            the expression to be matched
+     * @param reportContent
+     *            whether or not the content of a found expression shall be
+     *            reported via the result reason
+     */
     @DataBoundConstructor
     public POMCheck(String expression, boolean reportContent) {
         super("pom.xml", expression, reportContent);
