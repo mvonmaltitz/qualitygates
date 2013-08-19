@@ -14,11 +14,13 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import de.binarytree.plugins.qualitygates.GateStep;
 import de.binarytree.plugins.qualitygates.GateStepDescriptor;
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
+
 /**
- * This check is a manual check. That means, it has to be (dis)approved manually. 
- * At the next evaluation it then gives the desired result. 
+ * This check is a manual check. That means, it has to be (dis)approved
+ * manually. At the next evaluation it then gives the desired result.
+ * 
  * @author Marcel von Maltitz
- *
+ * 
  */
 public class ManualCheck extends GateStep {
     private enum Approval {
@@ -38,6 +40,15 @@ public class ManualCheck extends GateStep {
         this.approved = Approval.NOT_SET;
     }
 
+    /**
+     * Constructs a new manual check. Normally approving or disapproving logs
+     * the name of the responsible person. When the account of this person
+     * cannot be determined, usernameIfUserUnknown is used.
+     * 
+     * @param usernameIfUserUnknown
+     *            the value to be used of the (dis)approving account cannot be
+     *            determined
+     */
     public ManualCheck(String usernameIfUserUnknown) {
         this();
         this.unknownUser = usernameIfUserUnknown;
@@ -91,6 +102,10 @@ public class ManualCheck extends GateStep {
                 + "'>Disapprove</a>";
     }
 
+    /**
+     * Returns the name of the current user using {@link User}. If the user cannot be determined, {@link #unknownUser} is used
+     * @return the name of the current user
+     */
     public String getCurrentUserOrUnknown() {
         User currentUser = User.current();
         if (currentUser != null) {

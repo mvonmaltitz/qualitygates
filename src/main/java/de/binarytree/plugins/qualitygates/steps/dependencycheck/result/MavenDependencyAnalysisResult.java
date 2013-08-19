@@ -15,7 +15,14 @@ import java.util.Map;
 public class MavenDependencyAnalysisResult {
     private Map<DependencyProblemType, List<String>> violationsByType;
 
-    public MavenDependencyAnalysisResult(Map<DependencyProblemType, List<String>> result) {
+    /**
+     * Constructs a new structured analysis result based on the given map
+     * 
+     * @param result
+     *            the map to initialize the analysis result whith
+     */
+    public MavenDependencyAnalysisResult(
+            Map<DependencyProblemType, List<String>> result) {
         this.violationsByType = result;
     }
 
@@ -31,14 +38,28 @@ public class MavenDependencyAnalysisResult {
         return getSizeOrZeroIfNull(this.getUndeclaredDependencies());
     }
 
+    /**
+     * Returns the list of undeclared dependencies
+     * 
+     * @return the list of undeclared dependencies
+     */
     public List<String> getUndeclaredDependencies() {
         return this.violationsByType.get(DependencyProblemType.UNDECLARED);
     }
 
+    /**
+     * Returns the list of unused dependencies
+     * 
+     * @return the list of unused dependencies
+     */
     public List<String> getUnusedDependencies() {
         return this.violationsByType.get(DependencyProblemType.UNUSED);
     }
 
+    /** 
+     * Returns the analysis result as a map of which the keys are the values of {@link DependencyProblemType}
+     * @return the analysis result as a map 
+     */
     public Map<DependencyProblemType, List<String>> getMapOfViolations() {
         return new HashMap<DependencyProblemType, List<String>>(
                 this.violationsByType);
@@ -52,6 +73,11 @@ public class MavenDependencyAnalysisResult {
         }
     }
 
+    /**
+     * Adds the given violating dependency to the given problem type but skips it if it is a duplicate.
+     * @param currentProblemType the type of the problem 
+     * @param violatingDependency the violating dependency
+     */
     public void addViolation(DependencyProblemType currentProblemType,
             String violatingDependency) {
         List<String> violations = getListOfViolationsOfType(currentProblemType);

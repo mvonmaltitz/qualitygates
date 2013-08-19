@@ -18,6 +18,11 @@ public enum DependencyProblemType {
         pattern = Pattern.compile(regex);
     }
 
+    /**
+     * Returns the type of which the regex pattern matches the given string
+     * @param line the line to be matched by the pattern
+     * @return the according problem type
+     */
     public static DependencyProblemType matchAny(String line) {
         for (DependencyProblemType problem : DependencyProblemType.values()) {
             if (problem.pattern.matcher(line).matches()) {

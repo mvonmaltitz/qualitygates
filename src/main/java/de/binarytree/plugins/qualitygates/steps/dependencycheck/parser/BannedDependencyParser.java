@@ -24,6 +24,12 @@ public final class BannedDependencyParser {
     private static final Pattern ARTIFACT_PATTERN = Pattern
             .compile("Found Banned Dependency: (.*:.*:.*:.*)");
 
+    /**
+     * Analyzes the dependency section and transforms the result into a structured analysis result 
+     * @param content the string to be analyzed
+     * @return a structured result 
+     * @throws IOException when the log file could not be accessed or read
+     */
     public static BannedDependencyAnalysisResult parseDependencyAnalyzeSection(
             String content) throws IOException {
 

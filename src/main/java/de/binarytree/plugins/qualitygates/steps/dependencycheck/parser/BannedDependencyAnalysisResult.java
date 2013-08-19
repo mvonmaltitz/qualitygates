@@ -14,6 +14,12 @@ import java.util.Set;
 public class BannedDependencyAnalysisResult {
     private Set<String> bannedDependencies = new HashSet<String>();
 
+    /**
+     * Adds a banned dependcy to the set
+     * 
+     * @param bannedDependency
+     *            the dependency to be added
+     */
     public void addBannedDependency(String bannedDependency) {
         this.bannedDependencies.add(bannedDependency);
     }
@@ -22,6 +28,12 @@ public class BannedDependencyAnalysisResult {
         return this.bannedDependencies.size();
     }
 
+    /**
+     * Returns all added banned dependencies as a list. It is guaranteed that
+     * there are not duplicates in this list
+     * 
+     * @return a list of banned dependencies 
+     */
     public List<String> getBannedDependencies() {
         return new LinkedList<String>(this.bannedDependencies);
     }
