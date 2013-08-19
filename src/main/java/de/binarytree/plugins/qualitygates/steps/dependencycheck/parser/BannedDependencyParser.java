@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
  * This class parses the given string and extracts information about found
  * banned dependencies.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public final class BannedDependencyParser {

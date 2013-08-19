@@ -11,7 +11,7 @@ import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheck;
  * manually. Therefore, no checks can be added, but it is preinitialized using a
  * {@link de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheck}.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class ManualGate extends AndGate {

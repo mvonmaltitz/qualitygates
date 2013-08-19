@@ -9,7 +9,7 @@ import java.util.Map;
  * This class represents the analysis results of a maven dependency check. It
  * contains the found errors.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class MavenDependencyAnalysisResult {

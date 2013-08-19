@@ -21,7 +21,7 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * gate report which holds all performed checks and the result of the gate
  * itself. The gate always has the worst result of all of its checks.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class AndGate extends Gate {

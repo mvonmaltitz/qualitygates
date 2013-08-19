@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * This class implements the functionality to hold a list of unique items.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  * @param <T>
  *            the type of the items to be held

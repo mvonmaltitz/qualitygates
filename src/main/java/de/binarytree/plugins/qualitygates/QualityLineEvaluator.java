@@ -17,7 +17,7 @@ import de.binarytree.plugins.qualitygates.result.QualityLineReport;
  * normally happening after this gate is skipped. Nevertheless these gates,
  * which have not been executed are saved in the reported. 
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class QualityLineEvaluator {

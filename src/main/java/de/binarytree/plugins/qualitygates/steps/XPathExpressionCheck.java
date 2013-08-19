@@ -24,7 +24,7 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * content of the match shall be reported in the corresponding report as a
  * reason of the result.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class XPathExpressionCheck extends XMLCheck {

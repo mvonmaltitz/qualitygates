@@ -16,7 +16,7 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * This check always fails. It can be used to deactivate parts of an active
  * quality line as long as the quality line stops at failing gates.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class FailingCheck extends GateStep {

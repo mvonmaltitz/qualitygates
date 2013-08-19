@@ -17,7 +17,7 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * This action gets a shell command in form of a string and instantiates a {@link Shell}
  * when being executed which itself executes the given command.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class ShellAction extends GateStep {

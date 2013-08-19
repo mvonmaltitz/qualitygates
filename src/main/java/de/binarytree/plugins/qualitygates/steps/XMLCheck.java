@@ -29,7 +29,7 @@ import de.binarytree.plugins.qualitygates.GateStepDescriptor;
  * it does not implement logic to determine the result of the check based an
  * matching or not matching the expression in the given file.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public abstract class XMLCheck extends GateStep {

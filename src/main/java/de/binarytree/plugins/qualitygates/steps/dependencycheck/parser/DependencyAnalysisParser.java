@@ -27,7 +27,7 @@ public final class DependencyAnalysisParser {
     /**
      * Types of possible dependency problems.
      * 
-     * @author mvm
+     * @author Marcel von Maltitz
      * 
      */
     public static enum DependencyProblemTypesDetection {

@@ -23,7 +23,7 @@ import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheckFinder.Ma
  * This class realizes publishing the gate report via a dedicated URL-subspace
  * /qualitygates/
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class BuildResultAction implements ProminentProjectAction {

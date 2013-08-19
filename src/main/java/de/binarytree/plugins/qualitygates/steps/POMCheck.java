@@ -8,7 +8,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * This check evaluates whether a given expression is contained in the pom.xml.
  * It is a success to find the expression.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class POMCheck extends XPathExpressionCheck {

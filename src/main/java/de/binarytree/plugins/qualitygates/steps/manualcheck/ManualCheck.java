@@ -17,7 +17,7 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
 /**
  * This check is a manual check. That means, it has to be (dis)approved manually. 
  * At the next evaluation it then gives the desired result. 
- * @author mvm
+ * @author Marcel von Maltitz
  *
  */
 public class ManualCheck extends GateStep {

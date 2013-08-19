@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * This class groups a set of information about banned dependencies.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class BannedDependencyAnalysisResult {

@@ -9,7 +9,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * errors is evaluated against the thresholds given at construction time.
  * This check actually is a predefined {@link XPathExpressionCountCheck}.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class CheckstyleCheck extends XPathExpressionCountCheck {

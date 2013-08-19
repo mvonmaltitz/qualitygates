@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
  * Types of dependency problems. Namely unused declared and used undeclared
  * dependencies.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public enum DependencyProblemType {

@@ -8,7 +8,7 @@ import de.binarytree.plugins.qualitygates.GateStep;
  * reported as well a (optional) reason of the result. The reason is not
  * optional, when the step was not successful.
  * 
- * @author mvm
+ * @author Marcel von Maltitz
  * 
  */
 public class GateStepReport {
