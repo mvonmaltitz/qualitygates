@@ -14,8 +14,9 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
 /**
  * This check returns the result of the performed build process by Jenkins.
+ * 
  * @author Marcel von Maltitz
- *
+ * 
  */
 public class MavenBuildSuccessCheck extends GateStep {
 
@@ -27,22 +28,18 @@ public class MavenBuildSuccessCheck extends GateStep {
     }
 
     @Override
-    public void doStep(AbstractBuild<?, ?> build, Launcher launcher,
-            BuildListener listener, GateStepReport checkReport) {
-        if (build != null && build.getResult() != null) {
-            checkReport.setResult(build.getResult(),
-                    "Summary: " + build.getBuildStatusSummary().message);
+    public void doStep(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
+        if ((build != null) && (build.getResult() != null)) {
+            checkReport.setResult(build.getResult(), build.getResult().toString());
         } else {
-            checkReport.setResult(Result.FAILURE,
-                    "Build or build result was null");
+            checkReport.setResult(Result.FAILURE, "Build or build result was null");
         }
     }
-    
+
     @Override
     public String getDescription() {
         return "The result of the maven build process";
     }
-
 
     @Extension
     public static class MavenSuccessCheckDescriptor extends GateStepDescriptor {

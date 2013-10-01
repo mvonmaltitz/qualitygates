@@ -1,7 +1,8 @@
 package de.binarytree.plugins.qualitygates.steps.dependencycheck.parser;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.StringReader;
@@ -24,8 +25,15 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
     }
 
     @Test
-    public void testGoalPatternMatches() {
+    public void testGoalPatternMatchesWithBrackets() {
         String header = "[INFO] --- maven-dependency-plugin:2.1:analyze (default-cli) @ projectone ---";
+        Goal goal = BuildLogFileParser.Goal.getMatchingGoal(header);
+        assertNotNull(goal);
+    }
+
+    @Test
+    public void testGoalPatternMatchesWithoutBrackets() {
+        String header = "INFO: --- maven-dependency-plugin:2.1:analyze (default-cli) @ projectone ---";
         Goal goal = BuildLogFileParser.Goal.getMatchingGoal(header);
         assertNotNull(goal);
     }
@@ -36,7 +44,8 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
 
         parser.parseLogFile(file);
 
-        Assert.assertNull("No dependency:analyze block must be found", parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE)); 
+        Assert.assertNull("No dependency:analyze block must be found",
+                parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE));
 
     }
 
@@ -46,7 +55,8 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
 
         parser.parseLogFile(file);
 
-        Assert.assertNotNull("No dependency:analyze block found", parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE));
+        Assert.assertNotNull("No dependency:analyze block found",
+                parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE));
     }
 
     @Test
@@ -55,7 +65,8 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
 
         parser.parseLogFile(file);
 
-        Assert.assertNotNull("No dependency:analyze block found", parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE));
+        Assert.assertNotNull("No dependency:analyze block found",
+                parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE));
     }
 
     @Test
@@ -70,6 +81,21 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
 
         List<String> lines = IOUtils.readLines(new StringReader(result));
         Assert.assertEquals("Wrong number of line returned, ", 48, lines.size());
+
+    }
+
+    @Test
+    public void testGetDependencyAnalyzeSectionPresentWithNoBracketFormat() throws Exception {
+        File file = getFile("log_build_with_dependency_analyze_no_brackets");
+
+        parser.parseLogFile(file);
+
+        String result = parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE);
+
+        Assert.assertNotNull("dependency:analyze block must be found", result);
+
+        List<String> lines = IOUtils.readLines(new StringReader(result));
+        Assert.assertEquals("Wrong number of line returned, ", 6, lines.size());
 
     }
 
@@ -94,8 +120,7 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
 
         parser.parseLogFile(file);
 
-        String result = parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE); 
-
+        String result = parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE);
 
         Assert.assertNotNull("dependency:analyze-only block must be found", result);
 
@@ -110,7 +135,7 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
 
         parser.parseLogFile(file);
 
-        String result = parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE); 
+        String result = parser.getContentOfSectionFor(Goal.DEPENDENCY_ANALYSE);
 
         Assert.assertNotNull("dependency:analyze block must be found", result);
         List<String> lines = IOUtils.readLines(new StringReader(result));
@@ -120,21 +145,22 @@ public class BuildLogFileParserTest extends AbstractParserTestUtils {
 
     @Test
     public void testNoParsingLeadsToException() {
-    	
-    	try {
-        String result = parser.getContentOfSectionFor(Goal.BANNED_DEPENDENCY_ANALYSE); 
-        fail(); 
-    	}catch(IllegalStateException e){
-    		assertTrue(e.getMessage().contains("parsed")); 
-    	}
+
+        try {
+            String result = parser.getContentOfSectionFor(Goal.BANNED_DEPENDENCY_ANALYSE);
+            fail();
+        } catch (IllegalStateException e) {
+            assertTrue(e.getMessage().contains("parsed"));
+        }
     }
+
     @Test
     public void testGetBannedDependencyAnalyseSectionPresent() throws Exception {
         File file = getFile("log_build_with_banned_dependencies");
 
         parser.parseLogFile(file);
 
-        String result = parser.getContentOfSectionFor(Goal.BANNED_DEPENDENCY_ANALYSE); 
+        String result = parser.getContentOfSectionFor(Goal.BANNED_DEPENDENCY_ANALYSE);
 
         Assert.assertNotNull("dependency:analyze block must be found", result);
         List<String> lines = IOUtils.readLines(new StringReader(result));

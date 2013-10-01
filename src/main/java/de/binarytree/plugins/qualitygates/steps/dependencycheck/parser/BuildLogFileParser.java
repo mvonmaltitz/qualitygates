@@ -20,29 +20,22 @@ import org.apache.commons.io.IOUtils;
  * 
  */
 public class BuildLogFileParser {
-    public static final Logger LOGGER = Logger
-            .getLogger(BuildLogFileParser.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(BuildLogFileParser.class.getName());
 
-    private static final String LOG_LEVEL_REGEX = "\\[(INFO|WARNING)\\] ";
+    private static final String LOG_LEVEL_REGEX = "^\\s*(\\[)?(INFO|WARNING)(\\]|:)? ";
 
-    private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX
-            + "---.*");
+    private static final Pattern GOAL_START = Pattern.compile(LOG_LEVEL_REGEX + "---.*");
 
-    private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX
-            + "[-]*$");
+    private static final Pattern END_OF_BUILD = Pattern.compile(LOG_LEVEL_REGEX + "[-]*$");
 
     // To limit selection to maven output (filtering [HUDSON] tags)
-    private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX
-            + ".*");
+    private static final Pattern MAVEN_OUTPUT = Pattern.compile(LOG_LEVEL_REGEX + ".*");
 
-    private static final Pattern BANNED_OUTPUT = Pattern
-            .compile("Found Banned Dependency:.*");
+    private static final Pattern BANNED_OUTPUT = Pattern.compile("Found Banned Dependency:.*");
 
     public enum Goal {
-        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX
-                + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*",
-                MAVEN_OUTPUT), BANNED_DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX
-                + "--- maven-enforcer-plugin:[^:]+:enforce.*", BANNED_OUTPUT);
+        DEPENDENCY_ANALYSE(LOG_LEVEL_REGEX + "--- maven-dependency-plugin:[^:]+:analyze(-only| ).*", MAVEN_OUTPUT), BANNED_DEPENDENCY_ANALYSE(
+                LOG_LEVEL_REGEX + "--- maven-enforcer-plugin:[^:]+:enforce.*", BANNED_OUTPUT);
 
         private Pattern pattern;
 
@@ -108,16 +101,14 @@ public class BuildLogFileParser {
         return line.replaceAll("\u001b\\[8mha:[^=]+==\u001b\\[0m", "");
     }
 
-    private void extractSection(Iterator<String> lineIterator, Goal goal,
-            StringBuilder section) {
+    private void extractSection(Iterator<String> lineIterator, Goal goal, StringBuilder section) {
         String line;
         // Pass the search section to only keep content of the section
         boolean inSection = true;
         while (lineIterator.hasNext() && inSection) {
             line = lineIterator.next();
             line = eliminateColorEscapeCodes(line);
-            if (GOAL_START.matcher(line).matches()
-                    || END_OF_BUILD.matcher(line).matches()) {
+            if (GOAL_START.matcher(line).matches() || END_OF_BUILD.matcher(line).matches()) {
                 inSection = false;
             } else {
                 if (goal.linePattern.matcher(line).matches()) {
