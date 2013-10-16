@@ -63,7 +63,7 @@
   </ciManagement>
   <scm>
     <connection>scm:git:git://github.com/mvonmaltitz/qualitygates.git</connection>
-    <developerConnection>git@github.com:mvonmaltitz/qualitygates.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@github.com/mvonmaltitz/qualitygates.git</developerConnection>
     <url>https://github.com/mvonmaltitz/qualitygates</url>
   </scm>
   <reporting>
@@ -356,6 +356,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
