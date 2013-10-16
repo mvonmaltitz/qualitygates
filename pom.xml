@@ -57,6 +57,15 @@
       <url>http://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>http://huschteguzzel.de/hudson/job/jenkinsci-qualitygates-plugin/</url>
+  </ciManagement>
+  <scm>
+    <connection>scm:git:git://github.com/mvonmaltitz/qualitygates.git</connection>
+    <developerConnection>git@github.com:mvonmaltitz/qualitygates.git</developerConnection>
+    <url>https://github.com/mvonmaltitz/qualitygates</url>
+  </scm>
   <reporting>
     <plugins>
       <plugin>
