@@ -4,7 +4,13 @@
     <artifactId>plugin</artifactId>
     <version>1.533</version><!-- which version of Jenkins is this plugin built against? -->
   </parent>
-
+  <licenses>
+    <license>
+      <name>The MIT License</name>
+      <url>http://opensource.org/licenses/MIT</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <groupId>de.binarytree.plugins</groupId>
   <artifactId>qualitygates</artifactId>
   <version>1.0-SNAPSHOT</version>
