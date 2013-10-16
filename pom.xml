@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>1.533</version><!-- which version of Jenkins is this plugin built against? -->
+    <version>1.509.4</version><!-- which version of Jenkins is this plugin built against? -->
   </parent>
   <licenses>
     <license>
@@ -36,7 +36,8 @@
       ${project.build.outputDirectory}/META-INF/maven/${project.groupId}/${project.artifactId}/effective-pom.xml
     </maven-help-plugin.effective-pom.outputFile>
     <maven-invoker-plugin.version>1.8</maven-invoker-plugin.version>
-    <maven-surefire-plugin.version>2.13</maven-surefire-plugin.version>
+    <maven-surefire-plugin.version>2.16</maven-surefire-plugin.version>
+    <maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
     <jacoco-maven-plugin.version>0.6.2.201302030002</jacoco-maven-plugin.version>
     <jacoco-maven-plugin.haltOnFailure>false</jacoco-maven-plugin.haltOnFailure>
     <maven-pmd-plugin.failOnViolation>false</maven-pmd-plugin.failOnViolation>
@@ -50,9 +51,38 @@
       <url>http://repo.jenkins-ci.org/public/</url>
     </repository>
   </repositories>
-
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>http://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>http://huschteguzzel.de/hudson/job/jenkinsci-qualitygates-plugin/</url>
+  </ciManagement>
+  <scm>
+    <connection>scm:git:git://github.com/mvonmaltitz/qualitygates.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/mvonmaltitz/qualitygates.git</developerConnection>
+    <url>https://github.com/mvonmaltitz/qualitygates</url>
+  </scm>
   <reporting>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.7</version>
+        <!-- Avoid hanging site generation waiting for 'http://snapshots.maven.codehaus.org/maven2' see http://jira.codehaus.org/browse/MPIR-137 -->
+        <configuration>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+          <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${maven-jxr-plugin.version}</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
@@ -70,7 +100,6 @@
           </reportSet>
         </reportSets>
       </plugin>
-
       <plugin><!-- configuration has to be repeated from pluginManagement as it will not be picked up from there. -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -109,14 +138,8 @@
           <targetJdk>${maven.compiler.source}</targetJdk>
         </configuration>
       </plugin>
-
-
     </plugins>
   </reporting>
-  <reports>
-    <report>maven-pmd-plugin</report>
-    <report>emma-maven-plugin</report>
-  </reports>
   <dependencies>
     <dependency>
       <groupId>org.mockito</groupId>
@@ -251,99 +274,108 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+          <configuration>
+            <excludes>
+              <exclude>**/InjectedTest.*</exclude>
+            </excludes>
+            <forkCount>2</forkCount>
+            <reuseForks>true</reuseForks>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${maven-surefire-plugin.version}</version>
+          <configuration>
+            <includes>
+              <include>**/InjectedTest.*</include>
+              <include>**/*IT.*</include>
+            </includes>
+            <forkCount>2</forkCount>
+            <reuseForks>true</reuseForks>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.3</version>
+          <executions>
+            <execution>
+              <id>attach-descriptor</id>
+              <goals>
+                <goal>attach-descriptor</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.9.1</version>
+          <configuration>
+            <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+            <docletPath>/home/mvm/Downloads/UMLGraph-5.6.6/lib/UmlGraph.jar</docletPath>
+            <docletArtifact>
+              <groupId>org.umlgraph</groupId>
+              <artifactId>doclet</artifactId>
+              <version>5.1</version>
+            </docletArtifact>
+            <additionalparam>-views</additionalparam>
+            <useStandardDocletOptions>true</useStandardDocletOptions>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.pitest</groupId>
+          <artifactId>pitest-maven</artifactId>
+          <version>0.31</version>
+          <configuration>
+            <targetClasses>
+              <param>de.binarytree.plugins*</param>
+            </targetClasses>
+            <targetTests>
+              <param>de.binarytree.plugins*</param>
+            </targetTests>
+           </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.15</version>
-        <configuration>
-          <forkCount>2</forkCount>
-          <reuseForks>true</reuseForks>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.jenkins-ci.tools</groupId>
         <artifactId>maven-hpi-plugin</artifactId>
-        <version>1.95</version>
-      </plugin>
-      <plugin>
-        <groupId>org.pitest</groupId>
-        <artifactId>pitest-maven</artifactId>
-        <configuration>
-          <targetClasses>
-            <param>de.binarytree.plugins*</param>
-          </targetClasses>
-          <targetTests>
-            <param>de.binarytree.plugins*</param>
-          </targetTests>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
-        <configuration>
-          <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
-
-          <docletPath>/home/mvm/Downloads/UMLGraph-5.6.6/lib/UmlGraph.jar</docletPath>
-          <docletArtifact>
-            <groupId>org.umlgraph</groupId>
-            <artifactId>doclet</artifactId>
-            <version>5.1</version>
-          </docletArtifact>
-          <additionalparam>-views</additionalparam>
-          <useStandardDocletOptions>true</useStandardDocletOptions>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>2.3.2</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>findbugs</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>emma-maven-plugin</artifactId>
-        <version>1.0-alpha-3</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>emma</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.0.1</version>
-        <configuration>
-          <failOnViolation>false</failOnViolation>
-          <consoleOutput>true</consoleOutput>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-              <goal>cpd-check</goal>
-            </goals>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
     </plugins>
-  </build> 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>repo.jenkins-ci.org</id>
-      <url>http://repo.jenkins-ci.org/public/</url>
-    </pluginRepository>
-  </pluginRepositories>
+  </build>
 </project>
