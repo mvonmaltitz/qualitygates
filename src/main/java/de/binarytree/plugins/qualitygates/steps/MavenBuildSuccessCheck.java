@@ -30,7 +30,11 @@ public class MavenBuildSuccessCheck extends GateStep {
     @Override
     public void doStep(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener, GateStepReport checkReport) {
         if ((build != null) && (build.getResult() != null)) {
-            checkReport.setResult(build.getResult(), build.getResult().toString());
+            Result result = build.getResult();
+            if (result.equals(Result.ABORTED)) {
+                result = Result.FAILURE;
+            }
+            checkReport.setResult(result, build.getResult().toString());
         } else {
             checkReport.setResult(Result.FAILURE, "Build or build result was null");
         }
