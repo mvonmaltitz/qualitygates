@@ -11,3 +11,5 @@ work
 */.classpath
 */*.sw?
 */.settings/org.eclipse.core.resources.prefs
+/.classpath
+/.settings
