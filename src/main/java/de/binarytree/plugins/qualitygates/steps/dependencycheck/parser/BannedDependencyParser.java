@@ -47,12 +47,12 @@ public final class BannedDependencyParser {
         if (!StringUtils.isBlank(line)) {
             Matcher matcher = ARTIFACT_PATTERN.matcher(line);
             if (matcher.matches()) {
-                result.addBannedDependency(getDependencyAndAddToResult(result, matcher));
+                result.addBannedDependency(getDependencyAndAddToResult(matcher));
             }
         }
     }
 
-    private static String getDependencyAndAddToResult(BannedDependencyAnalysisResult result, Matcher matcher) {
+    private static String getDependencyAndAddToResult(Matcher matcher) {
         return matcher.group(1);
     }
 }
