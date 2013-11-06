@@ -131,7 +131,7 @@ public abstract class XMLCheck extends GateStep {
                 XPathFactory factory = XPathFactory.newInstance();
                 XPath xpath = factory.newXPath();
                 try {
-                    XPathExpression expr = xpath.compile(value);
+                    xpath.compile(value);
                 } catch (XPathExpressionException e) {
                     return FormValidation.error("XPath expression is not valid.");
                 }
