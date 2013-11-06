@@ -1,4 +1,4 @@
-package de.binarytree.plugins.qualitygates.steps.dependencycheck.parser;
+package de.binarytree.plugins.qualitygates.steps.dependencycheck.result;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,7 +15,7 @@ public class BannedDependencyAnalysisResult {
     private Set<String> bannedDependencies = new HashSet<String>();
 
     /**
-     * Adds a banned dependcy to the set
+     * Adds a banned dependency to the set
      * 
      * @param bannedDependency
      *            the dependency to be added
@@ -29,10 +29,9 @@ public class BannedDependencyAnalysisResult {
     }
 
     /**
-     * Returns all added banned dependencies as a list. It is guaranteed that
-     * there are not duplicates in this list
+     * Returns all added banned dependencies as a list. It is guaranteed that there are not duplicates in this list
      * 
-     * @return a list of banned dependencies 
+     * @return a list of banned dependencies
      */
     public List<String> getBannedDependencies() {
         return new LinkedList<String>(this.bannedDependencies);
