@@ -109,7 +109,7 @@
                      }
 
                      </style>
-    <l:layout xmlns:plugin="/de/binarytree/plugins/qualitygates/tags" css="/de/binarytree/plugins/qualitygates/css/style.css">
+    <l:layout xmlns:plugin="/de/binarytree/plugins/qualitygates/tags">
         <l:main-panel>
         <div id="gatereport">
             <h1>${it.displayName}</h1>
