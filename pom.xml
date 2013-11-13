@@ -13,6 +13,7 @@
   </licenses>
   <groupId>de.binarytree.plugins</groupId>
   <artifactId>qualitygates</artifactId>
+  <name>QualityLine</name>
   <version>1.0-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
