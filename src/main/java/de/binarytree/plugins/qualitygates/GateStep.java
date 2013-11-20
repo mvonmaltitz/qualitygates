@@ -10,6 +10,7 @@ import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 import de.binarytree.plugins.qualitygates.result.GateStepReport;
 
@@ -32,6 +33,9 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
  * 
  */
 public abstract class GateStep implements Describable<GateStep>, ExtensionPoint {
+
+    private final static Logger LOG = Logger.getLogger(GateStep.class.getName());
+
     /**
      * Performs the evaluation of this step
      * 
@@ -122,14 +126,13 @@ public abstract class GateStep implements Describable<GateStep>, ExtensionPoint 
     }
 
     public GateStepDescriptor getDescriptor() {
-        return (GateStepDescriptor) Hudson.getInstance().getDescriptor(
-                getClass());
+        LOG.info("Returning descriptor for GateStep class");
+        return (GateStepDescriptor) Hudson.getInstance().getDescriptor(getClass());
     }
 
     public static DescriptorExtensionList<GateStep, GateStepDescriptor> all() {
-        return Hudson.getInstance()
-                .<GateStep, GateStepDescriptor> getDescriptorList(
-                        GateStep.class);
+        LOG.info("Gathering all gate step instances");
+        return Hudson.getInstance().<GateStep, GateStepDescriptor> getDescriptorList(GateStep.class);
     }
 
 }

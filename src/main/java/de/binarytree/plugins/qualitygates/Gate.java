@@ -7,6 +7,10 @@ import hudson.model.BuildListener;
 import hudson.model.Describable;
 import hudson.model.AbstractBuild;
 import hudson.model.Hudson;
+
+import java.util.logging.Logger;
+
+import de.binarytree.plugins.qualitygates.result.BuildResultAction;
 import de.binarytree.plugins.qualitygates.result.GateReport;
 
 /**
@@ -28,6 +32,8 @@ import de.binarytree.plugins.qualitygates.result.GateReport;
  * 
  */
 public abstract class Gate implements Describable<Gate>, ExtensionPoint {
+
+    private final static Logger LOG = Logger.getLogger(Gate.class.getName());
 
     private String name;
 
@@ -102,8 +108,8 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
             BuildListener listener, GateReport gateReport);
 
     public QualityGateDescriptor getDescriptor() {
-        return (QualityGateDescriptor) Hudson.getInstance().getDescriptor(
-                getClass());
+        LOG.info("Returning descriptor for Gate class");
+        return (QualityGateDescriptor) Hudson.getInstance().getDescriptor(getClass());
     }
 
     public String getName() {
@@ -111,8 +117,8 @@ public abstract class Gate implements Describable<Gate>, ExtensionPoint {
     }
 
     public static DescriptorExtensionList<Gate, QualityGateDescriptor> all() {
-        return Hudson.getInstance()
-                .<Gate, QualityGateDescriptor> getDescriptorList(Gate.class);
+        LOG.info("Gathering all gate instances");
+        return Hudson.getInstance().<Gate, QualityGateDescriptor> getDescriptorList(Gate.class);
     }
 
 }

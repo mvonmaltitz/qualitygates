@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -38,6 +39,8 @@ public class QualityLine extends Recorder implements Saveable {
 
     private List<Gate> gates = new LinkedList<Gate>();
 
+    private final static Logger LOG = Logger.getLogger(QualityLine.class.getName());
+
     /**
      * Creates a new quality line.
      * 
@@ -50,6 +53,7 @@ public class QualityLine extends Recorder implements Saveable {
      */
     @DataBoundConstructor
     public QualityLine(String name, Collection<Gate> gates) throws IOException {
+        LOG.info("Creating QualityLine");
         this.name = name;
         if (gates != null) {
             this.gates.addAll(gates);
@@ -116,10 +120,12 @@ public class QualityLine extends Recorder implements Saveable {
      *             when writing the XML file fails
      */
     public final void save() throws IOException {
+        LOG.info("Saving quality line config as XML...");
         if (BulkChange.contains(this)) {
             return;
         }
         getConfigXml().write(this);
+        LOG.info("Saving was successful");
     }
 
     /**
@@ -128,6 +134,7 @@ public class QualityLine extends Recorder implements Saveable {
      * @return the XML file to be used for persisting this object.
      */
     protected XmlFile getConfigXml() {
+        LOG.info("Retrieving config from XML");
         return new XmlFile(Hudson.XSTREAM, new File(Hudson.getInstance().getRootDir(), "qualitygates.xml"));
     }
 
