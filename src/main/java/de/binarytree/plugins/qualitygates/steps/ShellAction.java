@@ -32,6 +32,10 @@ public class ShellAction extends GateStep {
         this.command = command;
     }
 
+    protected ShellAction() {
+        this.command = "";
+    }
+
     public String getCommand() {
         return this.command;
     }
@@ -55,13 +59,13 @@ public class ShellAction extends GateStep {
     }
 
     protected Shell getShell() {
-        return new Shell(this.command);
+        return new Shell(this.getCommand());
 
     }
 
     @Override
     public String getDescription() {
-        return "$ " + this.command;
+        return "$ " + this.getCommand();
     }
 
     @Extension
@@ -70,6 +74,10 @@ public class ShellAction extends GateStep {
         public String getDisplayName() {
             return "Execution of shell script";
         }
+    }
+
+    protected void setCommand(String newCommand) {
+        this.command = newCommand;
     }
 
 }

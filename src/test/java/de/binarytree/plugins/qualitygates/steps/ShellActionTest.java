@@ -71,7 +71,15 @@ public class ShellActionTest {
     public void testSettingAndGettingParameter() {
         assertEquals(command, check.getCommand());
         assertTrue(check.getDescription().startsWith("$ "));
-        assertTrue(check.getDescriptor().getDisplayName().toLowerCase().contains("shell")); 
+        assertTrue(check.getDescriptor().getDisplayName().toLowerCase().contains("shell"));
+    }
+
+    @Test
+    public void testResetCommand() {
+        String newCommand = "new command";
+        assertEquals(command, check.getCommand());
+        check.setCommand(newCommand);
+        assertEquals(newCommand, check.getCommand());
     }
 
     @Test
