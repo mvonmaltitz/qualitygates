@@ -1,0 +1,29 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:entry title="Properties File" field="propertiesFile">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Container List (CSV)" field="containerList">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Manager URL" field="managerUrl">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Manager User" field="managerUser">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Manager Password" field="managerPassword">
+    <f:password />
+  </f:entry>
+  <f:entry title="Target Context" field="context">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Deploy Context Limit" field="deployContextLimit">
+    <f:number />
+  </f:entry>
+  <f:entry title="War File" field="warFile">
+    <f:textbox />
+  </f:entry>
+  <f:entry title="Additional Parameters" field="additionalParameters">
+    <f:textbox />
+  </f:entry>
+</j:jelly>
