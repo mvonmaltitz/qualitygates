@@ -18,9 +18,9 @@ import de.binarytree.plugins.qualitygates.result.GateStepReport;
 /**
  * This check is a manual check. That means, it has to be (dis)approved
  * manually. At the next evaluation it then gives the desired result.
- * 
+ *
  * @author Marcel von Maltitz
- * 
+ *
  */
 public class ManualCheck extends GateStep {
     private enum Approval {
@@ -30,9 +30,9 @@ public class ManualCheck extends GateStep {
     private static final String UNKNOWN_USER = "Unknown";
     public static final Random RAND = new Random();
 
-    private transient String hash;
+    private String hash;
 
-    private transient Approval approved;
+    private Approval approved;
     private String unknownUser = UNKNOWN_USER;
 
     @DataBoundConstructor
@@ -44,7 +44,7 @@ public class ManualCheck extends GateStep {
      * Constructs a new manual check. Normally approving or disapproving logs
      * the name of the responsible person. When the account of this person
      * cannot be determined, usernameIfUserUnknown is used.
-     * 
+     *
      * @param usernameIfUserUnknown
      *            the value to be used of the (dis)approving account cannot be
      *            determined
@@ -140,7 +140,7 @@ public class ManualCheck extends GateStep {
     }
 
     public boolean hasHash(String hash) {
-        return this.hash.equals(hash);
+        return hash.equals(this.hash);
     }
 
 }
