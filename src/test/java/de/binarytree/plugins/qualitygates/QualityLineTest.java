@@ -1,7 +1,7 @@
 package de.binarytree.plugins.qualitygates;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -46,6 +46,16 @@ public class QualityLineTest {
             return this.evaluatorMock;
         }
 
+        @Override
+        protected void logQualityLineStart(BuildListener listener) {
+
+        }
+
+        @Override
+        protected void logQualityLineEnd(BuildListener listener) {
+
+        }
+
         public void verifyEvaluatorMock() {
             Mockito.verify(this.evaluatorMock).evaluate(
                     any(AbstractBuild.class), any(Launcher.class),
@@ -87,19 +97,19 @@ public class QualityLineTest {
     @Test
     public void testInitializeWithCollection() throws IOException {
         assertEquals(1, line.getNumberOfGates());
-        assertEquals(gates, line.getGates()); 
-        assertNotSame(gates, line.getGates()); 
+        assertEquals(gates, line.getGates());
+        assertNotSame(gates, line.getGates());
     }
     
     @Test
     public void testEvaluation() throws IOException {
-        AbstractBuild<?, ?> build = TestHelper.getBuildMock(); 
-        Launcher launcher = TestHelper.getLauncherMock(); 
-        BuildListener listener = TestHelper.getListenerMock(); 
+        AbstractBuild<?, ?> build = TestHelper.getBuildMock();
+        Launcher launcher = TestHelper.getLauncherMock();
+        BuildListener listener = TestHelper.getListenerMock();
         boolean buildMayContinue = line.perform(build, launcher, listener);
         line.verifyEvaluatorMock();
-        Mockito.verify(build).addAction(any(Action.class)); 
-        assertTrue(buildMayContinue); 
+        Mockito.verify(build).addAction(any(Action.class));
+        assertTrue(buildMayContinue);
     }
 
 }

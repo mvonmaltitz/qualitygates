@@ -8,6 +8,7 @@ import hudson.model.BuildListener;
 import hudson.model.Saveable;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
+import hudson.model.Computer;
 import hudson.model.Hudson;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
@@ -27,10 +28,10 @@ import de.binarytree.plugins.qualitygates.result.BuildResultAction;
 
 /**
  * This class is the main entry point for this plugin.
- * 
+ *
  * It holds a list of gate which can then be used to evaluate the current build via
  * {@link #perform(AbstractBuild, Launcher, BuildListener)}.
- * 
+ *
  * @author Marcel von Maltitz
  */
 public class QualityLine extends Recorder implements Saveable {
@@ -43,7 +44,7 @@ public class QualityLine extends Recorder implements Saveable {
 
     /**
      * Creates a new quality line.
-     * 
+     *
      * @param name
      *            the name of the line
      * @param gates
@@ -71,17 +72,30 @@ public class QualityLine extends Recorder implements Saveable {
 
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
-        listener.getLogger().println("Starting QualityLine");
+        logQualityLineStart(listener);
         QualityLineEvaluator gateEvaluator = getGateEvaluatorForGates();
         gateEvaluator.evaluate(build, launcher, listener);
         build.addAction(new BuildResultAction(gateEvaluator));
-        listener.getLogger().println("Stopping QualityLine");
+        logQualityLineEnd(listener);
         return true;
+    }
+
+    protected void logQualityLineEnd(BuildListener listener) {
+        listener.getLogger().println("Stopping QualityLine");
+    }
+
+    protected void logQualityLineStart(BuildListener listener) {
+        Computer computer = Computer.currentComputer();
+        if(computer != null){
+          listener.getLogger().println("Starting QualityLine on" + computer.getDisplayName() + "(" + computer.getUrl() + ")");
+        }else{
+          listener.getLogger().println("Starting QualityLine on unknown Computer");
+        }
     }
 
     /**
      * Returns the object which does the actual evaluation of the gates and collection of reports.
-     * 
+     *
      * @return the evaluator as mentioned above
      */
     protected QualityLineEvaluator getGateEvaluatorForGates() {
@@ -102,7 +116,7 @@ public class QualityLine extends Recorder implements Saveable {
 
     /**
      * Loads a persisted quality line from disk
-     * 
+     *
      * @throws IOException
      *             when opening the file or reading the XML fails
      */
@@ -115,7 +129,7 @@ public class QualityLine extends Recorder implements Saveable {
 
     /**
      * Saves this quality line to disk.
-     * 
+     *
      * @throws IOException
      *             when writing the XML file fails
      */
@@ -130,7 +144,7 @@ public class QualityLine extends Recorder implements Saveable {
 
     /**
      * Returns the XML file to be used for persisting this object.
-     * 
+     *
      * @return the XML file to be used for persisting this object.
      */
     protected XmlFile getConfigXml() {
@@ -145,7 +159,7 @@ public class QualityLine extends Recorder implements Saveable {
     /**
      * Descriptor for {@link QualityLine}. Used as a singleton. The class is marked as public so that it can be accessed
      * from views.
-     * 
+     *
      * <p>
      * See <tt>src/main/resources/hudson/plugins/hello_world/HelloWorldBuilder/*.jelly</tt> for the actual HTML fragment
      * for the configuration screen.
@@ -168,7 +182,7 @@ public class QualityLine extends Recorder implements Saveable {
 
         /**
          * This human readable name is used in the configuration screen.
-         * 
+         *
          * @return the name of this plugin to display
          */
         @Override

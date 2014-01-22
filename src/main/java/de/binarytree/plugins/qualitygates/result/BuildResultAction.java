@@ -5,12 +5,11 @@ import hudson.model.BuildListener;
 import hudson.model.ProminentProjectAction;
 import hudson.model.StreamBuildListener;
 import hudson.model.AbstractBuild;
+import hudson.model.Computer;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import jenkins.model.Jenkins;
 
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
@@ -21,9 +20,9 @@ import de.binarytree.plugins.qualitygates.steps.manualcheck.ManualCheckFinder.Ma
 
 /**
  * This class realizes publishing the gate report via a dedicated URL-subspace /qualitygates/
- * 
+ *
  * @author Marcel von Maltitz
- * 
+ *
  */
 public class BuildResultAction implements ProminentProjectAction {
 
@@ -55,7 +54,7 @@ public class BuildResultAction implements ProminentProjectAction {
 
     /**
      * Approves the next not_build manual check as long as it has the id provided by the request parameter "id".
-     * 
+     *
      * @param req
      *            the stapler request provided by Jenkins
      * @param res
@@ -69,7 +68,7 @@ public class BuildResultAction implements ProminentProjectAction {
 
     /**
      * Disapproves the next not_build manual check as long as it has the id provided by the request parameter "id".
-     * 
+     *
      * @param req
      *            the stapler request provided by Jenkins
      * @param res
@@ -104,8 +103,19 @@ public class BuildResultAction implements ProminentProjectAction {
         AbstractBuild<?, ?> build = getFormerBuild(req);
         BuildListener listener = new StreamBuildListener(getLogfileAppender(build));
         Launcher launcher = this.getLauncher(listener);
+        logQualityLineStart(listener);
         this.gateEvaluator.evaluate(build, launcher, listener);
         build.save();
+    }
+
+    protected void logQualityLineStart(BuildListener listener) {
+        Computer computer = Computer.currentComputer();
+        if(computer != null){
+            listener.getLogger().println(
+                    "Restarting QualityLine on " + computer.getDisplayName() + "(" + computer.getUrl() + ")");
+        }else{
+          listener.getLogger().println("Restarting QualityLine on unknown Computer");
+        }
     }
 
     private AbstractBuild<?, ?> getFormerBuild(StaplerRequest req) {

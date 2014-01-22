@@ -1,10 +1,10 @@
 package de.binarytree.plugins.qualitygates.result;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 import hudson.Launcher;
 import hudson.model.BuildListener;
 import hudson.model.AbstractBuild;
@@ -51,6 +51,7 @@ public class BuildResultActionTest {
             return "Current User";
         }
 
+        @Override
         public void setHash(String hash) {
             super.setHash(hash);
         }
@@ -65,8 +66,8 @@ public class BuildResultActionTest {
     public void setUp() throws Exception {
         mCheck1 = new MockManualCheck("Hash1");
         mCheck2 = new MockManualCheck("Hash2");
-        final Launcher launcher = TestHelper.getLauncherMock(); 
-        final BuildListener listener = TestHelper.getListenerMock(); 
+        final Launcher launcher = TestHelper.getLauncherMock();
+        final BuildListener listener = TestHelper.getListenerMock();
         LinkedList<GateStep> checks = new LinkedList<GateStep>();
         checks.add(mCheck1);
         checks.add(mCheck2);
@@ -75,14 +76,19 @@ public class BuildResultActionTest {
 
         gateEvaluator = getGateEvaluatorFromGates(gate1, gate2);
         gateEvaluator.evaluate(null, launcher, listener);
-        fakeEvaluator = mock(QualityLineEvaluator.class); 
-        when(fakeEvaluator.getLatestResults()).thenReturn(gateEvaluator.getLatestResults()); 
-        when(fakeEvaluator.evaluate(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenReturn(gateEvaluator.getLatestResults()); 
+        fakeEvaluator = mock(QualityLineEvaluator.class);
+        when(fakeEvaluator.getLatestResults()).thenReturn(gateEvaluator.getLatestResults());
+        when(fakeEvaluator.evaluate(any(AbstractBuild.class), any(Launcher.class), any(BuildListener.class))).thenReturn(gateEvaluator.getLatestResults());
         action = new BuildResultAction(fakeEvaluator) {
 
             @Override
             public Launcher getLauncher(BuildListener listener) {
                 return launcher;
+
+            }
+
+            @Override
+            public void logQualityLineStart(BuildListener listener) {
 
             }
         };
@@ -106,7 +112,7 @@ public class BuildResultActionTest {
         when(req.getParameter("id")).thenReturn("Hash1");
         when(req.findAncestorObject(AbstractBuild.class)).thenReturn(build);
         when(build.getLogFile()).thenReturn(new File("/tmp/logfile.log"));
-        return req; 
+        return req;
     }
     private StaplerResponse prepareFakedStaplerResponse() throws IOException {
        return mock(StaplerResponse.class);
@@ -114,7 +120,7 @@ public class BuildResultActionTest {
     
     @Test
     public void testManualApprovalViaGetRequestSuccessful() throws IOException {
-        assertFalse(mCheck1.isApproved()); 
+        assertFalse(mCheck1.isApproved());
         StaplerRequest req = prepareFakedStaplerRequest();
         StaplerResponse res = prepareFakedStaplerResponse();
         action.doApprove(req, res);
@@ -123,7 +129,7 @@ public class BuildResultActionTest {
     
     @Test
     public void testManualApprovalViaGetRequestWithoutIdParameterDoesNothing() throws IOException {
-        assertFalse(mCheck1.isApproved()); 
+        assertFalse(mCheck1.isApproved());
         StaplerRequest req = prepareFakedStaplerRequest();
         StaplerResponse res = prepareFakedStaplerResponse();
         when(req.hasParameter("id")).thenReturn(false);
@@ -133,7 +139,7 @@ public class BuildResultActionTest {
     
     @Test
     public void testManualApprovalViaGetRequestOnInexistentCheckDoesNothing() throws IOException {
-        assertFalse(mCheck1.isApproved()); 
+        assertFalse(mCheck1.isApproved());
         StaplerRequest req = prepareFakedStaplerRequest();
         StaplerResponse res = prepareFakedStaplerResponse();
         when(req.getParameter("id")).thenReturn("WrongHash");
@@ -143,7 +149,7 @@ public class BuildResultActionTest {
     
     @Test
     public void testManualDisapprovalViaGetRequest() throws IOException {
-        assertFalse(mCheck1.isApproved()); 
+        assertFalse(mCheck1.isApproved());
         StaplerRequest req = prepareFakedStaplerRequest();
         StaplerResponse res = prepareFakedStaplerResponse();
         action.doDisapprove(req, res);
