@@ -102,7 +102,7 @@ public class BuildResultAction implements ProminentProjectAction {
     private void rerunQualityLineEvaluation(StaplerRequest req) throws IOException {
         AbstractBuild<?, ?> build = getFormerBuild(req);
         BuildListener listener = new StreamBuildListener(getLogfileAppender(build));
-        Launcher launcher = this.getLauncher(listener);
+        Launcher launcher = this.getLauncher(listener, build);
         logQualityLineStart(listener);
         this.gateEvaluator.evaluate(build, launcher, listener);
         build.save();
@@ -126,8 +126,8 @@ public class BuildResultAction implements ProminentProjectAction {
         return new FileOutputStream(build.getLogFile(), true);
     }
 
-    protected Launcher getLauncher(BuildListener listener) {
-        return Jenkins.getInstance().createLauncher(listener);
+    protected Launcher getLauncher(BuildListener listener, AbstractBuild<?, ?> build) {
+        return build.getBuiltOn().createLauncher(listener);
     }
 
 }

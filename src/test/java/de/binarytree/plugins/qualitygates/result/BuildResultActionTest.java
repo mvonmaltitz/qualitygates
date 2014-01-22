@@ -82,7 +82,7 @@ public class BuildResultActionTest {
         action = new BuildResultAction(fakeEvaluator) {
 
             @Override
-            public Launcher getLauncher(BuildListener listener) {
+            public Launcher getLauncher(BuildListener listener, AbstractBuild<?, ?> build) {
                 return launcher;
 
             }
